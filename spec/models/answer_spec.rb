@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-describe Question, type: :model do
-  it { should have_many(:answers).dependent(:destroy) }
+describe Answer, type: :model do
+  it { should belong_to(:question).touch(true) }
 
   it { should validate_presence_of :body }
 end
