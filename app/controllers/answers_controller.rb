@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
-  expose :question, -> { Question.find(params[:question_id]) }
-  expose :answers, -> { question.answers }
+  expose :question
+  expose(:answers) { question.answers }
   expose :answer
 
   def show; end
