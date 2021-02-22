@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
+  expose :question, -> { Question.find(params[:question_id]) }
+  expose :answers, -> { question.answers }
+  expose :answer
+
   def show; end
 
   def new; end
@@ -8,7 +12,7 @@ class AnswersController < ApplicationController
   def edit; end
 
   def create
-    @answer = question.answers.new(answer_params)
+    @answer = answers.new(answer_params)
 
     if @answer.save
       redirect_to answer_path(@answer)
@@ -19,7 +23,7 @@ class AnswersController < ApplicationController
 
   def update
     if answer.update(answer_params)
-      redirect_to answer_path(@answer)
+      redirect_to answer_path(answer)
     else
       render :edit
     end
@@ -32,14 +36,6 @@ class AnswersController < ApplicationController
   end
 
   private
-
-  def question
-    @question = Question.find(params[:question_id])
-  end
-
-  def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
-  end
 
   def answer_params
     params.require(:answer).permit(:body)

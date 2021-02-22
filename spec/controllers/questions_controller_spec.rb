@@ -10,10 +10,6 @@ describe QuestionsController, type: :controller do
 
     before { get :index }
 
-    it 'populates an array of all questions' do
-      expect(assigns(:questions)).to match_array(questions)
-    end
-
     it 'renders the index view' do
       expect(response).to render_template :index
     end
@@ -52,9 +48,9 @@ describe QuestionsController, type: :controller do
       end
 
       it 'redirects to show view' do
-        post :create, params: { question: attributes_for(:question) }
+        post :create, params: { id: question }
 
-        expect(response).to redirect_to assigns(:question)
+        expect(response).to redirect_to question
       end
     end
 
@@ -74,12 +70,6 @@ describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     context 'with valid attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-
-        expect(assigns(:question)).to eq(question)
-      end
-
       it 'changes the question attributes' do
         patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }
 

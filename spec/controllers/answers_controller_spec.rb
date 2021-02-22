@@ -61,12 +61,6 @@ describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     context 'with valid attributes' do
-      it 'assigns the requested answer to @answer' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer) }
-
-        expect(assigns(:answer)).to eq(answer)
-      end
-
       it 'changes the answer attributes' do
         patch :update, params: { id: answer, answer: { body: 'New body' } }
 
