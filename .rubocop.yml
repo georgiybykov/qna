@@ -65,6 +65,9 @@ Metrics/PerceivedComplexity:
 Metrics/BlockLength:
   Exclude:
     - db/seeds.rb
+    - spec/**/*
+#  IgnoredMethods:
+#    ['describe', 'context']
 
 Metrics/CyclomaticComplexity:
   Exclude:
