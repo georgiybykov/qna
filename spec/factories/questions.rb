@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :question do
-    body { 'MyText' }
+    title { 'QuestionTitle' }
+    body { 'QuestionBody' }
   end
 end
