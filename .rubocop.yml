@@ -9,8 +9,6 @@ AllCops:
     - "bin/**/*"
     - "node_modules/**/*"
     - "db/**/*"
-    - "config/**/*"
-    - "vendor/**/*"
 
 Layout/LineLength:
   Max: 120
