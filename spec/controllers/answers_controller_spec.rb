@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe AnswersController, type: :controller do
+describe AnswersController, type: :controller, aggregate_failures: true do
   let(:question) { create(:question) }
   let(:answer) { create(:answer, question: question) }
 
@@ -48,7 +48,7 @@ describe AnswersController, type: :controller do
     context 'with invalid attributes' do
       it 'does not save the answer' do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }
-          .to_not change(Answer, :count)
+          .not_to change(Answer, :count)
       end
 
       it 're-renders the new view' do

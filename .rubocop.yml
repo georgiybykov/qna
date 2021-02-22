@@ -1,6 +1,7 @@
 require:
   - rubocop-performance
   - rubocop-rails
+  - rubocop-rspec
 
 AllCops:
   TargetRubyVersion: 2.7.2
@@ -10,6 +11,12 @@ AllCops:
     - node_modules/**/*
     - db/**/*
     - vendor/**/*
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+Rspec/Focus:
+  Enabled: true
 
 Layout/LineLength:
   Max: 120
@@ -65,8 +72,6 @@ Metrics/BlockLength:
   Exclude:
     - db/seeds.rb
     - spec/**/*
-#  IgnoredMethods:
-#    ['describe', 'context']
 
 Metrics/CyclomaticComplexity:
   Exclude:
