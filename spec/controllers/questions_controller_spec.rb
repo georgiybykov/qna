@@ -22,10 +22,6 @@ describe QuestionsController, type: :controller do
   describe 'GET #show' do
     before { get :show, params: { id: question } }
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq(question)
-    end
-
     it 'renders the show view' do
       expect(response).to render_template :show
     end
@@ -34,10 +30,6 @@ describe QuestionsController, type: :controller do
   describe 'GET #new' do
     before { get :new }
 
-    it 'assigns a new Question to @question' do
-      expect(assigns(:question)).to be_a_new(Question)
-    end
-
     it 'renders the new view' do
       expect(response).to render_template :new
     end
@@ -45,10 +37,6 @@ describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     before { get :edit, params: { id: question } }
-
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq(question)
-    end
 
     it 'renders the edit view' do
       expect(response).to render_template :edit
