@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-describe Answer, type: :model do
-  it { should belong_to(:question).touch(true) }
+describe Answer, type: :model, aggregate_failures: true do
+  it { is_expected.to belong_to(:question).touch(true) }
 
-  it { should validate_presence_of :body }
+  it { is_expected.to validate_presence_of :body }
 end

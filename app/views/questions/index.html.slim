@@ -1,0 +1,14 @@
+.row.justify-content-center.mt-3
+  .col.col-md-12
+    h1.text-center
+      b
+        = 'Questions'
+    table.table[style="text-align: center"]
+      thead.thead-light
+        tr
+          th.sort-by-title.pointer[scope="col"]
+          th[scope="col"]
+            = 'Title'
+          th[scope="col"]
+            = 'Body'
+      = render questions
