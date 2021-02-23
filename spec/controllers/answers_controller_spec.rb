@@ -34,7 +34,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     context 'with valid attributes' do
       it 'saves a new answer to the database' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }
-          .to change(Answer, :count)
+          .to change(question.answers, :count)
                 .by(1)
       end
 
@@ -48,7 +48,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     context 'with invalid attributes' do
       it 'does not save the answer' do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }
-          .not_to change(Answer, :count)
+          .not_to change(question.answers, :count)
       end
 
       it 're-renders the new view' do
@@ -97,7 +97,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
       it 'deletes the question' do
         expect { delete :destroy, params: { id: answer } }
-          .to change(Answer, :count)
+          .to change(question.answers, :count)
                 .by(-1)
       end
 
