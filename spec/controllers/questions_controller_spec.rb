@@ -2,6 +2,7 @@
 
 describe QuestionsController, type: :controller, aggregate_failures: true do
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
@@ -22,7 +23,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'GET #new' do
-    before { get :new }
+    before do
+      login(user)
+
+      get :new
+    end
 
     it 'renders the new view' do
       expect(response).to render_template :new
@@ -30,7 +35,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'GET #edit' do
-    before { get :edit, params: { id: question } }
+    before do
+      login(user)
+
+      get :edit, params: { id: question }
+    end
 
     it 'renders the edit view' do
       expect(response).to render_template :edit
@@ -38,6 +47,8 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new question to the database' do
         expect { post :create, params: { question: attributes_for(:question) } }
@@ -67,6 +78,8 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'changes the question attributes' do
         patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }
@@ -103,6 +116,8 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'DELETE #destroy' do
+    before { login(user) }
+
     let!(:question) { create(:question) }
 
     it 'deletes the question' do
