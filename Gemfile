@@ -30,9 +30,11 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+gem 'decent_exposure'
 gem 'slim-rails'
 
-gem 'decent_exposure'
+# AUTH
+gem 'devise'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -70,6 +72,9 @@ group :test do
 
   # Provides RSpec- and Minitest-compatible one-liners to test common Rails functionality
   gem 'shoulda-matchers'
+
+  # Launching external applications from within ruby programs (currently only a browser is supported)
+  gem 'launchy'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
