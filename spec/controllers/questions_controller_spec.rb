@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe QuestionsController, type: :controller, aggregate_failures: true do
   let(:question) { create(:question) }
 
