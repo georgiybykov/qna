@@ -16,9 +16,6 @@ AllCops:
 RSpec/MultipleExpectations:
   Enabled: false
 
-Rspec/Focus:
-  Enabled: true
-
 Layout/LineLength:
   Max: 120
 
