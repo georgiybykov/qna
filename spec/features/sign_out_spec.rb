@@ -8,7 +8,7 @@ feature 'The user can sign out', %q{
 
   given(:user) { create(:user) }
 
-  xscenario 'The registered user tries to sign out' do
+  scenario 'The registered user tries to sign out' do
     sign_in(user)
     visit root_path
     click_on 'Sign out'
