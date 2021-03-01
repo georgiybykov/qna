@@ -3,6 +3,10 @@
     h1.text-center
       b
         = 'Questions'
+
+    - if current_user
+      = link_to 'Ask question', new_question_path
+
     table.table[style="text-align: center"]
       thead.thead-light
         tr

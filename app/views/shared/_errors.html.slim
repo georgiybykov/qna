@@ -1,0 +1,7 @@
+- if resource.present? && resource.errors.any?
+  h2
+    = "The error(-s) count: #{resource.errors.count}"
+  ul
+    - resource.errors.full_messages.each do |message|
+      li
+        = message
