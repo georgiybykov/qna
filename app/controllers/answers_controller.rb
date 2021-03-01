@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: :show
+
   expose :question
   expose(:answers) { question.answers }
   expose :answer
@@ -38,6 +40,9 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params
+      .require(:answer)
+      .permit(:body)
+      .merge(user: current_user)
   end
 end

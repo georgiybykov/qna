@@ -9,7 +9,7 @@ AllCops:
   Exclude:
     - bin/**/*
     - node_modules/**/*
-    - db/**/*
+    - db/seeds.rb
     - vendor/**/*
     - spec/features/**/*
 
@@ -72,7 +72,7 @@ Metrics/PerceivedComplexity:
 Metrics/BlockLength:
   Exclude:
     - config/environments/**/*
-    - db/seeds.rb
+    - db/**/*
     - spec/**/*
 
 Metrics/CyclomaticComplexity:

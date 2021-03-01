@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 describe QuestionsController, type: :controller, aggregate_failures: true do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
