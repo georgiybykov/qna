@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-feature 'The user can create question', %q{
+feature 'The user can create a question', %q{
   In order to get answers to find out the information
   As an authenticated user
   I would like to be able to ask a question

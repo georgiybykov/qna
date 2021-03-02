@@ -8,8 +8,7 @@ feature 'The user can see the list of the questions', %q{
 }, type: :feature, aggregate_failures: true do
 
   given(:question) { create(:question) }
-
-  background { create_list(:answer, 3, question: question) }
+  given!(:question_answers) { create_list(:answer, 3, question: question) }
 
   scenario 'The user looks at the list of questions, selects first one and gets the list of answers ' do
     visit questions_path(question)
@@ -20,6 +19,6 @@ feature 'The user can see the list of the questions', %q{
 
     expect(page).to have_content(question.body)
 
-    question.answers.each { |answer| expect(page).to have_content(answer.body) }
+    question_answers.each { |answer| expect(page).to have_content(answer.body) }
   end
 end

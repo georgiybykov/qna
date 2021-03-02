@@ -6,4 +6,8 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :trackable, :validatable, :confirmable
+
+  def author?(object)
+    object.user_id.eql?(id)
+  end
 end
