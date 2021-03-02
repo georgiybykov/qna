@@ -8,7 +8,9 @@ class QuestionsController < ApplicationController
 
   def index; end
 
-  def show; end
+  def show
+    @answer = Answer.new(question: question)
+  end
 
   def new; end
 
