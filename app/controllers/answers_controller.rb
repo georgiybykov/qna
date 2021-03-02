@@ -9,8 +9,6 @@ class AnswersController < ApplicationController
 
   def show; end
 
-  def new; end
-
   def edit; end
 
   def create
@@ -19,7 +17,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
     else
-      render :new
+      redirect_to question_path(@answer.question), alert: 'Your answer has not been created!'
     end
   end
 

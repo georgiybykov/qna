@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe AnswersController, type: :controller, aggregate_failures: true do
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
@@ -12,18 +10,6 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
     it 'renders the show view' do
       expect(response).to render_template :show
-    end
-  end
-
-  describe 'GET #new' do
-    before do
-      login(user)
-
-      get :new, params: { question_id: question }
-    end
-
-    it 'renders the new view' do
-      expect(response).to render_template :new
     end
   end
 
@@ -65,7 +51,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       it 're-renders the new view' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
 
-        expect(response).to render_template :new
+        expect(response).to redirect_to question_path(question)
       end
     end
   end

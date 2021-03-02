@@ -9,15 +9,29 @@ feature 'The user can answer the question', %q{
   given(:question) { create(:question) }
   given(:user) { create(:user) }
 
-  scenario 'Authenticated user tries to create the answer' do
-    sign_in(user)
-    visit question_path(question)
-    fill_in 'Body', with: 'Answer to the question'
-    click_on 'Create Answer'
+  describe 'Authenticated user tries to create the answer' do
+    background do
+      sign_in(user)
+      visit question_path(question)
+    end
 
-    expect(page).to have_content('Your answer has been successfully created!')
-    expect(page).to have_content('Answer to the question')
+    scenario 'with valid data' do
+      fill_in 'Body', with: 'Answer to the question'
+      click_on 'Create Answer'
+
+      expect(page).to have_content('Your answer has been successfully created!')
+      expect(page).to have_content('Answer to the question')
+    end
+
+    scenario 'with invalid data (with the empty answer body)' do
+      fill_in 'Body', with: ''
+      click_on 'Create Answer'
+
+      expect(page).to have_content('Your answer has not been created!')
+      expect(page).to_not have_content('Answer to the question')
+    end
   end
+
 
   scenario 'Unauthenticated user tries to create the answer' do
     visit question_path(question)
