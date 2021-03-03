@@ -30,9 +30,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    answer.destroy
+    if current_user.author?(answer)
+      flash[:notice] = 'Your answer has been successfully deleted!' if answer.destroy
+    else
+      flash.now[:alert] = 'You are not able to delete this answer!'
+    end
 
-    redirect_to question_path(answer.question)
+    redirect_to answer.question
   end
 
   private

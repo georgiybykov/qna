@@ -7,9 +7,10 @@ feature 'The user can answer the question', %q{
 }, type: :feature, aggregate_failures: true do
 
   given(:question) { create(:question) }
-  given(:user) { create(:user) }
 
   describe 'Authenticated user tries to create the answer' do
+    given(:user) { create(:user) }
+
     background do
       sign_in(user)
       visit question_path(question)

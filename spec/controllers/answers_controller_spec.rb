@@ -95,20 +95,50 @@ describe AnswersController, type: :controller, aggregate_failures: true do
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
+    let!(:answer) { create(:answer) }
 
-    let!(:answer) { create(:answer, question: question) }
+    context 'when the user is the author of the answer' do
+      before { login(answer.user) }
 
-    it 'deletes the question' do
-      expect { delete :destroy, params: { id: answer } }
-        .to change(question.answers, :count)
-              .by(-1)
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }
+          .to change(Answer, :count)
+                .by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+
+        expect(response).to redirect_to question_path(answer.question)
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: answer }
+    context 'when the user is not the author of the answer' do
+      before { login(user) }
 
-      expect(response).to redirect_to question_path(question)
+      it 'does not delete the answer' do
+        expect { delete :destroy, params: { id: answer } }
+          .not_to change(Answer, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+
+        expect(response).to redirect_to answer.question
+      end
+    end
+
+    context 'when the user is the guest of the resource' do
+      it 'does not delete the answer' do
+        expect { delete :destroy, params: { id: answer } }
+          .not_to change(Answer, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 end
