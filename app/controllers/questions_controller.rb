@@ -17,6 +17,8 @@ class QuestionsController < ApplicationController
   def edit; end
 
   def create
+    question.user = current_user
+
     if question.save
       redirect_to question_path(question), notice: 'Your question has been successfully created!'
     else
@@ -25,7 +27,9 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params)
+    params = question_params.merge(user: current_user)
+
+    if question.update(params)
       redirect_to question_path(question)
     else
       render :edit
@@ -48,6 +52,5 @@ class QuestionsController < ApplicationController
     params
       .require(:question)
       .permit(:title, :body)
-      .merge(user: current_user)
   end
 end

@@ -11,6 +11,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = answers.new(answer_params)
+    @answer.user = current_user
 
     if @answer.save
       redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
@@ -20,7 +21,9 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if answer.update(answer_params)
+    params = answer_params.merge(user: current_user)
+
+    if answer.update(params)
       redirect_to answer_path(answer)
     else
       render :edit
@@ -43,6 +46,5 @@ class AnswersController < ApplicationController
     params
       .require(:answer)
       .permit(:body)
-      .merge(user: current_user)
   end
 end
