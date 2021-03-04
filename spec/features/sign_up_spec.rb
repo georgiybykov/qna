@@ -13,7 +13,7 @@ feature 'The user can sign up', %q{
             password: '123456',
             password_confirmation: '123456')
 
-    expect(page).to have_content(/A message with a confirmation link has been sent to your email address./)
+    expect(page).to have_content /A message with a confirmation link has been sent to your email address./
   end
 
   scenario 'The unregistered user tries to sign up with invalid Email' do
@@ -21,7 +21,7 @@ feature 'The user can sign up', %q{
             password: '123456',
             password_confirmation: '123456')
 
-    expect(page).to have_content('Email is invalid')
+    expect(page).to have_content 'Email is invalid'
   end
 
   scenario 'The unregistered user tries to sign up with invalid password' do
@@ -29,7 +29,7 @@ feature 'The user can sign up', %q{
             password: '123',
             password_confirmation: '123')
 
-    expect(page).to have_content('Password is too short (minimum is 6 characters)')
+    expect(page).to have_content 'Password is too short (minimum is 6 characters)'
   end
 
   scenario 'The unregistered user tries to sign up with invalid password confirmation' do
@@ -37,12 +37,12 @@ feature 'The user can sign up', %q{
             password: '123456',
             password_confirmation: '123')
 
-    expect(page).to have_content('Password confirmation doesn\'t match Password')
+    expect(page).to have_content 'Password confirmation doesn\'t match Password'
   end
 
   scenario 'The unregistered user tries to sign up without any params' do
     click_on 'Sign up'
 
-    expect(page).to have_content('Email can\'t be blank ')
+    expect(page).to have_content 'Email can\'t be blank '
   end
 end

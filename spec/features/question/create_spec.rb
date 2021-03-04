@@ -20,15 +20,15 @@ feature 'The user can create a question', %q{
       fill_in 'Body', with: 'Text in the question body'
       click_on 'Ask'
 
-      expect(page).to have_content('Your question has been successfully created!')
-      expect(page).to have_content('Question title')
-      expect(page).to have_content('Text in the question body')
+      expect(page).to have_content 'Your question has been successfully created!'
+      expect(page).to have_content 'Question title'
+      expect(page).to have_content 'Text in the question body'
     end
 
     scenario 'with invalid data' do
       click_on 'Ask'
 
-      expect(page).to have_content('Title can\'t be blank')
+      expect(page).to have_content 'Title can\'t be blank'
     end
   end
 

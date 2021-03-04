@@ -13,12 +13,12 @@ feature 'The user can sign out', %q{
     visit root_path
     click_on 'Sign out'
 
-    expect(page).to have_content('Signed out successfully.')
+    expect(page).to have_content 'Signed out successfully.'
   end
 
   scenario 'The unregistered user tries to sign out' do
     visit root_path
 
-    expect(page).to_not have_content('Sign Out')
+    expect(page).to_not have_content 'Sign Out'
   end
 end

@@ -13,12 +13,12 @@ feature 'The user can see the list of the questions', %q{
   scenario 'The user looks at the list of questions, selects first one and gets the list of answers ' do
     visit questions_path(question)
 
-    expect(page).to have_content('Questions')
+    expect(page).to have_content 'Questions'
 
     click_on 'Show', match: :first
 
-    expect(page).to have_content(question.body)
+    expect(page).to have_content question.body
 
-    question_answers.each { |answer| expect(page).to have_content(answer.body) }
+    question_answers.each { |answer| expect(page).to have_content answer.body }
   end
 end
