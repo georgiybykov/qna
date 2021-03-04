@@ -27,9 +27,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    params = question_params.merge(user: current_user)
-
-    if question.update(params)
+    if question.update(question_params.merge(user: current_user))
       redirect_to question_path(question)
     else
       render :edit

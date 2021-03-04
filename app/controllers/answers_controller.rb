@@ -10,8 +10,7 @@ class AnswersController < ApplicationController
   def edit; end
 
   def create
-    @answer = answers.new(answer_params)
-    @answer.user = current_user
+    @answer = answers.new(answer_params.merge(user: current_user))
 
     if @answer.save
       redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
@@ -21,9 +20,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    params = answer_params.merge(user: current_user)
-
-    if answer.update(params)
+    if answer.update(answer_params.merge(user: current_user))
       redirect_to answer_path(answer)
     else
       render :edit
