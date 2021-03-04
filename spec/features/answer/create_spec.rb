@@ -18,7 +18,7 @@ feature 'The user can answer the question', %q{
 
     scenario 'with valid data' do
       fill_in 'Body', with: 'Answer to the question'
-      click_on 'Create Answer'
+      click_on 'Create answer'
 
       expect(page).to have_content('Your answer has been successfully created!')
       expect(page).to have_content('Answer to the question')
@@ -26,10 +26,11 @@ feature 'The user can answer the question', %q{
 
     scenario 'with invalid data (with the empty answer body)' do
       fill_in 'Body', with: ''
-      click_on 'Create Answer'
+      click_on 'Create answer'
 
-      expect(page).to have_content('Your answer has not been created!')
+      expect(current_path).to eq(question_answers_path(question))
       expect(page).to_not have_content('Answer to the question')
+      expect(page).to have_content('Body can\'t be blank')
     end
   end
 

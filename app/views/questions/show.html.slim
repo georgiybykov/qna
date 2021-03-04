@@ -2,15 +2,13 @@ h1= question.title
 p= question.body
 
 - if current_user&.author?(question)
-  = link_to 'Delete question', question_path(question), method: :delete
+  = link_to 'Delete question',
+          question_path(question),
+          method: :delete,
+          data: { confirm: 'Are you sure?' }
 
 h2= 'Answers'
 = render question.answers
 
 - if current_user
-  h3= 'Create answer'
-  = form_with model: [question, @answer], local: true do |f|
-    = render 'shared/errors', resource: @answer
-    = f.label :body
-    = f.text_area :body
-    = f.submit
+  = render 'answers/form'

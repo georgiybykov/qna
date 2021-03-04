@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: :show
+  before_action :authenticate_user!
 
   expose :question
   expose(:answers) { question.answers }
   expose :answer
-
-  def show; end
 
   def edit; end
 
@@ -17,7 +15,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
     else
-      redirect_to question_path(@answer.question), alert: 'Your answer has not been created!'
+      render 'questions/show'
     end
   end
 

@@ -26,9 +26,8 @@ feature 'The user can delete the answer', %q{
       expect(page).to have_content(answer.body)
 
       click_on('Delete answer')
-
-      expect(current_path).to eq(question_path(answer.question))
       expect(page).to have_content('Your answer has been successfully deleted!')
+      expect(current_path).to eq(question_path(answer.question))
       expect(page).to_not have_content(answer.body)
     end
   end

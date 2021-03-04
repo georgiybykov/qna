@@ -5,14 +5,6 @@ describe AnswersController, type: :controller, aggregate_failures: true do
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
 
-  describe 'GET #show' do
-    before { get :show, params: { id: answer } }
-
-    it 'renders the show view' do
-      expect(response).to render_template :show
-    end
-  end
-
   describe 'GET #edit' do
     before do
       login(user)
@@ -48,10 +40,10 @@ describe AnswersController, type: :controller, aggregate_failures: true do
           .not_to change(question.answers, :count)
       end
 
-      it 're-renders the new view' do
+      it 're-renders the view of the question show' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
 
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template 'questions/show'
       end
     end
   end
