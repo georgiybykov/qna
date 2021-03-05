@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe QuestionsController, type: :controller, aggregate_failures: true do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
@@ -24,7 +23,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'GET #new' do
-    before { get :new }
+    before do
+      login(user)
+
+      get :new
+    end
 
     it 'renders the new view' do
       expect(response).to render_template :new
@@ -32,7 +35,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'GET #edit' do
-    before { get :edit, params: { id: question } }
+    before do
+      login(user)
+
+      get :edit, params: { id: question }
+    end
 
     it 'renders the edit view' do
       expect(response).to render_template :edit
@@ -40,6 +47,8 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new question to the database' do
         expect { post :create, params: { question: attributes_for(:question) } }
@@ -69,6 +78,8 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'changes the question attributes' do
         patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }
@@ -107,16 +118,48 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   describe 'DELETE #destroy' do
     let!(:question) { create(:question) }
 
-    it 'deletes the question' do
-      expect { delete :destroy, params: { id: question } }
-        .to change(Question, :count)
-              .by(-1)
+    context 'when the user is the author of the question' do
+      before { login(question.user) }
+
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }
+          .to change(Question, :count)
+                .by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: question }
+    context 'when the user is not the author of the question' do
+      before { login(user) }
 
-      expect(response).to redirect_to question_path
+      it 'does not delete the question' do
+        expect { delete :destroy, params: { id: question } }
+          .not_to change(Question, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'when the user is the guest of the resource' do
+      it 'does not delete the question' do
+        expect { delete :destroy, params: { id: question } }
+          .not_to change(Question, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 end

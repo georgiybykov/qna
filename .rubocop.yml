@@ -9,14 +9,12 @@ AllCops:
   Exclude:
     - bin/**/*
     - node_modules/**/*
-    - db/**/*
+    - db/seeds.rb
     - vendor/**/*
+    - spec/features/**/*
 
 RSpec/MultipleExpectations:
   Enabled: false
-
-Rspec/Focus:
-  Enabled: true
 
 Layout/LineLength:
   Max: 120
@@ -70,7 +68,8 @@ Metrics/PerceivedComplexity:
 
 Metrics/BlockLength:
   Exclude:
-    - db/seeds.rb
+    - config/environments/**/*
+    - db/**/*
     - spec/**/*
 
 Metrics/CyclomaticComplexity:
