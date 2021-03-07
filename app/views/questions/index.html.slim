@@ -5,7 +5,7 @@
         = 'Questions'
 
     - if current_user
-      = link_to 'Ask question', new_question_path
+      = link_to 'Ask question', new_question_path, class: 'btn btn-success'
 
     table.table[style="text-align: center"]
       thead.thead-light
@@ -15,4 +15,6 @@
             = 'Title'
           th[scope="col"]
             = 'Body'
+          th[scope="col" colspan="3"]
+            = 'Actions'
       = render questions

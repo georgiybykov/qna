@@ -1,5 +1,7 @@
 nav.navbar.navbar-light[style="background-color: #e3f2fd;"]
   span.navbar-text
+    = link_to 'QnA', root_path, class: 'navbar-brand'
+  span.navbar-text
     - if user_signed_in?
       = 'Hi, '
       b
