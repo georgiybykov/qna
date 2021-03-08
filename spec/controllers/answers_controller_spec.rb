@@ -30,7 +30,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       it 'redirects to show view' do
         post :create, params: { answer: attributes_for(:answer), question_id: question }
 
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to question
       end
     end
 

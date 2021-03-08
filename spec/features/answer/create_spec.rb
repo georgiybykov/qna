@@ -8,7 +8,7 @@ feature 'The user can answer the question', %q{
 
   given(:question) { create(:question) }
 
-  describe 'Authenticated user tries to create the answer' do
+  describe 'Authenticated user creates the answer' do
     given(:user) { create(:user) }
 
     background do
@@ -21,7 +21,11 @@ feature 'The user can answer the question', %q{
       click_on 'Create answer'
 
       expect(page).to have_content 'Your answer has been successfully created!'
-      expect(page).to have_content 'Answer to the question'
+      expect(current_path).to eq question_path(question)
+
+      within '.answers' do
+        expect(page).to have_content 'Answer to the question'
+      end
     end
 
     scenario 'with invalid data (with the empty answer body)' do
@@ -33,7 +37,6 @@ feature 'The user can answer the question', %q{
       expect(page).to have_content 'Body can\'t be blank'
     end
   end
-
 
   scenario 'Unauthenticated user tries to create the answer' do
     visit question_path(question)
