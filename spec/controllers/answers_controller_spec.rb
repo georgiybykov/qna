@@ -21,29 +21,31 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     before { login(user) }
 
     context 'with valid attributes' do
-      it 'saves a new answer to the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }
+      it 'saves a new answers to the database' do
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js } }
           .to change(question.answers, :count)
                 .by(1)
       end
 
-      it 'redirects to show view' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
+      it 'renders the create template' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
 
-        expect(response).to redirect_to question
+        expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
-      it 'does not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }
+      it 'does not save the answers' do
+        expect do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+        end
           .not_to change(question.answers, :count)
       end
 
-      it 're-renders the view of the question show' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
+      it 'renders the create template' do
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
 
-        expect(response).to render_template 'questions/show'
+        expect(response).to render_template :create
       end
     end
   end
@@ -52,7 +54,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     before { login(user) }
 
     context 'with valid attributes' do
-      it 'changes the answer attributes' do
+      it 'changes the answers attributes' do
         patch :update, params: { id: answer, answer: { body: 'New body' } }
 
         answer.reload
@@ -60,7 +62,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
         expect(answer.body).to eq('New body')
       end
 
-      it 'redirects to updated answer' do
+      it 'redirects to updated answers' do
         patch :update, params: { id: answer, answer: { body: 'New body' } }
 
         expect(response).to redirect_to answer
@@ -68,7 +70,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     end
 
     context 'with invalid attributes' do
-      it 'does not change the answer' do
+      it 'does not change the answers' do
         answer_body = answer.body
 
         patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }
@@ -89,10 +91,10 @@ describe AnswersController, type: :controller, aggregate_failures: true do
   describe 'DELETE #destroy' do
     let!(:answer) { create(:answer) }
 
-    context 'when the user is the author of the answer' do
+    context 'when the user is the author of the answers' do
       before { login(answer.user) }
 
-      it 'deletes the answer' do
+      it 'deletes the answers' do
         expect { delete :destroy, params: { id: answer } }
           .to change(Answer, :count)
                 .by(-1)
@@ -105,10 +107,10 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       end
     end
 
-    context 'when the user is not the author of the answer' do
+    context 'when the user is not the author of the answers' do
       before { login(user) }
 
-      it 'does not delete the answer' do
+      it 'does not delete the answers' do
         expect { delete :destroy, params: { id: answer } }
           .not_to change(Answer, :count)
       end
@@ -121,7 +123,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     end
 
     context 'when the user is the guest of the resource' do
-      it 'does not delete the answer' do
+      it 'does not delete the answers' do
         expect { delete :destroy, params: { id: answer } }
           .not_to change(Answer, :count)
       end

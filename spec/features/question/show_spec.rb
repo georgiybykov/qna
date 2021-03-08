@@ -10,7 +10,7 @@ feature 'The user can see the list of the questions', %q{
   given(:question) { create(:question) }
   given!(:question_answers) { create_list(:answer, 3, question: question) }
 
-  scenario 'The user looks at the list of questions, selects first one and gets the list of answers ' do
+  scenario 'The user looks at the list of the questions, selects first one and gets the list of answers ' do
     visit questions_path(question)
 
     expect(page).to have_content 'Questions'

@@ -12,4 +12,14 @@ h2= 'Answers'
   = render question.answers
 
 - if current_user
-  = render 'answers/form'
+  .answer-errors
+    = render 'shared/errors', resource: @answer
+
+  h3= 'Create answer'
+  = form_with model: [question, @answer], local: true do |f|
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+    = f.submit 'Create answer'
+
+/ - if current_user
+/   = render 'answers/form'

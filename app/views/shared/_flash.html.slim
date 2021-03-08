@@ -1,0 +1,2 @@
+- flash.each do |key, message|
+  = content_tag :p, message, class: "alert alert-#{ApplicationHelper::FLASH_MESSAGE_STYLE[key.to_sym]}"

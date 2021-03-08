@@ -10,13 +10,25 @@ class AnswersController < ApplicationController
   def edit; end
 
   def create
-    @answer = answers.new(answer_params.merge(user: current_user))
+    @answer = answers.create(answer_params.merge(user: current_user))
+    @answer.save
 
-    if @answer.save
-      redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
-    else
-      render 'questions/show'
-    end
+    # render 'answers/create.js'
+
+    # respond_to do |format|
+    #   format.js
+    # end
+
+    # render 'answers/create.js'
+    # render :create, handlers: :erb, format: :js
+    # , :handlers => [:erb], :formats => [:js])
+    # render 'questions/show'
+
+    # if @answer.save
+    #   redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
+    # else
+    #   render 'questions/show'
+    # end
   end
 
   def update

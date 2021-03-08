@@ -17,7 +17,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   describe 'GET #show' do
     before { get :show, params: { id: question } }
 
-    it 'assigns new answer for question' do
+    it 'assigns new answers for question' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 

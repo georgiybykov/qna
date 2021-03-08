@@ -4,11 +4,11 @@ feature 'The user can answer the question', %q{
   In order to start a discussion about the question
   As an authenticated user
   I would like to be able to answer the question
-}, type: :feature, aggregate_failures: true do
+}, type: :feature, js: true, aggregate_failures: true do
 
   given(:question) { create(:question) }
 
-  describe 'Authenticated user creates the answer' do
+  describe 'Authenticated user creates the answers' do
     given(:user) { create(:user) }
 
     background do
@@ -17,19 +17,18 @@ feature 'The user can answer the question', %q{
     end
 
     scenario 'with valid data' do
-      fill_in 'Body', with: 'Answer to the question'
+      fill_in 'Your answer', with: 'Answer to the question'
       click_on 'Create answer'
 
-      expect(page).to have_content 'Your answer has been successfully created!'
-      expect(current_path).to eq question_path(question)
-
+      # expect(page).to have_content 'Your answer has been successfully created!'
+      # expect(current_path).to eq question_path(question)
       within '.answers' do
         expect(page).to have_content 'Answer to the question'
       end
     end
 
     scenario 'with invalid data (with the empty answer body)' do
-      fill_in 'Body', with: ''
+      fill_in 'Your answer', with: ''
       click_on 'Create answer'
 
       expect(current_path).to eq(question_answers_path(question))
@@ -38,7 +37,7 @@ feature 'The user can answer the question', %q{
     end
   end
 
-  scenario 'Unauthenticated user tries to create the answer' do
+  scenario 'Unauthenticated user tries to create the answers' do
     visit question_path(question)
 
     expect(page).to_not have_button 'Create Answer'
