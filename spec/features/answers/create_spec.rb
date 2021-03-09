@@ -20,8 +20,8 @@ feature 'The user can answer the question', %q{
       fill_in 'Your answer', with: 'Answer to the question'
       click_on 'Create answer'
 
-      # expect(page).to have_content 'Your answer has been successfully created!'
-      # expect(current_path).to eq question_path(question)
+      expect(current_path).to eq question_path(question)
+
       within '.answers' do
         expect(page).to have_content 'Answer to the question'
       end
@@ -31,7 +31,7 @@ feature 'The user can answer the question', %q{
       fill_in 'Your answer', with: ''
       click_on 'Create answer'
 
-      expect(current_path).to eq(question_answers_path(question))
+      expect(current_path).to eq question_path(question)
       expect(page).to_not have_content 'Answer to the question'
       expect(page).to have_content 'Body can\'t be blank'
     end
