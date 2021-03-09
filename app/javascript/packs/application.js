@@ -10,3 +10,5 @@ require("channels")
 require("jquery")
 require("popper.js")
 require("bootstrap")
+
+require("../utilities/answers/form_toggler.js")

@@ -73,7 +73,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
           .not_to change(Question, :count)
       end
 
-      it 're-renders the new view' do
+      it 'renders the new view' do
         post :create, params: { question: attributes_for(:question, :invalid) }
 
         expect(response).to render_template :new
@@ -111,7 +111,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         expect(question.body).to eq('QuestionBody')
       end
 
-      it 're-renders the edit view' do
+      it 'renders the edit view' do
         patch :update, params: { id: question, question: attributes_for(:question, :invalid) }
 
         expect(response).to render_template :edit

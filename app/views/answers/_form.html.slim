@@ -2,7 +2,7 @@
   =render 'shared/errors', resource: @answer
 
 h3= 'Create answer'
-= form_with model: [question, @answer], local: false do |f|
+= form_with model: [question, @answer], local: false, class: 'new-answer' do |f|
   = f.label :body, 'Your answer'
   = f.text_area :body, id: 'answer_body'
   = f.submit 'Create answer'

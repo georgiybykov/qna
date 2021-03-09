@@ -7,19 +7,14 @@ class AnswersController < ApplicationController
   expose(:answers) { question.answers }
   expose :answer
 
-  def edit; end
-
   def create
-    @answer = answers.create(answer_params.merge(user: current_user))
+    @answer = answers.new(answer_params.merge(user: current_user))
     @answer.save
   end
 
   def update
-    if answer.update(answer_params.merge(user: current_user))
-      redirect_to answer_path(answer)
-    else
-      render :edit
-    end
+    answer.update(answer_params.merge(user: current_user))
+    @question = answer.question
   end
 
   def destroy

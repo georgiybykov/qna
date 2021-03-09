@@ -8,7 +8,7 @@ feature 'The user can answer the question', %q{
 
   given(:question) { create(:question) }
 
-  describe 'Authenticated user creates the answers' do
+  describe 'Authenticated user creates the answer' do
     given(:user) { create(:user) }
 
     background do
@@ -32,12 +32,11 @@ feature 'The user can answer the question', %q{
       click_on 'Create answer'
 
       expect(current_path).to eq question_path(question)
-      expect(page).to_not have_content 'Answer to the question'
       expect(page).to have_content 'Body can\'t be blank'
     end
   end
 
-  scenario 'Unauthenticated user tries to create the answers' do
+  scenario 'Unauthenticated user tries to create the answer' do
     visit question_path(question)
 
     expect(page).to_not have_button 'Create Answer'
