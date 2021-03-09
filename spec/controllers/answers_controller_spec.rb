@@ -79,15 +79,15 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       before { login(answer.user) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }
+        expect { delete :destroy, params: { id: answer }, format: :js }
           .to change(Answer, :count)
                 .by(-1)
       end
 
-      it 'redirects to index' do
-        delete :destroy, params: { id: answer }
+      it 'render the destroy view' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to question_path(answer.question)
+        expect(response).to render_template :destroy
       end
     end
 
@@ -95,27 +95,27 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       before { login(user) }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: answer } }
+        expect { delete :destroy, params: { id: answer }, format: :js }
           .not_to change(Answer, :count)
       end
 
-      it 'redirects to index' do
-        delete :destroy, params: { id: answer }
+      it 'render the destroy view' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to answer.question
+        expect(response).to render_template :destroy
       end
     end
 
     context 'when the user is the guest of the resource' do
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: answer } }
+        expect { delete :destroy, params: { id: answer }, format: :js }
           .not_to change(Answer, :count)
       end
 
       it 'redirects to index' do
-        delete :destroy, params: { id: answer }
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response.body).to have_content 'You need to sign in or sign up before continuing.'
       end
     end
   end
