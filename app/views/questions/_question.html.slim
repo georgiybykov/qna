@@ -1,17 +1,24 @@
-tbody
-  tr
-    td.align-middle.font-weight-bold
-    td.align-middle
-      = question.title
-    td.align-middle
-      = question.body
-    td.align-middle
-      = link_to 'Show', question_path(question), class: 'btn btn-primary'
-    td.align-middle
-      = link_to 'Edit', edit_question_path(question), class: 'btn btn-primary'
-    td.align-middle
-      = link_to 'Delete',
+- if question.persisted?
+  div id = "question_#{question.id}"
+    p= link_to question.title, question_path(question)
+    p= question.body
+    - if current_user&.author?(question)
+      = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: question.id }
+      |  |
+      = link_to 'Delete question',
               question_path(question),
               method: :delete,
-              data: { confirm: 'Are you sure?' },
-              class: 'btn btn-danger'
+              remote: true,
+              class: 'delete-question-link btn btn-danger'
+      p
+
+    = form_with model: question, local: false, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
+      .edit-question-errors
+      h5= 'Edit question'
+      = f.label :title, 'Title'
+      = f.text_field :title
+      br
+      = f.label :body, 'Your question', id: "question_body-#{question.id}"
+      = f.text_area :body
+      br
+      = f.submit 'Save'

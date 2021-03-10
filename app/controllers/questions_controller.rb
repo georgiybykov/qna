@@ -14,8 +14,6 @@ class QuestionsController < ApplicationController
 
   def new; end
 
-  def edit; end
-
   def create
     question.user = current_user
 
@@ -27,11 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params.merge(user: current_user))
-      redirect_to question_path(question)
-    else
-      render :edit
-    end
+    question.update(question_params.merge(user: current_user))
   end
 
   def destroy

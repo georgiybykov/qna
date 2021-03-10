@@ -11,4 +11,5 @@ require("jquery")
 require("popper.js")
 require("bootstrap")
 
-require("../utilities/answers/form_toggler.js")
+require("../utilities/answers/edit_form_toggler.js")
+require("../utilities/questions/edit_form_toggler.js")

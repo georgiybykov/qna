@@ -38,18 +38,6 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
     end
   end
 
-  describe 'GET #edit' do
-    before do
-      login(user)
-
-      get :edit, params: { id: question }
-    end
-
-    it 'renders the edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     before { login(user) }
 
@@ -86,7 +74,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
     context 'with valid attributes' do
       it 'changes the question attributes' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }
+        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' }, format: :js }
 
         question.reload
 
@@ -94,16 +82,16 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         expect(question.body).to eq('New body')
       end
 
-      it 'redirects to updated question' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }
+      it 'renders the update view' do
+        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' }, format: :js }
 
-        expect(response).to redirect_to question
+        expect(response).to render_template :update
       end
     end
 
     context 'with invalid attributes' do
       it 'does not change the question' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
 
         question.reload
 
@@ -111,10 +99,10 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         expect(question.body).to eq('QuestionBody')
       end
 
-      it 'renders the edit view' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }
+      it 'renders the update view' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
 
-        expect(response).to render_template :edit
+        expect(response).to render_template :update
       end
     end
   end
