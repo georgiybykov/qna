@@ -25,15 +25,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question.update(question_params.merge(user: current_user))
+    question.update(question_params.merge(user: current_user)) if current_user.author?(question)
   end
 
   def destroy
-    if current_user.author?(question)
-      flash[:notice] = 'Your question has been successfully deleted!' if question.destroy
-    else
-      flash.now[:alert] = 'You are not able to delete this question!'
-    end
+    question.destroy if current_user.author?(question)
 
     redirect_to questions_path
   end

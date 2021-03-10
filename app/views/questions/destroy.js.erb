@@ -1,0 +1,3 @@
+<% if question.destroyed? %>
+  $("#question_<%= question.id %>").remove()
+<% end %>
