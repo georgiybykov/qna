@@ -2,6 +2,7 @@
 
 class AnswersController < ApplicationController
   before_action :authenticate_user!
+  before_action -> { check_permissions(answer) }, only: %i[update destroy]
 
   expose :question
   expose(:answers) { question.answers }
@@ -17,9 +18,7 @@ class AnswersController < ApplicationController
     @question = answer.question
   end
 
-  def destroy
-    answer.destroy if current_user.author?(answer)
-  end
+  delegate :destroy, to: :answer
 
   private
 

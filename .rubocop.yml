@@ -90,3 +90,7 @@ Naming/VariableNumber:
   EnforcedStyle: non_integer
   Exclude:
     - db/seeds.rb
+
+Rails/LexicallyScopedActionFilter:
+  Exclude:
+    - app/controllers/answers_controller.rb

@@ -2,6 +2,7 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
+  before_action -> { check_permissions(question) }, only: %i[update destroy]
 
   expose :questions, -> { Question.all }
   expose :question
@@ -25,11 +26,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question.update(question_params.merge(user: current_user)) if current_user.author?(question)
+    question.update(question_params.merge(user: current_user))
   end
 
   def destroy
-    question.destroy if current_user.author?(question)
+    question.destroy
 
     redirect_to questions_path
   end

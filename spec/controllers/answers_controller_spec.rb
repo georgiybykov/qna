@@ -94,15 +94,9 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     context 'when the user is not the author of the answer' do
       before { login(user) }
 
-      it 'does not delete the answer' do
-        expect { delete :destroy, params: { id: answer }, format: :js }
-          .not_to change(Answer, :count)
-      end
-
-      it 'render the destroy view' do
-        delete :destroy, params: { id: answer }, format: :js
-
-        expect(response).to render_template :destroy
+      it 'does not delete the question and raise an `ActionControllerError`' do
+        expect { delete :destroy, params: { id: answer } }
+          .to raise_error(ActionController::BadRequest)
       end
     end
 
