@@ -124,6 +124,12 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
         expect(response).to redirect_to questions_path
       end
+
+      it 'renders the destroy view (after xhr request)' do
+        delete :destroy, xhr: true, params: { id: question }, format: :js
+
+        expect(response).to render_template :destroy
+      end
     end
 
     context 'when the user is not the author of the question' do
@@ -141,7 +147,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
           .not_to change(Question, :count)
       end
 
-      it 'redirects to index' do
+      it 'redirects to sign in' do
         delete :destroy, params: { id: question }
 
         expect(response).to redirect_to new_user_session_path

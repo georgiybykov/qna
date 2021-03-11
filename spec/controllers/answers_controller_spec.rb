@@ -84,7 +84,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
                 .by(-1)
       end
 
-      it 'render the destroy view' do
+      it 'renders the destroy view' do
         delete :destroy, params: { id: answer }, format: :js
 
         expect(response).to render_template :destroy
