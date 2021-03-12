@@ -20,6 +20,14 @@ class AnswersController < ApplicationController
 
   delegate :destroy, to: :answer
 
+  def set_best
+    @question = answer.question
+
+    check_permissions(@question)
+
+    answer.mark_as_best!
+  end
+
   private
 
   def answer_params

@@ -1,6 +1,19 @@
 - if answer.persisted?
   div id = "answer_#{answer.id}"
-    p= answer.body
+    p
+      - if answer.best?
+        i
+          sup.best BEST
+        '->
+      = answer.body
+    p
+      - if current_user&.author?(answer.question) && !answer.best?
+        = link_to 'Mark as best',
+                set_best_answer_path(answer),
+                method: :patch,
+                remote: true,
+                class: 'best-answer-link'
+
     - if current_user&.author?(answer)
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       |  |

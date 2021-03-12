@@ -5,6 +5,7 @@ FactoryBot.define do
 
   factory :answer do
     body { generate(:body) }
+    best { false }
 
     association :question
     association :user

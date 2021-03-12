@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
   def index; end
 
   def show
-    @answer = Answer.new(question: question)
+    @answer = question.answers.new
   end
 
   def new; end

@@ -8,8 +8,9 @@ p= question.body
           data: { confirm: 'Are you sure?' }
 
 h2= 'Answers'
-.answers
-  = render question.answers
+.container
+  .answers
+    = render question.answers
 
 - if current_user
   = render 'answers/form'

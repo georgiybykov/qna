@@ -106,10 +106,57 @@ describe AnswersController, type: :controller, aggregate_failures: true do
           .not_to change(Answer, :count)
       end
 
-      it 'redirects to index' do
+      it 'responses :forbidden' do
         delete :destroy, params: { id: answer }, format: :js
 
         expect(response.body).to have_content 'You need to sign in or sign up before continuing.'
+
+        expect(response.status).to be 401
+      end
+    end
+  end
+
+  describe 'PATCH #set_best' do
+    let(:author) { create(:user) }
+    let(:new_question) { create(:question, user: author) }
+    let(:answer) { create(:answer, question: new_question, user: author) }
+
+    context 'when the user is the author of the question' do
+      before { login(author) }
+
+      it 'sets the answer to be the best' do
+        patch :set_best, params: { id: answer }, format: :js
+
+        answer.reload
+
+        expect(answer).to be_best
+      end
+
+      it 'renders the `set_best` view' do
+        patch :set_best, params: { id: answer }, format: :js
+
+        expect(response).to render_template :set_best
+      end
+    end
+
+    context 'when the user is not the author of the question' do
+      let(:not_author) { create(:user) }
+
+      before { login(not_author) }
+
+      it 'does not set the answer to be the best' do
+        expect { patch :set_best, params: { id: answer, answer: { best: true } }, format: :js }
+          .to raise_error(ActionController::BadRequest)
+      end
+    end
+
+    context 'when the user is not authenticated' do
+      it 'does not set the answer to be the best' do
+        patch :set_best, params: { id: answer, answer: { best: true } }, format: :js
+
+        expect(response.body).to have_content 'You need to sign in or sign up before continuing.'
+
+        expect(response.status).to be 401
       end
     end
   end
