@@ -16,6 +16,9 @@ AllCops:
 RSpec/MultipleExpectations:
   Enabled: false
 
+RSpec/MultipleMemoizedHelpers:
+  Max: 8
+
 Layout/LineLength:
   Max: 120
 
@@ -90,3 +93,10 @@ Naming/VariableNumber:
   EnforcedStyle: non_integer
   Exclude:
     - db/seeds.rb
+
+Rails/LexicallyScopedActionFilter:
+  Exclude:
+    - app/controllers/answers_controller.rb
+
+Rails/SkipsModelValidations:
+  Enabled: false

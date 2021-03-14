@@ -2,46 +2,35 @@
 
 class AnswersController < ApplicationController
   before_action :authenticate_user!
+  before_action -> { check_permissions(answer) }, only: %i[update destroy]
 
   expose :question
   expose(:answers) { question.answers }
   expose :answer
 
-  def edit; end
-
   def create
     @answer = answers.new(answer_params.merge(user: current_user))
-
-    if @answer.save
-      redirect_to question_path(@answer.question), notice: 'Your answer has been successfully created!'
-    else
-      render 'questions/show'
-    end
+    @answer.save
   end
 
   def update
-    if answer.update(answer_params.merge(user: current_user))
-      redirect_to answer_path(answer)
-    else
-      render :edit
-    end
+    answer.update(answer_params.merge(user: current_user))
+    @question = answer.question
   end
 
-  def destroy
-    if current_user.author?(answer)
-      flash[:notice] = 'Your answer has been successfully deleted!' if answer.destroy
-    else
-      flash.now[:alert] = 'You are not able to delete this answer!'
-    end
+  delegate :destroy, to: :answer
 
-    redirect_to answer.question
+  def set_best
+    @question = answer.question
+
+    return head(:forbidden) unless current_user.author?(@question)
+
+    answer.mark_as_best!
   end
 
   private
 
   def answer_params
-    params
-      .require(:answer)
-      .permit(:body)
+    params.require(:answer).permit(:body)
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 feature 'The user can sign in', %q{
-  In order to ask the questions
+  In order to ask the question
   As an unauthenticated user
   I would like to be able to sign in
 }, type: :feature, aggregate_failures: true do

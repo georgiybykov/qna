@@ -2,6 +2,7 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
+  before_action -> { check_permissions(question) }, only: %i[update destroy]
 
   expose :questions, -> { Question.all }
   expose :question
@@ -9,12 +10,10 @@ class QuestionsController < ApplicationController
   def index; end
 
   def show
-    @answer = Answer.new(question: question)
+    @answer = question.answers.new
   end
 
   def new; end
-
-  def edit; end
 
   def create
     question.user = current_user
@@ -27,28 +26,21 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params.merge(user: current_user))
-      redirect_to question_path(question)
-    else
-      render :edit
-    end
+    question.update(question_params.merge(user: current_user))
   end
 
   def destroy
-    if current_user.author?(question)
-      flash[:notice] = 'Your question has been successfully deleted!' if question.destroy
-    else
-      flash.now[:alert] = 'You are not able to delete this question!'
-    end
+    question.destroy
 
-    redirect_to questions_path
+    respond_to do |format|
+      format.html { redirect_to questions_path }
+      format.js { render :destroy }
+    end
   end
 
   private
 
   def question_params
-    params
-      .require(:question)
-      .permit(:title, :body)
+    params.require(:question).permit(:title, :body)
   end
 end
