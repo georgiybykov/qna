@@ -32,7 +32,10 @@ class QuestionsController < ApplicationController
   def destroy
     question.destroy
 
-    request.xhr? ? render(:destroy) : redirect_to(questions_path)
+    respond_to do |format|
+      format.html { redirect_to questions_path }
+      format.js { render :destroy }
+    end
   end
 
   private
