@@ -1,20 +1,20 @@
-h1= question.title
-p= question.body
+h1= @question.title
+p= @question.body
 
--if question.files.attached?
-  - question.files.each do |file|
+-if @question.files.attached?
+  - @question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
 
-- if author_of?(current_user, question)
+- if author_of?(current_user, @question)
   = link_to 'Delete question',
-          question_path(question),
+          question_path(@question),
           method: :delete,
           data: { confirm: 'Are you sure?' }
 
 h2= 'Answers'
 .container
   .answers
-    = render question.answers
+    = render @question.answers
 
 - if current_user
   = render 'answers/form'

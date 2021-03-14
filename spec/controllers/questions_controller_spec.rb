@@ -49,9 +49,9 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       end
 
       it 'redirects to show view' do
-        post :create, params: { id: question }
+        post :create, params: { question: attributes_for(:question) }
 
-        expect(response).to redirect_to question
+        expect(response).to redirect_to assigns(:question)
       end
     end
 
