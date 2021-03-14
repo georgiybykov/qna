@@ -6,6 +6,8 @@ class Answer < ApplicationRecord
   belongs_to :user, touch: true
   belongs_to :question, touch: true
 
+  has_many_attached :files
+
   validates :body, presence: true
 
   def mark_as_best!

@@ -27,6 +27,22 @@ feature 'The user can answer the question', %q{
       end
     end
 
+    scenario 'with attached files' do
+      fill_in 'Your answer', with: 'Answer to the question'
+
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Create answer'
+
+      expect(current_path).to eq question_path(question)
+
+      within '.answers' do
+        expect(page).to have_content 'Answer to the question'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
     scenario 'with invalid data (with the empty answer body)' do
       fill_in 'Your answer', with: ''
       click_on 'Create answer'
