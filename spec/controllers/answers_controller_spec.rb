@@ -94,9 +94,11 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     context 'when the user is not the author of the answer' do
       before { login(user) }
 
-      it 'does not delete the question and raise an `ActionControllerError`' do
+      it 'does not delete the question and responses :forbidden' do
         expect { delete :destroy, params: { id: answer } }
-          .to raise_error(ActionController::BadRequest)
+          .not_to change(Answer, :count)
+
+        expect(response.status).to be 403
       end
     end
 
@@ -106,7 +108,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
           .not_to change(Answer, :count)
       end
 
-      it 'responses :forbidden' do
+      it 'responses :unauthorized' do
         delete :destroy, params: { id: answer }, format: :js
 
         expect(response.body).to have_content 'You need to sign in or sign up before continuing.'
@@ -144,9 +146,14 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
       before { login(not_author) }
 
-      it 'does not set the answer to be the best' do
-        expect { patch :set_best, params: { id: answer, answer: { best: true } }, format: :js }
-          .to raise_error(ActionController::BadRequest)
+      it 'does not set the answer to be the best and responses :forbidden' do
+        patch :set_best, params: { id: answer, answer: { best: true } }, format: :js
+
+        answer.reload
+
+        expect(answer.best?).to eq(false)
+
+        expect(response.status).to be 403
       end
     end
 

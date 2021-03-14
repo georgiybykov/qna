@@ -23,7 +23,7 @@ class AnswersController < ApplicationController
   def set_best
     @question = answer.question
 
-    check_permissions(@question)
+    return head(:forbidden) unless current_user.author?(@question)
 
     answer.mark_as_best!
   end

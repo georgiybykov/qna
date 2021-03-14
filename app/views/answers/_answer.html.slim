@@ -7,14 +7,14 @@
         '->
       = answer.body
     p
-      - if current_user&.author?(answer.question) && !answer.best?
+      - if author_of?(current_user, answer.question) && !answer.best?
         = link_to 'Mark as best',
                 set_best_answer_path(answer),
                 method: :patch,
                 remote: true,
                 class: 'best-answer-link'
 
-    - if current_user&.author?(answer)
+    - if author_of?(current_user, answer)
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       |  |
       = link_to 'Delete answer',

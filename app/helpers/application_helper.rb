@@ -6,4 +6,8 @@ module ApplicationHelper
   def greeting_in_header(user)
     user.email
   end
+
+  def author_of?(user, object)
+    user&.author?(object)
+  end
 end

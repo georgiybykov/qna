@@ -135,9 +135,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
     context 'when the user is not the author of the question' do
       before { login(user) }
 
-      it 'does not delete the question and raise an `ActionControllerError`' do
+      it 'does not delete the question and responses :forbidden' do
         expect { delete :destroy, params: { id: question } }
-          .to raise_error(ActionController::BadRequest)
+          .not_to change(Question, :count)
+
+        expect(response.status).to be 403
       end
     end
 

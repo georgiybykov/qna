@@ -2,7 +2,7 @@
   div id = "question_#{question.id}"
     p= link_to question.title, question_path(question)
     p= question.body
-    - if current_user&.author?(question)
+    - if author_of?(current_user, question)
       = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: question.id }
       |  |
       = link_to 'Delete question',
