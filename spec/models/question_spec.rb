@@ -9,7 +9,7 @@ describe Question, type: :model, aggregate_failures: true do
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :body }
 
-  it 'has one attached file' do
-    expect(question.file).to be_an_instance_of(ActiveStorage::Attached::One)
+  it 'has many attached files' do
+    expect(question.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 end
