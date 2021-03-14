@@ -2,7 +2,7 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show update destroy]
+  before_action :find_question, only: %i[show update destroy]
   before_action -> { check_permissions(@question) }, only: %i[update destroy]
 
   expose :questions, -> { Question.all }
@@ -42,7 +42,7 @@ class QuestionsController < ApplicationController
 
   private
 
-  def load_question
+  def find_question
     @question = Question.with_attached_files.find(params[:id])
   end
 
