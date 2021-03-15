@@ -35,4 +35,8 @@
       h5= 'Edit answer'
       = f.label :body, 'Your answer'
       = f.text_area :body, id: "answer_body-#{answer.id}"
+      br
+      = f.label :files
+      = f.file_field :files, multiple: true
+      br
       = f.submit 'Save'
