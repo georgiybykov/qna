@@ -8,6 +8,6 @@ h3= 'Create answer'
     = f.text_area :body, id: 'answer_body'
   p
     = f.label :files, 'Add files'
-    = f.file_field :files, multiple: true
+    = f.file_field :files, multiple: true, direct_upload: true
   p
     = f.submit 'Create answer'

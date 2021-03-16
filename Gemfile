@@ -36,6 +36,8 @@ gem 'slim-rails'
 # AUTH
 gem 'devise'
 
+gem 'aws-sdk-s3', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -50,6 +52,9 @@ group :development, :test do
 
   # A documentation generation tool
   gem 'yard'
+
+  # Shim to load environment variables.
+  gem 'dotenv-rails'
 end
 
 group :development do
