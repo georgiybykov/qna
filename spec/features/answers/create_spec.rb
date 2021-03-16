@@ -30,7 +30,12 @@ feature 'The user can answer the question', %q{
     scenario 'with attached files' do
       fill_in 'Your answer', with: 'Answer to the question'
 
-      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      expect(page).to_not have_link 'first_file.txt'
+      expect(page).to_not have_link 'second_file.txt'
+
+      attach_file 'Add files', ["#{Rails.root}/spec/fixtures/first_file.txt",
+                                "#{Rails.root}/spec/fixtures/second_file.txt"]
+
       click_on 'Create answer'
 
       expect(current_path).to eq question_path(question)
@@ -38,8 +43,8 @@ feature 'The user can answer the question', %q{
       within '.answers' do
         expect(page).to have_content 'Answer to the question'
 
-        expect(page).to have_link 'rails_helper.rb'
-        expect(page).to have_link 'spec_helper.rb'
+        expect(page).to have_link 'first_file.txt'
+        expect(page).to have_link 'second_file.txt'
       end
     end
 

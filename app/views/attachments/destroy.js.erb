@@ -1,0 +1,3 @@
+<% if attachment.destroyed? %>
+  $("#attachment_<%= attachment.id %>").remove()
+<% end %>

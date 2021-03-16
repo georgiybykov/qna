@@ -1,5 +1,5 @@
 .answer-errors
-  =render 'shared/errors', resource: @answer
+  = render 'shared/errors', resource: @answer
 
 h3= 'Create answer'
 = form_with model: [@question, @answer], local: false, class: 'new-answer' do |f|
@@ -7,7 +7,7 @@ h3= 'Create answer'
     = f.label :body, 'Your answer'
     = f.text_area :body, id: 'answer_body'
   p
-    = f.label :files
+    = f.label :files, 'Add files'
     = f.file_field :files, multiple: true
   p
     = f.submit 'Create answer'

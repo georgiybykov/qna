@@ -8,9 +8,7 @@
       = answer.body
 
       .container
-        - if answer.files.attached?
-          - answer.files.each do |file|
-            p= link_to file.filename.to_s, url_for(file)
+        = render 'shared/attachments', resource: answer
 
     p
       - if author_of?(current_user, answer.question) && !answer.best?

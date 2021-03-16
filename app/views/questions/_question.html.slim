@@ -3,9 +3,8 @@
     p= link_to question.title, question_path(question)
     p= question.body
 
-    - if question.files.attached?
-      - question.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
+    .container
+      = render 'shared/attachments', resource: question
 
     p
     - if author_of?(current_user, question)

@@ -46,17 +46,19 @@ feature 'The user can edit the question', %q{
     end
 
     scenario 'attaches the files to the question during editing' do
-      expect(page).to_not have_link 'rails_helper.rb'
-      expect(page).to_not have_link 'spec_helper.rb'
+      expect(page).to_not have_link 'first_file.txt'
+      expect(page).to_not have_link 'second_file.txt'
 
       within '.questions' do
         click_on 'Edit'
 
-        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        attach_file 'Files', ["#{Rails.root}/spec/fixtures/first_file.txt",
+                              "#{Rails.root}/spec/fixtures/second_file.txt"]
+
         click_on 'Save'
 
-        expect(page).to have_link 'rails_helper.rb'
-        expect(page).to have_link 'spec_helper.rb'
+        expect(page).to have_link 'first_file.txt'
+        expect(page).to have_link 'second_file.txt'
       end
     end
   end
