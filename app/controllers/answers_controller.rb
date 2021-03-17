@@ -17,7 +17,9 @@ class AnswersController < ApplicationController
     @question = @answer.question
   end
 
-  delegate :destroy, to: :@answer
+  def destroy
+    @answer.destroy
+  end
 
   def set_best
     @question = @answer.question
