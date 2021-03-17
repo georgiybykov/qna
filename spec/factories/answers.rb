@@ -17,5 +17,12 @@ FactoryBot.define do
     trait :invalid do
       body { nil }
     end
+
+    trait :with_file do
+      after :create do |answer|
+        answer.files.attach(io: File.open(Rails.root.join('spec/fixtures/second_file.txt')),
+                            filename: 'second_file.txt')
+      end
+    end
   end
 end

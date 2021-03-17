@@ -6,17 +6,17 @@ feature 'The user can edit the answer', %q{
   I would like to be able to edit my answer
 }, type: :feature, js: true, aggregate_failures: true do
 
-  given!(:user) { create(:user) }
-  given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question, user: user) }
+  given(:author) { create(:user) }
+  given(:question) { create(:question) }
+  given!(:answer) { create(:answer, question: question, user: author) }
 
   describe 'Authenticated owner of the answer' do
     background do
-      sign_in(user)
+      sign_in(author)
       visit question_path(question)
     end
 
-    scenario 'edits hiw own answer' do
+    scenario 'edits his answer with valid data' do
       click_on 'Edit'
 
       expect(current_path).to eq question_path(question)
@@ -30,7 +30,7 @@ feature 'The user can edit the answer', %q{
       end
     end
 
-    scenario 'tries to edit the answer of another user' do
+    scenario 'edits his answer with invalid data' do
       click_on 'Edit'
 
       expect(current_path).to eq question_path(question)
@@ -41,15 +41,33 @@ feature 'The user can edit the answer', %q{
 
         expect(page).to have_content answer.body
         expect(page).to have_content 'Body can\'t be blank'
+        expect(page).to have_selector 'textarea'
+      end
+    end
+
+    scenario 'attaches the files to the answer during editing' do
+      expect(page).to_not have_link 'first_file.txt'
+      expect(page).to_not have_link 'second_file.txt'
+
+      within '.answers' do
+        click_on 'Edit'
+
+        attach_file 'File', ["#{Rails.root}/spec/fixtures/first_file.txt",
+                             "#{Rails.root}/spec/fixtures/second_file.txt"]
+
+        click_on 'Save'
+
+        expect(page).to have_link 'first_file.txt'
+        expect(page).to have_link 'second_file.txt'
       end
     end
   end
 
   describe 'Authenticated user who does not own the answer' do
-    given!(:other_user) { create(:user) }
+    given!(:user) { create(:user) }
 
     scenario 'tries to edit the answer of another user' do
-      sign_in(other_user)
+      sign_in(user)
       visit question_path(question)
 
       expect(current_path).to eq question_path(question)

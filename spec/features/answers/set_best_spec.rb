@@ -43,7 +43,7 @@ feature 'The user can select the best answer for his question', %q{
   end
 
   scenario 'The authenticated user tries to set the best answer of for the question of the other user' do
-    sign_in user
+    sign_in(user)
     visit question_path(answer.question)
 
     expect(page).to_not have_link 'Mark as best'

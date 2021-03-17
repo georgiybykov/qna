@@ -15,17 +15,35 @@ feature 'The user can create a question', %q{
       click_on 'Ask question'
     end
 
-    scenario 'with valid data' do
-      fill_in 'Title', with: 'Question title'
-      fill_in 'Body', with: 'Text in the question body'
-      click_on 'Ask'
+    context 'tries to ask a question ' do
+      before do
+        fill_in 'Title', with: 'Question title'
+        fill_in 'Body', with: 'Text in the question body'
+      end
 
-      expect(page).to have_content 'Your question has been successfully created!'
-      expect(page).to have_content 'Question title'
-      expect(page).to have_content 'Text in the question body'
+      scenario 'with valid data' do
+        click_on 'Ask'
+
+        expect(page).to have_content 'Your question has been successfully created!'
+        expect(page).to have_content 'Question title'
+        expect(page).to have_content 'Text in the question body'
+      end
+
+      scenario 'with attached files' do
+        expect(page).to_not have_link 'first_file.txt'
+        expect(page).to_not have_link 'second_file.txt'
+
+        attach_file 'Files', ["#{Rails.root}/spec/fixtures/first_file.txt",
+                              "#{Rails.root}/spec/fixtures/second_file.txt"]
+
+        click_on 'Ask'
+
+        expect(page).to have_link 'first_file.txt'
+        expect(page).to have_link 'second_file.txt'
+      end
     end
 
-    scenario 'with invalid data' do
+    scenario 'tries to ask a question with invalid data' do
       click_on 'Ask'
 
       expect(page).to have_content 'Title can\'t be blank'

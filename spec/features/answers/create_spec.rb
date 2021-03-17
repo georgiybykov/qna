@@ -27,6 +27,27 @@ feature 'The user can answer the question', %q{
       end
     end
 
+    scenario 'with attached files' do
+      fill_in 'Your answer', with: 'Answer to the question'
+
+      expect(page).to_not have_link 'first_file.txt'
+      expect(page).to_not have_link 'second_file.txt'
+
+      attach_file 'Add files', ["#{Rails.root}/spec/fixtures/first_file.txt",
+                                "#{Rails.root}/spec/fixtures/second_file.txt"]
+
+      click_on 'Create answer'
+
+      expect(current_path).to eq question_path(question)
+
+      within '.answers' do
+        expect(page).to have_content 'Answer to the question'
+
+        expect(page).to have_link 'first_file.txt'
+        expect(page).to have_link 'second_file.txt'
+      end
+    end
+
     scenario 'with invalid data (with the empty answer body)' do
       fill_in 'Your answer', with: ''
       click_on 'Create answer'

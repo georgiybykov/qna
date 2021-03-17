@@ -6,6 +6,10 @@
           sup.best BEST
         '->
       = answer.body
+
+      .container
+        = render 'shared/attachments', resource: answer
+
     p
       - if author_of?(current_user, answer.question) && !answer.best?
         = link_to 'Mark as best',
@@ -29,4 +33,8 @@
       h5= 'Edit answer'
       = f.label :body, 'Your answer'
       = f.text_area :body, id: "answer_body-#{answer.id}"
+      br
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
+      br
       = f.submit 'Save'

@@ -1,5 +1,5 @@
-$('.edit-question-errors').html('<%= render 'shared/errors', resource: question %>')
+$('.edit-question-errors').html('<%= render 'shared/errors', resource: @question %>')
 
-<% if question.errors.blank? %>
+<% if @question.errors.blank? %>
   $('.questions').html('<%= j render questions %>');
 <% end %>

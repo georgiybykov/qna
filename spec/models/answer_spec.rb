@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe Answer, type: :model, aggregate_failures: true do
+  let(:answer) { described_class.new }
+
   it { is_expected.to belong_to(:user).touch(true) }
   it { is_expected.to belong_to(:question).touch(true) }
 
@@ -8,6 +10,10 @@ describe Answer, type: :model, aggregate_failures: true do
 
   it { is_expected.to have_db_column(:body).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:best).of_type(:boolean).with_options(null: false, default: false) }
+
+  it 'has many attached files' do
+    expect(answer.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
 
   describe '#default_scope(sort by best)' do
     let(:question) { create(:question) }
