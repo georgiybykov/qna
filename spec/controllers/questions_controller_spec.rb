@@ -17,7 +17,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   describe 'GET #show' do
     before { get :show, params: { id: question } }
 
-    it 'assigns new answers for question' do
+    it 'assigns a new answers for question' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
@@ -31,6 +31,14 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       login(user)
 
       get :new
+    end
+
+    it 'assigns a new Question for @question' do
+      expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'assigns a new link for @question' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
     end
 
     it 'renders the new view' do
