@@ -5,7 +5,7 @@ class CreateLinks < ActiveRecord::Migration[6.1]
     create_table :links do |t|
       t.string :name, limit: 50
       t.string :url
-      t.references :question, foreign_key: true
+      t.references :linkable, polymorphic: true
 
       t.timestamps
     end

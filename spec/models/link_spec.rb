@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Link, type: :model, aggregate_failures: true do
-  it { is_expected.to belong_to(:question) }
+  it { is_expected.to belong_to(:linkable).touch(true) }
 
   it { is_expected.to validate_presence_of :name }
   it { is_expected.to validate_presence_of :url }

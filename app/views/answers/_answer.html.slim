@@ -10,6 +10,12 @@
       .container
         = render 'shared/attachments', resource: answer
 
+      .links
+        p Links:
+        ul
+          - answer.links.each do |link|
+            li= link_to link.name, link.url, target: '_blank'
+
     p
       - if author_of?(current_user, answer.question) && !answer.best?
         = link_to 'Mark as best',

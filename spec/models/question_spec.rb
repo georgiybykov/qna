@@ -10,6 +10,9 @@ describe Question, type: :model, aggregate_failures: true do
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :body }
 
+  it { is_expected.to have_db_column(:title).of_type(:text) }
+  it { is_expected.to have_db_column(:body).of_type(:text) }
+
   it 'has many attached files' do
     expect(question.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
