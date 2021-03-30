@@ -9,6 +9,7 @@ feature 'The user can edit the answer', %q{
   given(:author) { create(:user) }
   given(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question, user: author) }
+  given(:url) { 'https://www.example.com/' }
 
   describe 'Authenticated owner of the answer' do
     background do
@@ -59,6 +60,21 @@ feature 'The user can edit the answer', %q{
 
         expect(page).to have_link 'first_file.txt'
         expect(page).to have_link 'second_file.txt'
+      end
+    end
+
+    scenario 'adds a link to the answer during editing' do
+      within "#answer_#{answer.id}" do
+        click_on 'Edit'
+
+        click_on 'Add link'
+
+        fill_in 'Link name', with: 'New Link'
+        fill_in 'URL', with: url
+
+        click_on 'Save'
+
+        expect(page).to have_link 'New Link', href: url
       end
     end
   end

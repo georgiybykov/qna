@@ -94,9 +94,9 @@ Naming/VariableNumber:
   Exclude:
     - db/seeds.rb
 
-Rails/LexicallyScopedActionFilter:
+Rails/Delegate:
   Exclude:
-    - app/controllers/answers_controller.rb
+    - app/controllers/**/*
 
 Rails/SkipsModelValidations:
   Enabled: false

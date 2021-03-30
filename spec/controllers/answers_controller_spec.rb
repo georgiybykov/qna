@@ -3,7 +3,7 @@
 describe AnswersController, type: :controller, aggregate_failures: true do
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
-  let(:answer) { create(:answer, question: question, user: user) }
+  let!(:answer) { create(:answer, question: question, user: user) }
 
   describe 'POST #create' do
     before { login(user) }

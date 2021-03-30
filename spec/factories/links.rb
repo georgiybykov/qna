@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :link do
     name { 'MyString' }
-    url { 'MyString' }
-    reference { '' }
+    url { 'https://www.example.com/' }
   end
 end

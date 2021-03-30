@@ -10,6 +10,7 @@ require("channels")
 require("jquery")
 require("popper.js")
 require("bootstrap")
+require("@nathanvda/cocoon")
 
 require("../utilities/answers/edit_form_toggler.js")
 require("../utilities/questions/edit_form_toggler.js")

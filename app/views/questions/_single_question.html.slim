@@ -1,0 +1,43 @@
+h1= @question.title
+p= @question.body
+
+.container
+  = render 'shared/attachments', resource: @question
+
+  .links
+    - unless @question.links.empty?
+      = render 'links/links', resource: @question
+
+- if author_of?(current_user, @question)
+  p
+    = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: @question.id }
+
+  p
+  = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
+    .edit-question-errors
+    h5= 'Edit question'
+    = f.label :title, 'Title'
+    = f.text_field :title
+    br
+    = f.label :body, 'Your question'
+    = f.text_area :body
+    br
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
+
+    .links-form
+      p Links:
+      #question-links
+        = f.fields_for :links do |l|
+          = render 'links/form', f: l
+        = link_to_add_association 'Add link', f, :links, partial: 'links/form'
+
+    br
+    = f.submit 'Save'
+
+  p
+    = link_to 'Delete question',
+            question_path(@question),
+            method: :delete,
+            data: { confirm: 'Are you sure?' },
+            class: 'btn btn-danger'

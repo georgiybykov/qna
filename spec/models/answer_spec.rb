@@ -3,6 +3,8 @@
 describe Answer, type: :model, aggregate_failures: true do
   let(:answer) { described_class.new }
 
+  it_behaves_like 'linkable'
+
   it { is_expected.to belong_to(:user).touch(true) }
   it { is_expected.to belong_to(:question).touch(true) }
   it { is_expected.to have_many(:links).dependent(:destroy) }

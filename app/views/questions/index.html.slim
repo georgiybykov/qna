@@ -1,9 +1,22 @@
-h1.text-center
-b
-  = 'Questions'
+.row.justify-content-center.mt-3
+  .col.col-md-12
+    h1
+      = 'Questions'
+    p
+      - if current_user
+        = link_to 'Ask question', new_question_path, class: 'btn btn-success'
 
-- if current_user
-  p= link_to 'Ask question', new_question_path, class: 'btn btn-success'
-
-.questions
-  = render questions
+    table.table[style="text-align: center"]
+      thead.thead-light
+        tr
+          th.sort-by-title.pointer[scope="col"]
+            = 'Title'
+          th[scope="col"]
+            = 'Body'
+          th[scope="col"]
+            = 'Files'
+          th[scope="col"]
+            = 'Links'
+          th[scope="col" colspan="2"]
+            = 'Actions'
+      = render questions

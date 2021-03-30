@@ -15,7 +15,7 @@ feature 'The user can see the list of the questions', %q{
 
     expect(page).to have_content 'Questions'
 
-    click_link question.title
+    click_link 'Show'
 
     expect(page).to have_content question.body
 
