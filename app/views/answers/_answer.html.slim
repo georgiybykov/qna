@@ -8,7 +8,7 @@
       = answer.body
 
       .container
-        = render 'shared/attachments', resource: answer
+        = render 'attachments/attachments', resource: answer
 
       .links
         - unless answer.links.empty?
@@ -44,9 +44,7 @@
       .links-form
         p Links:
         #answer-links
-          = f.fields_for :links do |l|
-            = render 'links/form', f: l
-          = link_to_add_association 'Add link', f, :links, partial: 'links/form'
+          = render 'links/form', f: f
 
       br
       = f.submit 'Save'

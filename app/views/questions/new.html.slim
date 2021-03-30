@@ -14,9 +14,7 @@
   .links
     p Links:
     #question-links
-      = f.fields_for :links do |l|
-        = render 'links/form', f: l
-      = link_to_add_association 'Add link', f, :links, partial: 'links/form'
+      = render 'links/form', f: f
 
   p
     = f.submit 'Ask'

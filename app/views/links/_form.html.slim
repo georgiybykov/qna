@@ -1,9 +1,3 @@
-.nested-fields
-  p
-    = f.label :name, 'Link name'
-    = f.text_field :name
-  p
-    = f.label :url, 'URL'
-    = f.text_field :url
-
-  = link_to_remove_association "Remove link", f
+= f.fields_for :links do |l|
+  = render 'links/link_fields', f: l
+= link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
