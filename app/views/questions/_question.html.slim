@@ -6,13 +6,9 @@
       td.align-middle
         = question.body
       td.align-middle
-        .container
-          = render 'attachments/attachments', resource: question
+        = question.files.count
       td.align-middle
-        .links
-          - unless question.links.empty?
-            = render 'links/links', links: question.links
-
+        = question.links.count
       td.align-middle
         = link_to 'Show', question_path(question), class: 'btn btn-primary'
       - if author_of?(current_user, question)
