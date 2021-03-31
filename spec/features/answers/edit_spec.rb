@@ -26,7 +26,7 @@ feature 'The user can edit the answer', %q{
         find("#answer_body-#{answer.id}").fill_in(with: 'Edited answer to the question')
         click_on 'Save'
 
-        expect(page).to_not have_content answer.body
+        expect(page).not_to have_content answer.body
         expect(page).to have_content 'Edited answer to the question'
       end
     end
@@ -47,8 +47,8 @@ feature 'The user can edit the answer', %q{
     end
 
     scenario 'attaches the files to the answer during editing' do
-      expect(page).to_not have_link 'first_file.txt'
-      expect(page).to_not have_link 'second_file.txt'
+      expect(page).not_to have_link 'first_file.txt'
+      expect(page).not_to have_link 'second_file.txt'
 
       within '.answers' do
         click_on 'Edit'
@@ -87,13 +87,13 @@ feature 'The user can edit the answer', %q{
       visit question_path(question)
 
       expect(current_path).to eq question_path(question)
-      expect(page).to_not have_link 'Edit'
+      expect(page).not_to have_link 'Edit'
     end
   end
 
   scenario 'Unauthenticated user tries to edit the answer' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Edit'
+    expect(page).not_to have_link 'Edit'
   end
 end

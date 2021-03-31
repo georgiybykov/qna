@@ -8,9 +8,9 @@ feature 'The user can add links to the answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given(:gist_url) { 'https://gist.github.com/georgiybykov/65dc44ab3be2a8a1354ab90b3e5d1793' }
   given(:first_url) { 'https://first-aexample.com/new' }
   given(:second_url) { 'https://second-aexample.com/show' }
+  given(:gist_url) { 'https://gist.github.com/georgiybykov/65dc44ab3be2a8a1354ab90b3e5d1793' }
 
   describe 'Authenticated user' do
     background do
@@ -21,13 +21,13 @@ feature 'The user can add links to the answer', %q{
     end
 
     scenario 'adds a link when makes an answer' do
-      fill_in 'Link name', with: 'My gist'
-      fill_in 'URL', with: gist_url
+      fill_in 'Link name', with: 'New Link'
+      fill_in 'URL', with: first_url
 
       click_on 'Create answer'
 
       within '.answers' do
-        expect(page).to have_link 'My gist', href: gist_url
+        expect(page).to have_link 'New Link', href: first_url
       end
     end
 
@@ -47,12 +47,24 @@ feature 'The user can add links to the answer', %q{
         expect(page).to have_link 'Second Link', href: second_url
       end
     end
+
+    # TODO: use VCR cassette
+    xscenario 'adds a link to GitHub Gist when makes an answer' do
+      fill_in 'Link name', with: 'Link to gist'
+      fill_in 'URL', with: gist_url
+
+      click_on 'Create answer'
+
+      within '.answers' do
+        expect(page).not_to have_link 'Link to gist', href: gist_url
+      end
+    end
   end
 
   scenario 'Unauthenticated user tries to create an answer with the attached link' do
     visit question_path(question)
 
-    expect(page).to_not have_button 'Add link'
-    expect(page).to_not have_button 'Create Answer'
+    expect(page).not_to have_button 'Add link'
+    expect(page).not_to have_button 'Create Answer'
   end
 end

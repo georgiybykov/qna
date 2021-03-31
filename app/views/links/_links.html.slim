@@ -1,7 +1,7 @@
 p Links:
 ul
-  - resource.links.each do |link|
+  - links.each do |link|
     li id="link_#{link.id}"
-      p= link_to link.name, link.url, target: '_blank'
-      - if author_of?(current_user, resource)
+      p= parse_url(link.url, link.name)
+      - if author_of?(current_user, link.linkable)
         = link_to 'Delete link', link_path(link), method: :delete, remote: true

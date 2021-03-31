@@ -11,7 +11,7 @@
       td.align-middle
         .links
           - unless question.links.empty?
-            = render 'links/links', resource: question
+            = render 'links/links', links: question.links
 
       td.align-middle
         = link_to 'Show', question_path(question), class: 'btn btn-primary'

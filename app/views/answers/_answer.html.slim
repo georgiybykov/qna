@@ -12,7 +12,7 @@
 
       .links
         - unless answer.links.empty?
-          = render 'links/links', resource: answer
+          = render 'links/links', links: answer.links
 
     p
       - if author_of?(current_user, answer.question) && !answer.best?

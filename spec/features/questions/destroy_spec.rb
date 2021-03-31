@@ -24,16 +24,16 @@ feature 'The user can delete the question', %q{
       accept_confirm { click_on 'Delete question' }
 
       visit questions_path
-      expect(page).to_not have_content question.title
-      expect(page).to_not have_content question.body
+      expect(page).not_to have_content question.title
+      expect(page).not_to have_content question.body
     end
 
     scenario 'tries to delete his own question from the main page of the resource' do
       click_on 'Delete question'
 
       visit questions_path
-      expect(page).to_not have_content question.title
-      expect(page).to_not have_content question.body
+      expect(page).not_to have_content question.title
+      expect(page).not_to have_content question.body
     end
   end
 
@@ -41,12 +41,12 @@ feature 'The user can delete the question', %q{
     sign_in(user)
     visit question_path(question)
 
-    expect(page).to_not have_link 'Delete question'
+    expect(page).not_to have_link 'Delete question'
   end
 
   scenario 'Unauthenticated user tries to delete the question' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Delete question'
+    expect(page).not_to have_link 'Delete question'
   end
 end

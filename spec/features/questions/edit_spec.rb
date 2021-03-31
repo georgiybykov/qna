@@ -25,7 +25,7 @@ feature 'The user can edit the question', %q{
 
         click_on 'Save'
 
-        expect(page).to_not have_content question.body
+        expect(page).not_to have_content question.body
         expect(page).to have_content 'Edited question title'
         expect(page).to have_content 'Edited question body'
       end
@@ -47,8 +47,8 @@ feature 'The user can edit the question', %q{
     end
 
     scenario 'attaches the files to the question during editing' do
-      expect(page).to_not have_link 'first_file.txt'
-      expect(page).to_not have_link 'second_file.txt'
+      expect(page).not_to have_link 'first_file.txt'
+      expect(page).not_to have_link 'second_file.txt'
 
       within '.single-question' do
         click_on 'Edit'
@@ -86,13 +86,13 @@ feature 'The user can edit the question', %q{
       sign_in(user)
       visit questions_path
 
-      expect(page).to_not have_link 'Edit'
+      expect(page).not_to have_link 'Edit'
     end
   end
 
   scenario 'Unauthenticated user tries to edit the question' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Edit'
+    expect(page).not_to have_link 'Edit'
   end
 end

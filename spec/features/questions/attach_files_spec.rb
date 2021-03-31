@@ -23,8 +23,8 @@ feature 'The user can attach the files to the question', %q{
       fill_in 'Title', with: 'Question title'
       fill_in 'Body', with: 'Text in the question body'
 
-      expect(page).to_not have_link 'first_file.txt'
-      expect(page).to_not have_link 'second_file.txt'
+      expect(page).not_to have_link 'first_file.txt'
+      expect(page).not_to have_link 'second_file.txt'
 
       attach_file 'Files', ["#{Rails.root}/spec/fixtures/first_file.txt",
                             "#{Rails.root}/spec/fixtures/second_file.txt"]
@@ -44,7 +44,7 @@ feature 'The user can attach the files to the question', %q{
 
       within('.attachments') { click_on 'Delete file' }
 
-      expect(page).to_not have_link filename
+      expect(page).not_to have_link filename
     end
   end
 
@@ -54,13 +54,13 @@ feature 'The user can attach the files to the question', %q{
     visit questions_path
 
     expect(page).to have_link filename
-    expect(page).to_not have_link 'Delete file'
+    expect(page).not_to have_link 'Delete file'
   end
 
   scenario 'Unauthenticated user tries to delete the attached files from the question' do
     visit questions_path
 
     expect(page).to have_link filename
-    expect(page).to_not have_link 'Delete file'
+    expect(page).not_to have_link 'Delete file'
   end
 end

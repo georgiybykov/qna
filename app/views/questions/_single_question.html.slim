@@ -6,7 +6,7 @@ p= @question.body
 
   .links
     - unless @question.links.empty?
-      = render 'links/links', resource: @question
+      = render 'links/links', links: @question.links
 
 - if author_of?(current_user, @question)
   p

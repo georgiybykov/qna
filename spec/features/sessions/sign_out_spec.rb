@@ -19,6 +19,6 @@ feature 'The user can sign out', %q{
   scenario 'The unregistered user tries to sign out' do
     visit root_path
 
-    expect(page).to_not have_content 'Sign Out'
+    expect(page).not_to have_content 'Sign Out'
   end
 end

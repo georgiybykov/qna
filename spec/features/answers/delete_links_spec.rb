@@ -27,7 +27,7 @@ feature 'The user can delete links to the answer', %q{
         end
       end
 
-      expect(page).to_not have_link link.name, href: link.url
+      expect(page).not_to have_link link.name, href: link.url
     end
 
     scenario 'and not an author of the answer tries to delete link' do
@@ -36,7 +36,7 @@ feature 'The user can delete links to the answer', %q{
 
       within "#answer_#{answer.id}" do
         expect(page).to have_link link.name, href: link.url
-        expect(page).to_not have_content 'Delete link'
+        expect(page).not_to have_content 'Delete link'
       end
     end
   end
@@ -46,7 +46,7 @@ feature 'The user can delete links to the answer', %q{
 
     within "#answer_#{answer.id}" do
       expect(page).to have_link link.name, href: link.url
-      expect(page).to_not have_content 'Delete link'
+      expect(page).not_to have_content 'Delete link'
     end
   end
 end
