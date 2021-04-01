@@ -13,8 +13,11 @@
 
   .links
     p Links:
-    #question-links
-      = render 'links/form', f: f
+    = render 'links/form', f: f
+
+  .reward
+    p Reward:
+    = render 'rewards/reward', f: f
 
   p
     = f.submit 'Ask'

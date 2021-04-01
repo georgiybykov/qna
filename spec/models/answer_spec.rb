@@ -35,6 +35,8 @@ describe Answer, type: :model, aggregate_failures: true do
     let!(:first_answer) { create(:answer, question: question, user: user) }
     let!(:second_answer) { create(:answer, question: question, user: user) }
 
+    before { create(:reward, question: question) }
+
     it 'sets the answer to be the best' do
       first_answer.mark_as_best!
 
@@ -47,7 +49,13 @@ describe Answer, type: :model, aggregate_failures: true do
 
       total_best_question_answers = question.answers.where(best: true).count
 
-      expect(total_best_question_answers).to eq 1
+      expect(total_best_question_answers).to eq(1)
+    end
+
+    it 'sets the reward to the author of the best answer' do
+      first_answer.mark_as_best!
+
+      expect(user.reload.rewards.count).to eq(1)
     end
   end
 end

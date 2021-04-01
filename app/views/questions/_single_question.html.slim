@@ -27,8 +27,7 @@ p= @question.body
 
     .links-form
       p Links:
-      #question-links
-        = render 'links/form', f: f
+      = render 'links/form', f: f
 
     br
     = f.submit 'Save'
