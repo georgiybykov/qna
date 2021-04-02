@@ -8,15 +8,16 @@ feature 'The user can edit the question', %q{
 
   given(:author) { create(:user) }
   given!(:question) { create(:question, user: author) }
+  given(:url) { 'https://www.example.com/' }
 
   describe 'Authenticated owner of the question' do
     background do
       sign_in(author)
-      visit questions_path
+      visit question_path(question)
     end
 
-    scenario 'edits hiw question with valid data' do
-      within '.questions' do
+    scenario 'edits his question with valid data' do
+      within '.single-question' do
         click_on 'Edit'
 
         fill_in 'Title', with: 'Edited question title'
@@ -24,14 +25,14 @@ feature 'The user can edit the question', %q{
 
         click_on 'Save'
 
-        expect(page).to_not have_content question.body
+        expect(page).not_to have_content question.body
         expect(page).to have_content 'Edited question title'
         expect(page).to have_content 'Edited question body'
       end
     end
 
     scenario 'tries to edit hiw question with invalid data' do
-      within '.questions' do
+      within '.single-question' do
         click_on 'Edit'
 
         fill_in 'Title', with: ''
@@ -46,10 +47,10 @@ feature 'The user can edit the question', %q{
     end
 
     scenario 'attaches the files to the question during editing' do
-      expect(page).to_not have_link 'first_file.txt'
-      expect(page).to_not have_link 'second_file.txt'
+      expect(page).not_to have_link 'first_file.txt'
+      expect(page).not_to have_link 'second_file.txt'
 
-      within '.questions' do
+      within '.single-question' do
         click_on 'Edit'
 
         attach_file 'Files', ["#{Rails.root}/spec/fixtures/first_file.txt",
@@ -61,6 +62,21 @@ feature 'The user can edit the question', %q{
         expect(page).to have_link 'second_file.txt'
       end
     end
+
+    scenario 'adds a link to the question during editing' do
+      within '.single-question' do
+        click_on 'Edit'
+
+        click_on 'Add link'
+
+        fill_in 'Link name', with: 'New Link'
+        fill_in 'URL', with: url
+
+        click_on 'Save'
+
+        expect(page).to have_link 'New Link', href: url
+      end
+    end
   end
 
   describe 'Authenticated user who does not own the question' do
@@ -70,13 +86,13 @@ feature 'The user can edit the question', %q{
       sign_in(user)
       visit questions_path
 
-      expect(page).to_not have_link 'Edit'
+      expect(page).not_to have_link 'Edit'
     end
   end
 
   scenario 'Unauthenticated user tries to edit the question' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Edit'
+    expect(page).not_to have_link 'Edit'
   end
 end

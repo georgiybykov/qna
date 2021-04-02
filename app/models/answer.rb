@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Answer < ApplicationRecord
+  include Linkable
+
   default_scope { order(best: :desc, created_at: :asc) }
 
   belongs_to :user, touch: true
@@ -15,6 +17,8 @@ class Answer < ApplicationRecord
       self.class.where(question_id: question_id).update_all(best: false)
 
       update!(best: true)
+
+      question.reward&.update!(user: user)
     end
   end
 end

@@ -30,8 +30,8 @@ feature 'The user can create a question', %q{
       end
 
       scenario 'with attached files' do
-        expect(page).to_not have_link 'first_file.txt'
-        expect(page).to_not have_link 'second_file.txt'
+        expect(page).not_to have_link 'first_file.txt'
+        expect(page).not_to have_link 'second_file.txt'
 
         attach_file 'Files', ["#{Rails.root}/spec/fixtures/first_file.txt",
                               "#{Rails.root}/spec/fixtures/second_file.txt"]
@@ -53,6 +53,6 @@ feature 'The user can create a question', %q{
   scenario 'Unauthenticated user tries to ask a question' do
     visit questions_path
 
-    expect(page).to_not have_link(new_question_path)
+    expect(page).not_to have_link(new_question_path)
   end
 end

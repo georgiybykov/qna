@@ -1,14 +1,5 @@
-h1= @question.title
-p= @question.body
-
-.container
-  = render 'shared/attachments', resource: @question
-
-- if author_of?(current_user, @question)
-  = link_to 'Delete question',
-          question_path(@question),
-          method: :delete,
-          data: { confirm: 'Are you sure?' }
+.single-question
+  = render 'single_question', resource: @question
 
 h2= 'Answers'
 .container

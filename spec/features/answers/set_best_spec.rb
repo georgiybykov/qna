@@ -11,6 +11,7 @@ feature 'The user can select the best answer for his question', %q{
   given(:question) { create(:question, user: author) }
   given!(:answer) { create(:answer, question: question, user: author) }
   given!(:answers) { create_list(:answer, 4, question: question, user: author) }
+  given!(:reward) { create(:reward, question: question) }
 
   describe 'Authenticated user' do
     background do
@@ -36,22 +37,32 @@ feature 'The user can select the best answer for his question', %q{
       within "div#answer_#{answers[0].id}" do
         click_on 'Mark as best'
 
-        expect(page).to_not have_content 'Mark as best'
+        expect(page).not_to have_content 'Mark as best'
         expect(page).to have_content 'BEST'
       end
     end
+
+    scenario 'tries to see the list of the earned rewards' do
+      within "div#answer_#{answers[0].id}" do
+        click_on 'Mark as best'
+      end
+
+      visit rewards_path
+
+      expect(page).to have_content 'New Reward'
+    end
   end
 
-  scenario 'The authenticated user tries to set the best answer of for the question of the other user' do
+  scenario 'Authenticated user tries to set the best answer of for the question of the other user' do
     sign_in(user)
     visit question_path(answer.question)
 
-    expect(page).to_not have_link 'Mark as best'
+    expect(page).not_to have_link 'Mark as best'
   end
 
   scenario 'Unauthenticated user tries to set the best answer' do
     visit question_path(answer.question)
 
-    expect(page).to_not have_link 'Mark as best'
+    expect(page).not_to have_link 'Mark as best'
   end
 end

@@ -9,5 +9,10 @@ h3= 'Create answer'
   p
     = f.label :files, 'Add files'
     = f.file_field :files, multiple: true, direct_upload: true
+
+  .links
+    p Links:
+    = render 'links/form', f: f
+
   p
     = f.submit 'Create answer'

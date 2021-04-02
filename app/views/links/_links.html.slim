@@ -1,0 +1,7 @@
+p Links:
+ul
+  - links.each do |link|
+    li id="link_#{link.id}"
+      p= parse_url(link.url, link.name)
+      - if author_of?(current_user, link.linkable)
+        = link_to 'Delete link', link_path(link), method: :delete, remote: true

@@ -1,5 +1,5 @@
 - if answer.persisted?
-  div id = "answer_#{answer.id}"
+  div id="answer_#{answer.id}"
     p
       - if answer.best?
         i
@@ -8,7 +8,11 @@
       = answer.body
 
       .container
-        = render 'shared/attachments', resource: answer
+        = render 'attachments/attachments', resource: answer
+
+      .links
+        - unless answer.links.empty?
+          = render 'links/links', links: answer.links
 
     p
       - if author_of?(current_user, answer.question) && !answer.best?
@@ -36,5 +40,10 @@
       br
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
+
+      .links-form
+        p Links:
+        = render 'links/form', f: f
+
       br
       = f.submit 'Save'

@@ -30,8 +30,8 @@ feature 'The user can answer the question', %q{
     scenario 'with attached files' do
       fill_in 'Your answer', with: 'Answer to the question'
 
-      expect(page).to_not have_link 'first_file.txt'
-      expect(page).to_not have_link 'second_file.txt'
+      expect(page).not_to have_link 'first_file.txt'
+      expect(page).not_to have_link 'second_file.txt'
 
       attach_file 'Add files', ["#{Rails.root}/spec/fixtures/first_file.txt",
                                 "#{Rails.root}/spec/fixtures/second_file.txt"]
@@ -60,6 +60,6 @@ feature 'The user can answer the question', %q{
   scenario 'Unauthenticated user tries to create the answer' do
     visit question_path(question)
 
-    expect(page).to_not have_button 'Create Answer'
+    expect(page).not_to have_button 'Create Answer'
   end
 end

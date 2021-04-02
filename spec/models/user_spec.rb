@@ -5,6 +5,7 @@ describe User, type: :model, aggregate_failures: true do
 
   it { is_expected.to have_many(:questions).dependent(:destroy) }
   it { is_expected.to have_many(:answers).dependent(:destroy) }
+  it { is_expected.to have_many(:rewards).dependent(:nullify) }
 
   it { is_expected.to validate_presence_of :email }
   it { is_expected.to validate_presence_of :password }

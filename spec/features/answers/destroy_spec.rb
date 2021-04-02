@@ -15,7 +15,7 @@ feature 'The user can delete the answer', %q{
       sign_in(user)
       visit question_path(answer.question)
 
-      expect(page).to_not have_link 'Delete answer'
+      expect(page).not_to have_link 'Delete answer'
     end
 
     scenario 'tries to delete his own answer' do
@@ -27,13 +27,13 @@ feature 'The user can delete the answer', %q{
 
       click_on 'Delete answer'
       expect(current_path).to eq(question_path(answer.question))
-      expect(page).to_not have_content answer.body
+      expect(page).not_to have_content answer.body
     end
   end
 
   scenario 'Unauthenticated user tries to delete the answer' do
     visit question_path(answer.question)
 
-    expect(page).to_not have_link 'Delete answer'
+    expect(page).not_to have_link 'Delete answer'
   end
 end
