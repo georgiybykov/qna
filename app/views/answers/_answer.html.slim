@@ -7,8 +7,10 @@
         '->
       = answer.body
 
-      .container
-        = render 'attachments/attachments', resource: answer
+    .container
+      .attachments
+        - if answer.files.attached?
+          = render 'attachments/attachments', resource: answer
 
       .links
         - unless answer.links.empty?

@@ -1,8 +1,15 @@
-h1= @question.title
-p= @question.body
+h2.text-center
+  b
+    = @question.title
+h5
+  b
+    = @question.body
 
+p
 .container
-  = render 'attachments/attachments', resource: @question
+  .attachments
+    - if @question.files.attached?
+      = render 'attachments/attachments', resource: @question
 
   .links
     - unless @question.links.empty?
@@ -11,6 +18,12 @@ p= @question.body
 - if author_of?(current_user, @question)
   p
     = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: @question.id }
+    |  |
+    = link_to 'Delete question',
+            question_path(@question),
+            method: :delete,
+            data: { confirm: 'Are you sure?' },
+            class: 'btn btn-danger'
 
   p
   = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
@@ -31,10 +44,3 @@ p= @question.body
 
     br
     = f.submit 'Save'
-
-  p
-    = link_to 'Delete question',
-            question_path(@question),
-            method: :delete,
-            data: { confirm: 'Are you sure?' },
-            class: 'btn btn-danger'
