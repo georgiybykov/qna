@@ -44,12 +44,12 @@ shared_examples 'votable' do
     end
   end
 
-  describe '#revoke_vote_of' do
+  describe '#revoke_vote!' do
     context 'when the user revokes its up vote' do
       before do
         votable.vote_up!(user)
 
-        votable.revoke_vote_of(user)
+        votable.revoke_vote!(user)
       end
 
       specify do
@@ -61,7 +61,7 @@ shared_examples 'votable' do
       before do
         votable.vote_down!(user)
 
-        votable.revoke_vote_of(user)
+        votable.revoke_vote!(user)
       end
 
       specify do
@@ -70,7 +70,7 @@ shared_examples 'votable' do
     end
 
     context 'when the user has not been voted and tries to revoke the vote' do
-      before { votable.revoke_vote_of(user) }
+      before { votable.revoke_vote!(user) }
 
       specify do
         expect(user.reload.votes.count).to eq(0)

@@ -8,6 +8,8 @@ module Voted
   end
 
   def vote_up
+    # Module `include` should be before callbacks in the controller by Rails style guide.
+    # So, we should not use this repeatable check as callback method.
     return render_errors if current_user.author?(@votable)
 
     @votable.vote_up!(current_user)
@@ -26,7 +28,7 @@ module Voted
   def revoke_vote
     return render_errors if current_user.author?(@votable)
 
-    @votable.revoke_vote_of(current_user)
+    @votable.revoke_vote!(current_user)
 
     render_json
   end
@@ -34,13 +36,16 @@ module Voted
   private
 
   def render_json
-    render json: { id: @votable.id,
-                   name: @votable.class.name.downcase,
-                   rating: @votable.rating }
+    render json: {
+      id: @votable.id,
+      name: @votable.class.name.downcase,
+      rating: @votable.rating
+    }
   end
 
   def render_errors
-    render json: { message: 'You do not have permissions to vote!' }, status: :forbidden
+    render json: { message: 'You do not have permissions to vote!' },
+           status: :forbidden
   end
 
   def set_votable

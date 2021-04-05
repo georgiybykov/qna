@@ -19,7 +19,7 @@ module Votable
     votes.create!(user: user, value: -1)
   end
 
-  def revoke_vote_of(user)
+  def revoke_vote!(user)
     previous_vote_of(user)&.destroy!
   end
 
