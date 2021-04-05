@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 shared_examples_for 'voted' do
-  let!(:model) { described_class.controller_name.classify.constantize }
-  let!(:votable) { create(model.to_s.underscore.to_sym) }
+  let(:model) { described_class.controller_name.classify.constantize }
+  let(:votable) { create(model.to_s.underscore.to_sym) }
 
-  let!(:voter) { create(:user) }
-  let!(:authored) { create(model.to_s.underscore.to_sym, user: voter) }
+  let(:voter) { create(:user) }
+  let(:authored) { create(model.to_s.underscore.to_sym, user: voter) }
 
   describe 'PATCH #vote_up' do
     context 'when the user is not the author' do

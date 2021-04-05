@@ -8,19 +8,19 @@ module Votable
   end
 
   def vote_up!(user)
-    return if vote_of(user)
+    return if previous_vote_of(user)
 
     votes.create!(user: user, value: 1)
   end
 
   def vote_down!(user)
-    return if vote_of(user)
+    return if previous_vote_of(user)
 
     votes.create!(user: user, value: -1)
   end
 
   def revoke_vote_of(user)
-    vote_of(user)&.destroy!
+    previous_vote_of(user)&.destroy!
   end
 
   def rating
@@ -29,7 +29,7 @@ module Votable
 
   private
 
-  def vote_of(user)
+  def previous_vote_of(user)
     votes.find_by(user: user)
   end
 end

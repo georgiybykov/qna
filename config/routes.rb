@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :voted do
-    resources :answers, shallow: true, except: %i[index new show] do
+    resources :answers, concerns: :voted, shallow: true, except: %i[index new show] do
       patch :set_best, on: :member
     end
   end
