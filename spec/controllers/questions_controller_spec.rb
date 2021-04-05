@@ -172,4 +172,6 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       end
     end
   end
+
+  it_behaves_like 'voted'
 end
