@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
-  include Voted
-
   before_action :authenticate_user!
   before_action :find_answer, only: %i[update destroy set_best]
   before_action -> { check_permissions(@answer) }, only: %i[update destroy]
 
   expose :question
+
+  include Voted
 
   def create
     @answer = question.answers.new(answer_params.merge(user: current_user))
