@@ -4,6 +4,7 @@ describe Answer, type: :model, aggregate_failures: true do
   let(:answer) { described_class.new }
 
   it_behaves_like 'linkable'
+  it_behaves_like 'votable'
 
   it { is_expected.to belong_to(:user).touch(true) }
   it { is_expected.to belong_to(:question).touch(true) }

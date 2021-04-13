@@ -1,10 +1,23 @@
-.single-question
-  = render 'single_question', resource: @question
+.row.justify-content-center.mt-3
+  .col.col-md-9
+    .single-question
+      .card.border-primary.mb-3
+        .card-body
+          = render 'single_question', resource: @question
 
-h2= 'Answers'
-.container
-  .answers
-    = render @question.answers
+  .col.col-md-9
+    .card.border-primary.mb-3
+      .card-body
+        h4.text-center
+          b
+            = 'Answers'
+        .container
+          .answers
+            = render @question.answers
 
-- if current_user
-  = render 'answers/form'
+    - if current_user
+      .card.border-primary.mb-3
+        .card-body
+          .form-group
+            ol
+              = render 'answers/form'

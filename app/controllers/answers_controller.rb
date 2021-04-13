@@ -7,6 +7,8 @@ class AnswersController < ApplicationController
 
   expose :question
 
+  include Voted
+
   def create
     @answer = question.answers.new(answer_params.merge(user: current_user))
     @answer.save

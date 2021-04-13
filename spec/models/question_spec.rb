@@ -4,6 +4,7 @@ describe Question, type: :model, aggregate_failures: true do
   let(:question) { described_class.new }
 
   it_behaves_like 'linkable'
+  it_behaves_like 'votable'
 
   it { is_expected.to belong_to(:user).touch(true) }
   it { is_expected.to have_one(:reward).dependent(:destroy) }

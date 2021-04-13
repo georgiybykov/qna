@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
 
   expose :questions, -> { Question.all }
 
+  include Voted
+
   def index; end
 
   def show

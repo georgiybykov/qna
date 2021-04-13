@@ -1,40 +1,49 @@
-h1= @question.title
-p= @question.body
+div id="question_#{@question.id}"
+  h2.text-center
+    b
+      = @question.title
+  h5
+    b
+      = @question.body
 
-.container
-  = render 'attachments/attachments', resource: @question
-
-  .links
-    - unless @question.links.empty?
-      = render 'links/links', links: @question.links
-
-- if author_of?(current_user, @question)
-  p
-    = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: @question.id }
+  = render 'votes/vote', resource: @question
 
   p
-  = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
-    .edit-question-errors
-    h5= 'Edit question'
-    = f.label :title, 'Title'
-    = f.text_field :title
-    br
-    = f.label :body, 'Your question'
-    = f.text_area :body
-    br
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+  .container
+    .attachments
+      - if @question.files.attached?
+        = render 'attachments/attachments', resource: @question
 
-    .links-form
-      p Links:
-      = render 'links/form', f: f
+    .links
+      - unless @question.links.empty?
+        = render 'links/links', links: @question.links
 
-    br
-    = f.submit 'Save'
+  - if author_of?(current_user, @question)
+    p
+      = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: @question.id }
+      |  |
+      = link_to 'Delete question',
+              question_path(@question),
+              method: :delete,
+              data: { confirm: 'Are you sure?' },
+              class: 'btn btn-danger'
 
-  p
-    = link_to 'Delete question',
-            question_path(@question),
-            method: :delete,
-            data: { confirm: 'Are you sure?' },
-            class: 'btn btn-danger'
+    p
+    = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
+      .edit-question-errors
+      h5= 'Edit question'
+      = f.label :title, 'Title'
+      = f.text_field :title
+      br
+      = f.label :body, 'Your question'
+      = f.text_area :body
+      br
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
+
+      .links-form
+        p Links:
+        = render 'links/form', f: f
+
+        br
+        = f.submit 'Save'

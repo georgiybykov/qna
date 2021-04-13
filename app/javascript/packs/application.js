@@ -14,4 +14,5 @@ require("@nathanvda/cocoon")
 
 require("../utilities/answers/edit_form_toggler.js")
 require("../utilities/questions/edit_form_toggler.js")
+require("../utilities/votes/rating.js")
 require("../utilities/direct_uploads.js")

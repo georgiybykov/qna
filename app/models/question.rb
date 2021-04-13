@@ -2,6 +2,7 @@
 
 class Question < ApplicationRecord
   include Linkable
+  include Votable
 
   belongs_to :user, touch: true
 
