@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: %i[show update destroy]
   before_action -> { check_permissions(@question) }, only: %i[update destroy]
 
+  after_action :publish_question, only: %i[create destroy]
+
   expose :questions, -> { Question.all }
 
   include Voted
@@ -57,5 +59,20 @@ class QuestionsController < ApplicationController
                                      files: [],
                                      links_attributes: %i[id name url _destroy],
                                      reward_attributes: %i[title image])
+  end
+
+  def publish_question
+    return if @question.errors.any?
+
+    ActionCable.server.broadcast(
+      'questions',
+      ApplicationController.renderer.render(
+        partial: 'questions/question',
+        locals: {
+          question: @question,
+          current_user: current_user
+        }
+      )
+    )
   end
 end

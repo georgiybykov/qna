@@ -69,6 +69,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
         expect(response).to redirect_to assigns(:question)
       end
+
+      it 'broadcasts to the `questions` channel' do
+        expect { post :create, params: { question: attributes_for(:question) } }
+          .to broadcast_to('questions')
+      end
     end
 
     context 'with invalid attributes' do
@@ -81,6 +86,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         post :create, params: { question: attributes_for(:question, :invalid) }
 
         expect(response).to render_template :new
+      end
+
+      it 'does not broadcast to the `questions` channel' do
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }
+          .not_to broadcast_to('questions')
       end
     end
   end
