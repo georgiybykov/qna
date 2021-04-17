@@ -20,6 +20,11 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
         expect(response).to render_template :create
       end
+
+      it 'broadcasts to the unique question channel' do
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js } }
+          .to broadcast_to("question_#{question.id}")
+      end
     end
 
     context 'with invalid attributes' do
@@ -34,6 +39,13 @@ describe AnswersController, type: :controller, aggregate_failures: true do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
 
         expect(response).to render_template :create
+      end
+
+      it 'does not broadcast to the unique question channel' do
+        expect do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+        end
+          .not_to broadcast_to("question_#{question.id}")
       end
     end
   end

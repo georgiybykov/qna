@@ -7,6 +7,8 @@ class AnswersController < ApplicationController
 
   expose :question
 
+  after_action :publish_answer, only: :create
+
   include Voted
 
   def create
@@ -41,5 +43,16 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body,
                                    files: [],
                                    links_attributes: %i[id name url _destroy])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast(
+      "question_#{question.id}",
+      answer: @answer,
+      rating: @answer.rating,
+      links: @answer.links
+    )
   end
 end

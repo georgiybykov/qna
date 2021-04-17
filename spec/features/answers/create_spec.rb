@@ -6,10 +6,10 @@ feature 'The user can answer the question', %q{
   I would like to be able to answer the question
 }, type: :feature, js: true, aggregate_failures: true do
 
+  given(:user) { create(:user) }
   given(:question) { create(:question) }
 
   describe 'Authenticated user creates the answer' do
-    given(:user) { create(:user) }
 
     background do
       sign_in(user)
@@ -54,6 +54,48 @@ feature 'The user can answer the question', %q{
 
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Body can\'t be blank'
+    end
+  end
+
+  describe 'Multiple sessions', js: true do
+    given(:url) { 'https://first-example.com/new' }
+
+    scenario 'with the answer appears on another page of the user' do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Your answer', with: 'Answer to the question'
+
+        fill_in 'Link name', with: 'Valid Link'
+        fill_in 'URL', with: url
+
+        click_on 'Create answer'
+
+        within '.answers' do
+          expect(page).to have_content 'Answer to the question'
+        end
+
+        within "#answer_#{question.answers.first.id}" do
+          expect(page).to have_link 'Valid Link', href: url
+        end
+      end
+
+      Capybara.using_session('guest') do
+        within '.answers' do
+          expect(page).to have_content 'Answer to the question'
+        end
+
+        within "#answer-#{question.answers.first.id}" do
+          expect(page).to have_link 'Valid Link', href: url
+        end
+      end
     end
   end
 

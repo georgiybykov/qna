@@ -4,6 +4,8 @@ $(document).on('turbolinks:load', function(){
             name = e.detail[0]['name'],
             rating = e.detail[0]['rating'];
 
-        $('#' + name + '_' + id + ' .vote .rating').html(rating)
+        let ratingText = '<b>Rating: <b>'
+
+        $('#' + name + '_' + id + ' .resource-rating').html(ratingText + rating)
     })
 })

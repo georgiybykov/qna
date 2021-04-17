@@ -8,8 +8,8 @@ feature 'The user can add links to the answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given(:first_url) { 'https://first-aexample.com/new' }
-  given(:second_url) { 'https://second-aexample.com/show' }
+  given(:first_url) { 'https://first-example.com/new' }
+  given(:second_url) { 'https://second-example.com/show' }
   given(:gist_url) { 'https://gist.github.com/georgiybykov/example' }
 
   describe 'Authenticated user' do
@@ -65,7 +65,7 @@ feature 'The user can add links to the answer', %q{
 
       click_on 'Create answer'
 
-      within '.answers' do
+      within "#answer_#{question.answers.first.id}" do
         expect(page).not_to have_link 'Link to gist', href: gist_url
       end
     end

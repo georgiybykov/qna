@@ -5,9 +5,9 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: %i[show update destroy]
   before_action -> { check_permissions(@question) }, only: %i[update destroy]
 
-  after_action :publish_question, only: %i[create destroy]
-
   expose :questions, -> { Question.all }
+
+  after_action :publish_question, only: :create
 
   include Voted
 
