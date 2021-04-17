@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe QuestionsController, type: :controller, aggregate_failures: true do
+  include_context 'with gon stores shared params'
+
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
 
@@ -74,6 +76,12 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         expect { post :create, params: { question: attributes_for(:question) } }
           .to broadcast_to('questions')
       end
+
+      it 'gonifies the `user_id` value as expected' do
+        post :create, params: { question: attributes_for(:question) }
+
+        expect(gon['user_id']).to eq(user.id)
+      end
     end
 
     context 'with invalid attributes' do
@@ -91,6 +99,22 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       it 'does not broadcast to the `questions` channel' do
         expect { post :create, params: { question: attributes_for(:question, :invalid) } }
           .not_to broadcast_to('questions')
+      end
+
+      it 'gonifies the values as expected' do
+        post :create, params: { question: attributes_for(:question, :invalid) }
+
+        expect(gon['user_id']).to eq(user.id)
+      end
+    end
+
+    context 'when the user is not authenticated' do
+      before { sign_out(user) }
+
+      it 'gonifies the `user_id` value and it equals to `nil`' do
+        post :create, params: { question: attributes_for(:question) }
+
+        expect(gon['user_id']).to eq(nil)
       end
     end
   end

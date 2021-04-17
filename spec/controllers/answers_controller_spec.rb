@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe AnswersController, type: :controller, aggregate_failures: true do
+  include_context 'with gon stores shared params'
+
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
   let!(:answer) { create(:answer, question: question, user: user) }
@@ -25,6 +27,12 @@ describe AnswersController, type: :controller, aggregate_failures: true do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js } }
           .to broadcast_to("question_#{question.id}")
       end
+
+      it 'gonifies the `user_id` value as expected' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+
+        expect(gon['user_id']).to eq(user.id)
+      end
     end
 
     context 'with invalid attributes' do
@@ -46,6 +54,22 @@ describe AnswersController, type: :controller, aggregate_failures: true do
           post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
         end
           .not_to broadcast_to("question_#{question.id}")
+      end
+
+      it 'gonifies the `user_id` value as expected' do
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+
+        expect(gon['user_id']).to eq(user.id)
+      end
+    end
+
+    context 'when the user is not authenticated' do
+      before { sign_out(user) }
+
+      it 'gonifies the `user_id` value and it equals to `nil`' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+
+        expect(gon['user_id']).to eq(nil)
       end
     end
   end
