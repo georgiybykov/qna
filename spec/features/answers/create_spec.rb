@@ -10,7 +10,6 @@ feature 'The user can answer the question', %q{
   given(:question) { create(:question) }
 
   describe 'Authenticated user creates the answer' do
-
     background do
       sign_in(user)
       visit question_path(question)

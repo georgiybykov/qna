@@ -1,0 +1,14 @@
+.comment-errors
+  = render 'shared/errors', resource: comment
+
+h3= 'Create comment'
+= form_with model: [commentable, comment],
+        url: polymorphic_path(commentable, action: :comment),
+        local: false,
+        class: 'new-comment' do |f|
+  p
+    = f.label :body, 'Your comment'
+    = f.text_area :body, id: 'comment_body'
+
+  p
+    = f.submit 'Create comment'

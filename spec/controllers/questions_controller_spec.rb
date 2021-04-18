@@ -124,7 +124,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
     context 'with valid attributes' do
       it 'changes the question attributes' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' }, format: :js }
+        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
 
         question.reload
 
@@ -133,7 +133,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' }, format: :js }
+        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
 
         expect(response).to render_template :update
       end
@@ -141,7 +141,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
     context 'with invalid attributes' do
       it 'does not change the question' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
 
         question.reload
 
@@ -150,7 +150,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
 
         expect(response).to render_template :update
       end
@@ -208,4 +208,5 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   it_behaves_like 'voted'
+  it_behaves_like 'commented'
 end

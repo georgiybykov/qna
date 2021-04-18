@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
   devise_for :users
+
   root to: 'questions#index'
 
   concern :voted do
@@ -12,10 +13,14 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :commented do
+    post :comment, on: :member
+  end
+
   resources :questions,
-            concerns: [:voted] do
+            concerns: %i[voted commented] do
     resources :answers,
-              concerns: [:voted],
+              concerns: %i[voted commented],
               shallow: true,
               except: %i[index new show] do
       patch :set_best,

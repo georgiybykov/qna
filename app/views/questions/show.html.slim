@@ -10,6 +10,26 @@
       .card-body
         h4.text-center
           b
+            = 'Comments'
+        .container
+          .comments
+            - unless @question.comments.empty?
+              = render 'comments/comments', commentable: @question, comments: @question.comments
+            - else
+              = 'No comments yet'
+
+    - if current_user
+      .card.border-primary.mb-3
+        .card-body
+          .form-group
+            ol
+              = render 'comments/form', commentable: @question, comment: @question.comments.build
+
+  .col.col-md-9
+    .card.border-primary.mb-3
+      .card-body
+        h4.text-center
+          b
             = 'Answers'
         .container
           .answers

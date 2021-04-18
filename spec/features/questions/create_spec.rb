@@ -8,10 +8,11 @@ feature 'The user can create a question', %q{
 
   given(:user) { create(:user) }
 
-  describe 'Authenticated user tries to ask a question' do
+  describe 'Authenticated user' do
     background do
       sign_in(user)
       visit questions_path
+
       click_on 'Ask question'
     end
 
