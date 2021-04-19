@@ -50,7 +50,7 @@ class AnswersController < ApplicationController
     return if @answer.errors.any?
 
     ActionCable.server.broadcast(
-      "question_#{question.id}",
+      "answers_for_page_with_question_#{question.id}",
       answer: @answer,
       rating: @answer.rating,
       links: @answer.links

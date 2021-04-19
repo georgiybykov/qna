@@ -104,3 +104,7 @@ Rails/Delegate:
 
 Rails/SkipsModelValidations:
   Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Exclude:
+    - app/controllers/questions_controller.rb

@@ -2,7 +2,7 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :find_question, only: %i[show update destroy]
+  before_action :find_question, only: %i[show update destroy comment]
   before_action -> { check_permissions(@question) }, only: %i[update destroy]
 
   expose :questions, -> { Question.all }
@@ -66,7 +66,7 @@ class QuestionsController < ApplicationController
     return if @question.errors.any?
 
     ActionCable.server.broadcast(
-      'questions',
+      'questions_list',
       ApplicationController.renderer.render(
         partial: 'questions/question',
         locals: {

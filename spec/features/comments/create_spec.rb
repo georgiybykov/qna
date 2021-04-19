@@ -7,7 +7,7 @@ feature 'The user can leave a comment for the question or the answer', %q{
 }, type: :feature, js: true, aggregate_failures: true do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given!(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question) }
 
   describe 'Authenticated user' do
@@ -21,9 +21,9 @@ feature 'The user can leave a comment for the question or the answer', %q{
         within '.single-question' do
           fill_in 'Your comment', with: 'The comment for the question'
           click_on 'Create comment'
-
-          expect(page).to have_content 'The comment for the question'
         end
+
+        expect(page).to have_content 'The comment for the question'
       end
 
       scenario 'with invalid data' do
@@ -40,9 +40,9 @@ feature 'The user can leave a comment for the question or the answer', %q{
         within "#answer_#{answer.id}" do
           fill_in 'Your comment', with: 'The comment for the answer'
           click_on 'Create comment'
-
-          expect(page).to have_content 'The comment for the answer'
         end
+
+        expect(page).to have_content 'The comment for the answer'
       end
 
       scenario 'with invalid data' do
@@ -51,6 +51,39 @@ feature 'The user can leave a comment for the question or the answer', %q{
 
           expect(page).to have_content 'Body can\'t be blank'
         end
+      end
+    end
+  end
+
+  describe 'Multiple sessions' do
+    scenario 'with the comment appears on another page of the user' do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.single-question' do
+          fill_in 'Your comment', with: 'The comment for the question'
+          click_on 'Create comment'
+        end
+
+        within "#answer_#{answer.id}" do
+          fill_in 'Your comment', with: 'The comment for the answer'
+          click_on 'Create comment'
+        end
+
+        expect(page).to have_content 'The comment for the question'
+        expect(page).to have_content 'The comment for the answer'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'The comment for the question'
+        expect(page).to have_content 'The comment for the answer'
       end
     end
   end

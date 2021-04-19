@@ -72,9 +72,9 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         expect(response).to redirect_to assigns(:question)
       end
 
-      it 'broadcasts to the `questions` channel' do
+      it 'broadcasts to the `questions_list` channel' do
         expect { post :create, params: { question: attributes_for(:question) } }
-          .to broadcast_to('questions')
+          .to broadcast_to('questions_list')
       end
 
       it 'gonifies the `user_id` value as expected' do
@@ -96,9 +96,9 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
         expect(response).to render_template :new
       end
 
-      it 'does not broadcast to the `questions` channel' do
+      it 'does not broadcast to the `questions_list` channel' do
         expect { post :create, params: { question: attributes_for(:question, :invalid) } }
-          .not_to broadcast_to('questions')
+          .not_to broadcast_to('questions_list')
       end
 
       it 'gonifies the values as expected' do

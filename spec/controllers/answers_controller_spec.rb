@@ -23,9 +23,9 @@ describe AnswersController, type: :controller, aggregate_failures: true do
         expect(response).to render_template :create
       end
 
-      it 'broadcasts to the unique question channel' do
+      it 'broadcasts to the `answers_for_page_with_question_ID` channel' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
-          .to broadcast_to("question_#{question.id}")
+          .to broadcast_to("answers_for_page_with_question_#{question.id}")
       end
 
       it 'gonifies the `user_id` value as expected' do
@@ -49,11 +49,11 @@ describe AnswersController, type: :controller, aggregate_failures: true do
         expect(response).to render_template :create
       end
 
-      it 'does not broadcast to the unique question channel' do
+      it 'does not broadcast to the `answers_for_page_with_question_ID` channel' do
         expect do
           post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
         end
-          .not_to broadcast_to("question_#{question.id}")
+          .not_to broadcast_to("answers_for_page_with_question_#{question.id}")
       end
 
       it 'gonifies the `user_id` value as expected' do

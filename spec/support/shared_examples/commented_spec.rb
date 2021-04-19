@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 shared_examples_for 'commented' do
-  let(:model) { described_class.controller_name.classify.constantize }
-  let(:commentable) { create(model.to_s.underscore.to_sym) }
+  let!(:model) { described_class.controller_name.classify.constantize }
+  let!(:commentable) { create(model.to_s.underscore.to_sym) }
 
   let(:user) { create(:user) }
 
@@ -22,6 +22,19 @@ shared_examples_for 'commented' do
 
           expect(response).to render_template 'comments/create'
         end
+
+        it 'broadcasts to the `comments_for_page_with_question_ID` channel' do
+          question_id = commentable.is_a?(Question) ? commentable.id : commentable.question.id
+
+          expect { post :comment, params: { id: commentable, comment: attributes_for(:comment) }, format: :js }
+            .to broadcast_to("comments_for_page_with_question_#{question_id}")
+        end
+
+        it 'gonifies the `user_id` value as expected' do
+          post :comment, params: { id: commentable, comment: attributes_for(:comment) }, format: :js
+
+          expect(gon['user_id']).to eq(user.id)
+        end
       end
 
       context 'with invalid attributes' do
@@ -36,6 +49,29 @@ shared_examples_for 'commented' do
           post :comment, params: { id: commentable, comment: attributes_for(:comment, :invalid) }, format: :js
 
           expect(response).to render_template 'comments/create'
+        end
+
+        it 'does not broadcast to the `comments_for_page_with_question_ID` channel' do
+          expect do
+            post :comment, params: { id: commentable, comment: attributes_for(:comment, :invalid) }, format: :js
+          end
+            .not_to broadcast_to("comments_for_page_with_question_#{question.id}")
+        end
+
+        it 'gonifies the `user_id` value as expected' do
+          post :comment, params: { id: commentable, comment: attributes_for(:comment, :invalid) }, format: :js
+
+          expect(gon['user_id']).to eq(user.id)
+        end
+      end
+
+      context 'when the user is not authenticated' do
+        before { sign_out(user) }
+
+        it 'gonifies the `user_id` value and it equals to `nil`' do
+          post :comment, params: { id: commentable, comment: attributes_for(:comment) }, format: :js
+
+          expect(gon['user_id']).to eq(nil)
         end
       end
     end

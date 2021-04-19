@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe AnswersChannel, type: :channel, aggregate_failures: true do
+describe CommentChannel, type: :channel, aggregate_failures: true do
   subject(:subscribed_channel) do
     subscribe
 
@@ -36,9 +36,9 @@ describe AnswersChannel, type: :channel, aggregate_failures: true do
     it 'streams successfully' do
       perform :follow, { question_id: question.id }
 
-      expect(subscribed_channel).to have_stream_from("answers_for_page_with_question_#{question.id}")
+      expect(subscribed_channel).to have_stream_from("comments_for_page_with_question_#{question.id}")
 
-      expect(subscribed_channel.send(:streams)).to eq(["answers_for_page_with_question_#{question.id}"])
+      expect(subscribed_channel.send(:streams)).to eq(["comments_for_page_with_question_#{question.id}"])
     end
   end
 
@@ -48,7 +48,7 @@ describe AnswersChannel, type: :channel, aggregate_failures: true do
     it 'streams successfully' do
       3.times { perform :follow, { question_id: question.id } }
 
-      expect(subscribed_channel).to have_stream_from("answers_for_page_with_question_#{question.id}")
+      expect(subscribed_channel).to have_stream_from("comments_for_page_with_question_#{question.id}")
 
       expect(subscribed_channel.send(:streams).count).to eq(3)
     end
