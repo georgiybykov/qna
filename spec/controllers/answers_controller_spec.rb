@@ -204,4 +204,6 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       end
     end
   end
+
+  it_behaves_like 'commented'
 end

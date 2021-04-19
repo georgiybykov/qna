@@ -6,9 +6,7 @@ consumer.subscriptions.create("AnswersChannel", {
   },
 
   received(data) {
-    console.log(data)
-
-    if (!(gon.user_id === data.user_id)) {
+    if (!(gon.user_id === data.answer.user_id)) {
       let answerTemplate = require('templates/answer.hbs')({
         answer: data.answer,
         links: data.links,

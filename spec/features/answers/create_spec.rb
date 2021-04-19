@@ -91,7 +91,7 @@ feature 'The user can answer the question', %q{
           expect(page).to have_content 'Answer to the question'
         end
 
-        within "#answer-#{question.answers.first.id}" do
+        within "#answer_#{question.answers.first.id}" do
           expect(page).to have_link 'Valid Link', href: url
         end
       end

@@ -1,18 +1,30 @@
-<div id="answer-{{answer.id}}">
-  <p>{{answer.body}}</p>
-  <p>
-    <b><span>Rating: </span></b>
-    <span>{{rating}}</span>
-  </p>
+<div id="answer_{{answer.id}}">
+  <div class="card border-primary mb-3">
+    <div class="card-body">
+      <div class="container">
+        <p>{{answer.body}}</p>
+        <p>
+          <b>
+            <span>Rating: </span>
+          </b>
+          <span>{{rating}}</span>
+        </p>
 
-  <div class="links-hbs">
-    {{#if links.length}}
-      <span>Links: </span>
-      <ul class="links">
-        {{#each links}}
-        <li><a target="_blank" rel="noopener noreferrer" href="{{this.url}}">{{this.name}}</a></li>
-        {{/each}}
-      </ul>
-    {{/if}}
+        <div class="links-hbs">
+          {{#if links.length}}
+            <span>Links: </span>
+            <ul class="links">
+              {{#each links}}
+              <li>
+                <a target="_blank" rel="noopener noreferrer" href="{{this.url}}">
+                  {{this.name}}
+                </a>
+              </li>
+              {{/each}}
+            </ul>
+          {{/if}}
+        </div>
+      </div>
+    </div>
   </div>
 </div>

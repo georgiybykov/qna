@@ -1,6 +1,15 @@
 $('.comment-errors').html('<%= render 'shared/errors', resource: @comment %>')
 
 <% if @comment.persisted? %>
-  $('.comments').append('<%= j render 'comments/comment', comment: @comment %>');
-  $('.new-comment #comment_body').val('');
+  $('.empty-comments-label').remove()
+
+  var commentTemplate = '<%= j render 'comments/comment', comment: @comment %>'
+
+  <% if @comment.commentable.is_a?(Question) %>
+    $('.question-comments').append(commentTemplate)
+  <% else %>
+    $('.answer-comments').append(commentTemplate)
+  <% end %>
+
+  $('.new-comment #comment_body').val('')
 <% end %>
