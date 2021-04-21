@@ -1,3 +1,9 @@
+p
+  .resource-rating
+    b
+      = 'Rating: '
+    = resource.rating
+
 -if current_user && !author_of?(current_user, resource)
   .vote
     p
@@ -7,17 +13,13 @@
               remote: true
 
     p
-      .rating
-        = resource.rating
-
-    p
-      = link_to '-', polymorphic_path(resource, action: :vote_down),
-              method: :patch,
+      = link_to 'Revoke vote', polymorphic_path(resource, action: :revoke_vote),
+              method: :delete,
               data: { type: :json },
               remote: true
 
     p
-      = link_to 'Revoke vote', polymorphic_path(resource, action: :revoke_vote),
-              method: :delete,
+      = link_to '-', polymorphic_path(resource, action: :vote_down),
+              method: :patch,
               data: { type: :json },
               remote: true

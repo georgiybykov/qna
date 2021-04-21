@@ -20,7 +20,7 @@ feature 'The user can vote for the question', %q{
       within "#question_#{question.id}" do
         click_on '+'
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '1'
         end
       end
@@ -31,7 +31,7 @@ feature 'The user can vote for the question', %q{
         click_on '+'
         click_on '+'
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '1'
         end
       end
@@ -42,7 +42,7 @@ feature 'The user can vote for the question', %q{
         click_on '+'
         click_on 'Revoke vote'
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '0'
         end
       end
@@ -52,7 +52,7 @@ feature 'The user can vote for the question', %q{
       within "#question_#{question.id}" do
         click_on '-'
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '-1'
         end
       end
@@ -63,7 +63,7 @@ feature 'The user can vote for the question', %q{
         click_on '-'
         click_on '-'
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '-1'
         end
       end
@@ -73,14 +73,14 @@ feature 'The user can vote for the question', %q{
       within "#question_#{question.id}" do
         click_on "+"
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '1'
         end
 
         click_on 'Revoke vote'
         click_on '-'
 
-        within '.rating' do
+        within '.resource-rating' do
           expect(page).to have_content '-1'
         end
       end

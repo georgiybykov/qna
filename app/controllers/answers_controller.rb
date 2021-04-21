@@ -7,7 +7,10 @@ class AnswersController < ApplicationController
 
   expose :question
 
+  after_action :publish_answer, only: :create
+
   include Voted
+  include Commented
 
   def create
     @answer = question.answers.new(answer_params.merge(user: current_user))
@@ -41,5 +44,16 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body,
                                    files: [],
                                    links_attributes: %i[id name url _destroy])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast(
+      "answers_for_page_with_question_#{question.id}",
+      answer: @answer,
+      rating: @answer.rating,
+      links: @answer.links
+    )
   end
 end

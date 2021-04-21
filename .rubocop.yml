@@ -19,6 +19,9 @@ RSpec/MultipleExpectations:
 RSpec/MultipleMemoizedHelpers:
   Max: 8
 
+RSpec/ExampleLength:
+  Max: 10
+
 Layout/LineLength:
   Max: 120
 
@@ -72,6 +75,7 @@ Metrics/PerceivedComplexity:
 Metrics/BlockLength:
   Exclude:
     - config/environments/**/*
+    - config/routes.rb
     - db/**/*
     - spec/**/*
 
@@ -100,3 +104,7 @@ Rails/Delegate:
 
 Rails/SkipsModelValidations:
   Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Exclude:
+    - app/controllers/questions_controller.rb

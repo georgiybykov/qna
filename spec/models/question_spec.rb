@@ -5,6 +5,7 @@ describe Question, type: :model, aggregate_failures: true do
 
   it_behaves_like 'linkable'
   it_behaves_like 'votable'
+  it_behaves_like 'commentable'
 
   it { is_expected.to belong_to(:user).touch(true) }
   it { is_expected.to have_one(:reward).dependent(:destroy) }

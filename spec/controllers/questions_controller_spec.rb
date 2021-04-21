@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe QuestionsController, type: :controller, aggregate_failures: true do
+  include_context 'with gon stores shared params'
+
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
 
@@ -69,6 +71,17 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
         expect(response).to redirect_to assigns(:question)
       end
+
+      it 'broadcasts to the `questions_list` channel' do
+        expect { post :create, params: { question: attributes_for(:question) } }
+          .to broadcast_to('questions_list')
+      end
+
+      it 'gonifies the `user_id` value as expected' do
+        post :create, params: { question: attributes_for(:question) }
+
+        expect(gon['user_id']).to eq(user.id)
+      end
     end
 
     context 'with invalid attributes' do
@@ -82,6 +95,27 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
         expect(response).to render_template :new
       end
+
+      it 'does not broadcast to the `questions_list` channel' do
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }
+          .not_to broadcast_to('questions_list')
+      end
+
+      it 'gonifies the values as expected' do
+        post :create, params: { question: attributes_for(:question, :invalid) }
+
+        expect(gon['user_id']).to eq(user.id)
+      end
+    end
+
+    context 'when the user is not authenticated' do
+      before { sign_out(user) }
+
+      it 'gonifies the `user_id` value and it equals to `nil`' do
+        post :create, params: { question: attributes_for(:question) }
+
+        expect(gon['user_id']).to eq(nil)
+      end
     end
   end
 
@@ -90,7 +124,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
     context 'with valid attributes' do
       it 'changes the question attributes' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' }, format: :js }
+        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
 
         question.reload
 
@@ -99,7 +133,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' }, format: :js }
+        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
 
         expect(response).to render_template :update
       end
@@ -107,7 +141,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
     context 'with invalid attributes' do
       it 'does not change the question' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
 
         question.reload
 
@@ -116,7 +150,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
 
         expect(response).to render_template :update
       end
@@ -174,4 +208,5 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   it_behaves_like 'voted'
+  it_behaves_like 'commented'
 end

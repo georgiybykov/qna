@@ -6,14 +6,13 @@
           = render 'single_question', resource: @question
 
   .col.col-md-9
-    .card.border-primary.mb-3
-      .card-body
-        h4.text-center
-          b
-            = 'Answers'
-        .container
-          .answers
-            = render @question.answers
+    .card-body
+      h4.text-center
+        b
+          = 'Answers'
+      .container
+        .answers
+          = render @question.answers
 
     - if current_user
       .card.border-primary.mb-3

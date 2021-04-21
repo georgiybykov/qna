@@ -8,10 +8,11 @@ feature 'The user can create a question', %q{
 
   given(:user) { create(:user) }
 
-  describe 'Authenticated user tries to ask a question' do
+  describe 'Authenticated user' do
     background do
       sign_in(user)
       visit questions_path
+
       click_on 'Ask question'
     end
 
@@ -47,6 +48,36 @@ feature 'The user can create a question', %q{
       click_on 'Ask'
 
       expect(page).to have_content 'Title can\'t be blank'
+    end
+  end
+
+  describe 'Multiple sessions', js: true do
+    scenario 'with the question appears on another page of the user' do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit questions_path
+      end
+
+      Capybara.using_session('guest') do
+        visit questions_path
+      end
+
+      Capybara.using_session('user') do
+        click_on 'Ask question'
+
+        fill_in 'Title', with: 'Question title'
+        fill_in 'Body', with: 'Text in the question body'
+
+        click_on 'Ask'
+
+        expect(page).to have_content 'Your question has been successfully created!'
+        expect(page).to have_content 'Question title'
+        expect(page).to have_content 'Text in the question body'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'Question title'
+      end
     end
   end
 

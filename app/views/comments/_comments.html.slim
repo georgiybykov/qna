@@ -1,0 +1,4 @@
+ul
+  - comments.each do |comment|
+    li id="comment_#{comment.id}"
+      p= comment.body

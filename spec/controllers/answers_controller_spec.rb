@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe AnswersController, type: :controller, aggregate_failures: true do
+  include_context 'with gon stores shared params'
+
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
   let!(:answer) { create(:answer, question: question, user: user) }
@@ -10,30 +12,64 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
     context 'with valid attributes' do
       it 'saves a new answer to the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js } }
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
           .to change(question.answers, :count)
                 .by(1)
       end
 
       it 'renders the create template' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+        post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
 
         expect(response).to render_template :create
+      end
+
+      it 'broadcasts to the `answers_for_page_with_question_ID` channel' do
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
+          .to broadcast_to("answers_for_page_with_question_#{question.id}")
+      end
+
+      it 'gonifies the `user_id` value as expected' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
+
+        expect(gon['user_id']).to eq(user.id)
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
         expect do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
         end
           .not_to change(question.answers, :count)
       end
 
       it 'renders the create template' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question, format: :js }
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
 
         expect(response).to render_template :create
+      end
+
+      it 'does not broadcast to the `answers_for_page_with_question_ID` channel' do
+        expect do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
+        end
+          .not_to broadcast_to("answers_for_page_with_question_#{question.id}")
+      end
+
+      it 'gonifies the `user_id` value as expected' do
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
+
+        expect(gon['user_id']).to eq(user.id)
+      end
+    end
+
+    context 'when the user is not authenticated' do
+      before { sign_out(user) }
+
+      it 'gonifies the `user_id` value and it equals to `nil`' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
+
+        expect(gon['user_id']).to eq(nil)
       end
     end
   end
@@ -43,7 +79,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
     context 'with valid attributes' do
       it 'changes the answer attributes' do
-        patch :update, params: { id: answer, answer: { body: 'New body' }, format: :js }
+        patch :update, params: { id: answer, answer: { body: 'New body' } }, format: :js
 
         answer.reload
 
@@ -51,7 +87,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: answer, answer: { body: 'New body' }, format: :js }
+        patch :update, params: { id: answer, answer: { body: 'New body' } }, format: :js
 
         expect(response).to render_template :update
       end
@@ -60,12 +96,13 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     context 'with invalid attributes' do
       it 'does not change the answer' do
         expect do
-          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
-        end.not_to change(answer, :body)
+          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        end
+          .not_to change(answer, :body)
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
+        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
 
         expect(response).to render_template :update
       end
@@ -95,7 +132,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       before { login(user) }
 
       it 'does not delete the question and responses :forbidden' do
-        expect { delete :destroy, params: { id: answer } }
+        expect { delete :destroy, params: { id: answer }, format: :js }
           .not_to change(Answer, :count)
 
         expect(response.status).to be 403
@@ -167,4 +204,6 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       end
     end
   end
+
+  it_behaves_like 'commented'
 end
