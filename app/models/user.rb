@@ -8,7 +8,8 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
 
   devise :database_authenticatable, :registerable, :recoverable,
-         :rememberable, :trackable, :validatable, :confirmable
+         :rememberable, :trackable, :validatable, :confirmable,
+         :omniauthable, omniauth_providers: [:github]
 
   def author?(object)
     object.user_id.eql?(id)
