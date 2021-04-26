@@ -36,6 +36,7 @@ gem 'slim-rails'
 # AUTH
 gem 'devise', github: 'heartcombo/devise'
 gem 'omniauth'
+gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
 

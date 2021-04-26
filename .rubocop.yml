@@ -22,6 +22,14 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/ExampleLength:
   Max: 10
 
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - if
+    - and
+
 Layout/LineLength:
   Max: 120
 

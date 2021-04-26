@@ -12,6 +12,8 @@ module Users
 
       return authorization.user if authorization
 
+      return :no_email_provided unless email
+
       find_or_create_user(provider, uid, email)
     end
 
@@ -27,7 +29,7 @@ module Users
 
         result.authorizations.create!(provider: provider, uid: uid)
       rescue StandardError
-        result = :not_found
+        result = :not_found_or_created
 
         raise ActiveRecord::Rollback
       end

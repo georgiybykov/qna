@@ -50,18 +50,36 @@ describe Users::FindForOauth, type: :service, aggregate_failures: true do
   end
 
   context 'when the authorization data is invalid' do
-    let(:auth_hash) { mock_auth_hash(provider: nil, email: 'github-test@email.com') }
+    context 'and does not consist :provider info' do
+      let(:auth_hash) { mock_auth_hash(provider: nil, email: 'github-test@email.com') }
 
-    it 'does not create the user' do
-      expect { result }.not_to change(User, :count)
+      it 'does not create the user' do
+        expect { result }.not_to change(User, :count)
+      end
+
+      it 'does not create the authorization for the user' do
+        expect { result }.not_to change(Authorization, :count)
+      end
+
+      it 'returns the symbolic error :not_found_or_created' do
+        expect(result).to eq(:not_found_or_created)
+      end
     end
 
-    it 'does not create the authorization for the user' do
-      expect { result }.not_to change(Authorization, :count)
-    end
+    context 'and does not consist :email info' do
+      let(:auth_hash) { mock_auth_hash(provider: :github, email: nil) }
 
-    it 'returns the symbolic error :not_found' do
-      expect(result).to eq(:not_found)
+      it 'does not create the user' do
+        expect { result }.not_to change(User, :count)
+      end
+
+      it 'does not create the authorization for the user' do
+        expect { result }.not_to change(Authorization, :count)
+      end
+
+      it 'returns the symbolic error :no_email_provided' do
+        expect(result).to eq(:no_email_provided)
+      end
     end
   end
 end
