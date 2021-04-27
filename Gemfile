@@ -34,7 +34,11 @@ gem 'decent_exposure'
 gem 'slim-rails'
 
 # AUTH
-gem 'devise'
+gem 'devise', github: 'heartcombo/devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-github'
+gem 'omniauth-rails_csrf_protection'
 
 gem 'aws-sdk-s3', require: false
 
@@ -81,7 +85,12 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 3.26'
+
+  # Tests messages in Capybara integration tests
+  gem 'capybara-email'
+
   gem 'selenium-webdriver'
+
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
 
