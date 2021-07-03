@@ -1,3 +1,6 @@
-= f.fields_for :links do |l|
-  = render 'links/link_fields', f: l
-= link_to_add_association 'Add link', f, :links, partial: 'links/link_fields'
+.card.border-primary.mb-3
+  .card-body
+    = f.fields_for :links do |l|
+      = render 'links/link_fields', f: l
+    p
+    = link_to_add_association 'Add link', f, :links, partial: 'links/link_fields', class: 'btn btn-primary'

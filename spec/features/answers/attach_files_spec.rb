@@ -23,7 +23,7 @@ feature 'The user can attach the files to the answer', %q{
       expect(page).not_to have_link 'first_file.txt'
       expect(page).not_to have_link 'second_file.txt'
 
-      attach_file 'Add files', ["#{Rails.root}/spec/fixtures/first_file.txt",
+      attach_file 'Add files:', ["#{Rails.root}/spec/fixtures/first_file.txt",
                                 "#{Rails.root}/spec/fixtures/second_file.txt"]
 
       click_on 'Create answer'
