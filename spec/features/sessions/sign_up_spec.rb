@@ -43,6 +43,6 @@ feature 'The user can sign up', %q{
   scenario 'The unregistered user tries to sign up without any params' do
     click_on 'Sign up'
 
-    expect(page).to have_content 'Email can\'t be blank '
+    expect(page).to have_content 'Email can\'t be blank'
   end
 end

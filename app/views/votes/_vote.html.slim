@@ -4,7 +4,7 @@ p
       = 'Rating: '
     = resource.rating
 
--if current_user && !author_of?(current_user, resource)
+- if current_user && !author_of?(current_user, resource)
   .vote
     p
       = link_to '+', polymorphic_path(resource, action: :vote_up),

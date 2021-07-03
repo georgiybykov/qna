@@ -16,9 +16,9 @@ feature 'The user can sign in', %q{
 
   scenario 'The unregistered user tries to sign in' do
     visit new_user_session_path
-    fill_in 'Email', with: 'unregistered@test.com'
+    fill_in 'E-mail', with: 'unregistered@test.com'
     fill_in 'Password', with: '12345'
-    click_on 'Log in'
+    within('.actions') { click_on 'Sign in' }
 
     expect(page).to have_content 'Invalid Email or password.'
   end

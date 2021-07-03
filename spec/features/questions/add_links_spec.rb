@@ -71,6 +71,6 @@ feature 'The user can add links to the question', %q{
     expect(page).not_to have_button 'Add link'
     expect(page).not_to have_button 'Ask'
 
-    expect(page).to have_content 'Log in'
+    expect(page).to have_content 'Sign in'
   end
 end
