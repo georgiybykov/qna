@@ -6,8 +6,8 @@ feature 'The user can delete the question', %q{
   I would like to be able to delete the question
 }, type: :feature, js: true, aggregate_failures: true do
 
-  given(:question) { create(:question) }
-  given(:user) { create(:user) }
+  given!(:question) { create(:question) }
+  given!(:user) { create(:user) }
 
   describe 'Authenticated user' do
     background do
