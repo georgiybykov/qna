@@ -1,7 +1,9 @@
-= f.fields_for :reward do |r|
-  p
-    = r.label :title, 'Reward'
-    = r.text_field :title
-  p
-    = r.label :image
-    = r.file_field :image
+.card.border-primary.mb-3
+  .card-body
+    = f.fields_for :reward do |r|
+      p
+        = r.label :title, 'Reward'
+        = r.text_field :title, class: 'form-control'
+      p
+        = r.label :image
+        = r.file_field :image, class: 'form-control'

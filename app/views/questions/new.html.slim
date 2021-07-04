@@ -1,24 +1,33 @@
-= render 'shared/errors', resource: @question
+.row.justify-content-center.mt-3
+  .col.col-md-9
+    .card.border-primary.mb-3
+      .card-body
+        h3.text-center
+          b
+            | Create new question
 
-= form_with model: @question, local: true do |f|
-  p
-    = f.label :title
-    = f.text_field :title
-  p
-    = f.label :body
-    = f.text_area :body
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+        = form_with model: @question, local: true do |f|
+          = render 'shared/errors', resource: @question
 
-  .links
-    p
-      b Links:
-      = render 'links/form', f: f
+          p
+            b= f.label :title
+            = f.text_field :title, class: 'form-control'
+          p
+            b= f.label :body
+            = f.text_area :body, class: 'form-control'
+          p
+            b= f.label :files, 'Files:'
+            = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control'
 
-  .reward
-    p Reward:
-    = render 'rewards/reward', f: f
+          .links
+            p
+              b Links:
+              = render 'links/form', f: f
 
-  p
-    = f.submit 'Ask'
+          .reward
+            p
+              b Reward:
+              = render 'rewards/reward', f: f
+
+          p
+            = f.submit 'Ask', class: 'btn btn-success'
