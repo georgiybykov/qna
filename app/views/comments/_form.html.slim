@@ -1,15 +1,18 @@
-.comment-errors
-  = render 'shared/errors', resource: comment
-
-h3= 'Create comment'
+h4.text-center
+  | Create comment
 = form_with model: [commentable, comment],
         url: polymorphic_path(commentable, action: :comment),
         method: :post,
         local: false,
         class: 'new-comment' do |f|
-  p
-    = f.label :body, 'Your comment'
-    = f.text_area :body, id: 'comment_body'
 
-  p
-    = f.submit 'Create comment'
+  .comment-errors
+    = render 'shared/errors', resource: comment
+
+  .form-group
+    p
+      = f.label :body, 'Your comment'
+      = f.text_area :body, id: 'comment_body', class: 'form-control'
+
+    p
+      = f.submit 'Create comment', class: 'btn btn-info'

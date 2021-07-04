@@ -57,11 +57,11 @@ div id="question_#{@question.id}"
         = 'Comments'
     .container
       .question-comments
-        - unless @question.comments.empty?
-          = render 'comments/comments', commentable: @question, comments: @question.comments
-        - else
-          .empty-comments-label
+        - if @question.comments.empty?
+          .empty-comments-label.mb-2
             = 'No comments yet'
+        - else
+          = render 'comments/comments', commentable: @question, comments: @question.comments
 
     - if current_user
       .card.border-primary.mb-3

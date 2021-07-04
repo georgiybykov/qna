@@ -62,11 +62,11 @@
             = 'Comments'
         .container
           .answer-comments
-            - unless answer.comments.empty?
-              = render 'comments/comments', commentable: answer, comments: answer.comments
-            - else
-              .empty-comments-label
+            - if answer.comments.empty?
+              .empty-comments-label.mb-2
                 = 'No comments yet'
+            - else
+              = render 'comments/comments', commentable: answer, comments: answer.comments
 
           - if current_user
             .card.border-primary.mb-3

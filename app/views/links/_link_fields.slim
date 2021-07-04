@@ -4,6 +4,6 @@
     = f.text_field :name, class: 'form-control'
   p
     = f.label :url, 'URL'
-    = f.text_field :url, class: 'form-control'
+    = f.text_field :url, class: 'form-control', placeholder: 'It should start with http or https'
 
   = link_to_remove_association 'Remove link', f, class: 'btn btn-danger'
