@@ -6,8 +6,8 @@
           p
             - if answer.best?
               i
-                sup.best BEST
-              '->
+                sup.best THE BEST ANSWER
+              p
             = answer.body
 
           = render 'votes/vote', resource: answer, current_user: current_user
@@ -27,33 +27,37 @@
                       set_best_answer_path(answer),
                       method: :patch,
                       remote: true,
-                      class: 'best-answer-link'
+                      class: 'best-answer-link btn btn-outline-success'
 
           - if author_of?(current_user, answer)
-            = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-            |  |
+            = link_to 'Edit', '#', class: 'edit-answer-link btn btn-outline-primary', data: { answer_id: answer.id }
+            | |
             = link_to 'Delete answer',
                     answer_path(answer),
                     method: :delete,
                     remote: true,
-                    class: 'delete-answer-link'
+                    class: 'btn btn-outline-danger'
             p
 
           = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
             .edit-answer-errors
-            h5= 'Edit answer'
-            = f.label :body, 'Your answer'
-            = f.text_area :body, id: "answer_body-#{answer.id}"
+            h5.text-center
+              b
+                | Edit answer
+            b= f.label :body, 'Your answer'
+            = f.text_area :body, id: "answer_body-#{answer.id}", class: 'form-control'
             br
-            = f.label :files
-            = f.file_field :files, multiple: true, direct_upload: true
+            b= f.label :files, 'Files:'
+            = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control'
+            br
 
             .links-form
-              p Links:
-              = render 'links/form', f: f
+              p
+                b Links:
+                = render 'links/form', f: f
 
             br
-            = f.submit 'Save'
+            = f.submit 'Save', class: 'btn btn-outline-success'
 
         hr
 

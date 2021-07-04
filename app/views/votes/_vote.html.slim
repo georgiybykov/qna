@@ -11,16 +11,16 @@ p
               method: :patch,
               data: { type: :json },
               remote: true,
-              class: 'btn btn-primary'
+              class: 'btn btn-outline-primary'
       | |
       = link_to 'Revoke vote', polymorphic_path(resource, action: :revoke_vote),
               method: :delete,
               data: { type: :json },
               remote: true,
-              class: 'btn btn-danger'
+              class: 'btn btn-outline-danger'
       | |
       = link_to '-', polymorphic_path(resource, action: :vote_down),
               method: :patch,
               data: { type: :json },
               remote: true,
-              class: 'btn btn-primary'
+              class: 'btn btn-outline-primary'
