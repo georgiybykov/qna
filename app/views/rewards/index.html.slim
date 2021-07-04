@@ -1,17 +1,18 @@
-h3= current_user.email
-
-h2 Rewards:
-- unless @rewards.empty?
-  - @rewards.each do |reward|
-    p
-      b Question:
-      = reward.question.title
-    p
-      b Reward title:
-      = reward.title
-    p
-      = image_tag reward.image, size: "150x150" if reward.image.attached?
-    hr
-- else
-  p
-    = '- You do not have any reward yet -'
+.card.border-primary.mb-3
+  .card-body
+    h2.text-center
+      b Rewards:
+    - unless @rewards.empty?
+      - @rewards.each do |reward|
+        p
+          b= 'Question: '
+          = reward.question.title
+        p
+          b= 'Reward title: '
+          = reward.title
+        p
+          = image_tag reward.image, size: "150x150" if reward.image.attached?
+        hr
+    - else
+      p.text-center.mt-3
+        = '- You do not have any reward yet -'

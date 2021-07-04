@@ -1,7 +1,14 @@
-p Files:
-ul
-  - resource.files.each do |file|
-    div id="attachment_#{file.id}"
-      = link_to file.filename.to_s, url_for(file)
-      - if author_of?(current_user, resource)
-        p= link_to 'Delete file', attachment_path(file.record_id), method: :delete, remote: true
+.card.border-primary.mb-3
+  .card-body
+    p
+      b Files:
+      ul
+        - resource.files.each do |file|
+          div id="attachment_#{file.id}"
+            = link_to file.filename.to_s, url_for(file)
+            - if author_of?(current_user, resource)
+              p= link_to 'Delete file',
+                          attachment_path(file.record_id),
+                          method: :delete,
+                          remote: true,
+                          class: 'btn btn-outline-danger'

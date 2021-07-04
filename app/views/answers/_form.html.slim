@@ -1,18 +1,22 @@
-.answer-errors
-  = render 'shared/errors', resource: @answer
-
-h3= 'Create answer'
+h3.text-center
+  | Create answer
 = form_with model: [@question, @answer], local: false, class: 'new-answer' do |f|
-  p
-    = f.label :body, 'Your answer'
-    = f.text_area :body, id: 'answer_body'
-  p
-    = f.label :files, 'Add files'
-    = f.file_field :files, multiple: true, direct_upload: true
+  .answer-errors
+    = render 'shared/errors', resource: @answer
+
+  .form-group
+    p
+      = f.label :body, 'Your answer'
+      = f.text_area :body, id: 'answer_body', class: 'form-control'
+    p
+      b
+        = f.label :files, 'Add files:'
+        = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control'
 
   .links
-    p Links:
-    = render 'links/form', f: f
+    p
+      b Links:
+      = render 'links/form', f: f
 
   p
-    = f.submit 'Create answer'
+    = f.submit 'Create answer', class: 'btn btn-success'

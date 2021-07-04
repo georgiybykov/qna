@@ -4,22 +4,23 @@ p
       = 'Rating: '
     = resource.rating
 
--if current_user && !author_of?(current_user, resource)
+- if current_user && !author_of?(current_user, resource)
   .vote
     p
       = link_to '+', polymorphic_path(resource, action: :vote_up),
               method: :patch,
               data: { type: :json },
-              remote: true
-
-    p
+              remote: true,
+              class: 'btn btn-outline-primary'
+      | |
       = link_to 'Revoke vote', polymorphic_path(resource, action: :revoke_vote),
               method: :delete,
               data: { type: :json },
-              remote: true
-
-    p
+              remote: true,
+              class: 'btn btn-outline-danger'
+      | |
       = link_to '-', polymorphic_path(resource, action: :vote_down),
               method: :patch,
               data: { type: :json },
-              remote: true
+              remote: true,
+              class: 'btn btn-outline-primary'

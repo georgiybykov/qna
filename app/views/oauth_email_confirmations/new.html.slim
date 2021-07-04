@@ -2,7 +2,8 @@ h2 Enter your email
 
 = form_with url: oauth_email_confirmation_path, method: :post do |f|
   p
-    = f.label :email
-    = f.email_field :email
+    = f.label :email, 'E-mail'
+    = f.email_field :email, class: 'form-control'
 
-  p= f.submit 'Send'
+  p
+    = f.submit 'Send', class: 'btn btn-outline-primary'

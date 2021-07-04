@@ -1,12 +1,12 @@
 div id="question_#{@question.id}"
   .card-body
-    .container
+    .card-header-pills
       h2.text-center
         b
           = @question.title
+    .container
       h5
-        b
-          = @question.body
+        = @question.body
 
       = render 'votes/vote', resource: @question
 
@@ -33,22 +33,26 @@ div id="question_#{@question.id}"
         p
         = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
           .edit-question-errors
-          h5= 'Edit question'
-          = f.label :title, 'Title'
-          = f.text_field :title
+          h5.text-center
+            b
+              | Edit question
+          b= f.label :title, 'Title'
+          = f.text_field :title, class: 'form-control'
           br
-          = f.label :body, 'Your question'
-          = f.text_area :body
+          b= f.label :body, 'Your question'
+          = f.text_area :body, class: 'form-control'
           br
-          = f.label :files
-          = f.file_field :files, multiple: true, direct_upload: true
+          b= f.label :files, 'Files:'
+          = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control'
+          br
 
           .links-form
-            p Links:
-            = render 'links/form', f: f
+            p
+              b Links:
+              = render 'links/form', f: f
 
             br
-            = f.submit 'Save'
+            = f.submit 'Save', class: 'btn btn-outline-success'
 
     hr
 
@@ -57,11 +61,11 @@ div id="question_#{@question.id}"
         = 'Comments'
     .container
       .question-comments
-        - unless @question.comments.empty?
-          = render 'comments/comments', commentable: @question, comments: @question.comments
-        - else
-          .empty-comments-label
+        - if @question.comments.empty?
+          .empty-comments-label.mb-2
             = 'No comments yet'
+        - else
+          = render 'comments/comments', commentable: @question, comments: @question.comments
 
     - if current_user
       .card.border-primary.mb-3

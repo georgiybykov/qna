@@ -1,0 +1,33 @@
+.row.justify-content-center.mt-3
+  .col.col-md-6
+    h2.text-center
+      | Enter your account
+    .card.border-primary
+      .card-body
+        = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+          .form-group
+            p
+              = f.label :email, 'E-mail'
+              br
+              = f.email_field :email,
+                              autofocus: true,
+                              class: 'form-control',
+                              placeholder: 'Enter your e-mail'
+            p
+              = f.label :password
+              br
+              = f.password_field :password,
+                                 autocomplete: 'off',
+                                 class: 'form-control',
+                                 placeholder: 'Enter your password'
+
+            - if devise_mapping.rememberable?
+              .form-check
+                = f.label :remember_me, class: 'form-check-label' do
+                  = f.check_box :remember_me, class: 'form-check-input'
+                  = 'Remember me'
+          .actions
+            = f.submit 'Sign in', class: 'btn btn-primary'
+
+    .mt-2.ml-2
+      = render 'devise/shared/links'

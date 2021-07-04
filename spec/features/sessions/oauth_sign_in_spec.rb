@@ -52,7 +52,7 @@ feature 'The user can sign in from provider', %q{
 
         click_link 'Sign in with GitHub'
 
-        fill_in 'Email', with: 'invalid'
+        fill_in 'E-mail', with: 'invalid'
         click_button 'Send'
 
         expect(page).to have_content 'Please, enter valid email'
@@ -63,7 +63,7 @@ feature 'The user can sign in from provider', %q{
 
         click_link 'Sign in with GitHub'
 
-        fill_in 'Email', with: 'github-test@email.com'
+        fill_in 'E-mail', with: 'github-test@email.com'
         click_button 'Send'
 
         expect(page).to have_content 'Check your email to confirm registration!'
@@ -122,7 +122,7 @@ feature 'The user can sign in from provider', %q{
 
         click_link 'Sign in with Facebook'
 
-        fill_in 'Email', with: 'invalid'
+        fill_in 'E-mail', with: 'invalid'
         click_button 'Send'
 
         expect(page).to have_content 'Please, enter valid email'
@@ -133,7 +133,7 @@ feature 'The user can sign in from provider', %q{
 
         click_link 'Sign in with Facebook'
 
-        fill_in 'Email', with: 'facebook-test@email.com'
+        fill_in 'E-mail', with: 'facebook-test@email.com'
         click_button 'Send'
 
         expect(page).to have_content 'Check your email to confirm registration!'
