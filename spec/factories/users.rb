@@ -9,5 +9,9 @@ FactoryBot.define do
 
     after(:build, &:skip_confirmation_notification!)
     after(:create, &:confirm)
+
+    trait :admin do
+      admin { true }
+    end
   end
 end
