@@ -1,4 +1,4 @@
-$('.comment-errors').html('<%= render 'shared/errors', resource: @comment %>')
+$('.comment-errors').html('<%= j render 'shared/errors', resource: @comment %>')
 
 <% if @comment.persisted? %>
   $('.empty-comments-label').remove()

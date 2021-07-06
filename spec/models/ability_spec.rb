@@ -45,8 +45,8 @@ describe Ability, type: :model, aggregate_failures: true do
       it { is_expected.to be_able_to :destroy, user_question }
       it { is_expected.not_to be_able_to :destroy, not_current_user_question }
 
-      it { is_expected.to be_able_to %i[vote_up vote_down revoke_vote], not_current_user_question }
-      it { is_expected.not_to be_able_to %i[vote_up vote_down revoke_vote], user_question }
+      it { is_expected.to be_able_to :vote_actions, not_current_user_question }
+      it { is_expected.not_to be_able_to :vote_actions, user_question }
     end
 
     context 'with answers' do
@@ -58,8 +58,8 @@ describe Ability, type: :model, aggregate_failures: true do
       it { is_expected.to be_able_to :destroy, user_answer }
       it { is_expected.not_to be_able_to :destroy, not_current_user_answer }
 
-      it { is_expected.to be_able_to %i[vote_up vote_down revoke_vote], not_current_user_answer }
-      it { is_expected.not_to be_able_to %i[vote_up vote_down revoke_vote], user_answer }
+      it { is_expected.to be_able_to :vote_actions, not_current_user_answer }
+      it { is_expected.not_to be_able_to :vote_actions, user_answer }
 
       it { is_expected.to be_able_to :set_best, user_answer }
       it { is_expected.not_to be_able_to :set_best, not_current_user_answer }

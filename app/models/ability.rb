@@ -27,7 +27,9 @@ class Ability
     can :create, [Question, Answer, Comment]
     can %i[update destroy], [Question, Answer], { user_id: user.id }
 
-    can %i[vote_up vote_down revoke_vote], [Answer, Question] do |votable|
+    alias_action :vote_up, :vote_down, :revoke_vote, to: :vote_actions
+
+    can :vote_actions, [Answer, Question] do |votable|
       votable.user_id != user.id
     end
 
