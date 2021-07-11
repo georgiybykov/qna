@@ -2,11 +2,12 @@
 
 class LinksController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { check_permissions(link.linkable) }, only: :destroy
 
   expose :link
 
   def destroy
+    authorize! :destroy, link.linkable
+
     link.destroy
   end
 end

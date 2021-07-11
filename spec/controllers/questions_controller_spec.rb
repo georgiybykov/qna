@@ -120,39 +120,55 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'PATCH #update' do
-    before { login(user) }
+    let!(:question) { create(:question) }
+    let(:question_params) { { title: 'New title', body: 'New body' } }
+    let(:invalid_params) { attributes_for(:question, :invalid) }
 
-    context 'with valid attributes' do
-      it 'changes the question attributes' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+    context 'when the user is the author of the question' do
+      before { login(question.user) }
 
-        question.reload
+      context 'with valid attributes' do
+        it 'changes the question attributes' do
+          patch :update, params: { id: question, question: question_params }, format: :js
 
-        expect(question.title).to eq('New title')
-        expect(question.body).to eq('New body')
+          question.reload
+
+          expect(question.title).to eq('New title')
+          expect(question.body).to eq('New body')
+        end
+
+        it 'renders the update view' do
+          patch :update, params: { id: question, question: question_params }, format: :js
+
+          expect(response).to render_template :update
+        end
       end
 
-      it 'renders the update view' do
-        patch :update, params: { id: question, question: { title: 'New title', body: 'New body' } }, format: :js
+      context 'with invalid attributes' do
+        it 'does not change the question' do
+          patch :update, params: { id: question, question: invalid_params }, format: :js
 
-        expect(response).to render_template :update
+          question.reload
+
+          expect(question.title).to eq('QuestionTitle')
+          expect(question.body).to eq('QuestionBody')
+        end
+
+        it 'renders the update view' do
+          patch :update, params: { id: question, question: invalid_params }, format: :js
+
+          expect(response).to render_template :update
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      it 'does not change the question' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+    context 'when the user is not the author of the question' do
+      before { login(user) }
 
-        question.reload
+      it 'does not update the question and responses with :forbidden status' do
+        patch :update, params: { id: question, question: question_params }, format: :js
 
-        expect(question.title).to eq('QuestionTitle')
-        expect(question.body).to eq('QuestionBody')
-      end
-
-      it 'renders the update view' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
-
-        expect(response).to render_template :update
+        expect(response.status).to be 403
       end
     end
   end
@@ -185,8 +201,17 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
     context 'when the user is not the author of the question' do
       before { login(user) }
 
-      it 'does not delete the question and responses :forbidden' do
+      it 'does not delete the question and responses with :forbidden status' do
         expect { delete :destroy, params: { id: question } }
+          .not_to change(Question, :count)
+
+        expect(response.status).to be 403
+
+        expect(flash[:alert]).to match 'You are not authorized to perform this action!'
+      end
+
+      it 'does not delete the question and responses with :forbidden status (JS format)' do
+        expect { delete :destroy, xhr: true, params: { id: question }, format: :js }
           .not_to change(Question, :count)
 
         expect(response.status).to be 403

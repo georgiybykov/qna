@@ -3,14 +3,15 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show update destroy comment]
-  before_action -> { check_permissions(@question) }, only: %i[update destroy]
+  after_action :publish_question, only: :create
 
   expose :questions, -> { Question.all }
 
-  after_action :publish_question, only: :create
-
   include Voted
   include Commented
+
+  authorize_resource except: :comment
+  skip_authorization_check only: :comment
 
   def index; end
 

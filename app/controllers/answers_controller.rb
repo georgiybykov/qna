@@ -3,14 +3,17 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_answer, only: %i[update destroy set_best]
-  before_action -> { check_permissions(@answer) }, only: %i[update destroy]
 
-  expose :question
+  expose :question, id: -> { params[:question_id] }
+  expose :answer_question, -> { @answer.question }
 
   after_action :publish_answer, only: :create
 
   include Voted
   include Commented
+
+  authorize_resource except: :comment
+  skip_authorization_check only: :comment
 
   def create
     @answer = question.answers.new(answer_params.merge(user: current_user))
@@ -19,7 +22,6 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params.merge(user: current_user))
-    @question = @answer.question
   end
 
   def destroy
@@ -27,10 +29,6 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    @question = @answer.question
-
-    return head(:forbidden) unless current_user.author?(@question)
-
     @answer.mark_as_best!
   end
 

@@ -186,9 +186,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       it 'does not set the answer to be the best and responses :forbidden' do
         patch :set_best, params: { id: answer, answer: { best: true } }, format: :js
 
-        answer.reload
-
-        expect(answer.best?).to eq(false)
+        expect(answer.reload.best?).to eq(false)
 
         expect(response.status).to be 403
       end

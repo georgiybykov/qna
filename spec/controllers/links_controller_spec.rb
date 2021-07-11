@@ -27,7 +27,7 @@ describe LinksController, type: :controller, aggregate_failures: true do
       before { login(user) }
 
       it 'does not delete the link and responses :forbidden' do
-        expect { delete :destroy, params: { id: link } }
+        expect { delete :destroy, params: { id: link }, format: :js }
           .not_to change(question.links, :count)
 
         expect(response.status).to be 403

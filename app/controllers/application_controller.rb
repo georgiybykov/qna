@@ -7,8 +7,18 @@ class ApplicationController < ActionController::Base
     exception.default_message = 'You are not authorized to perform this action!'
 
     respond_to do |format|
-      format.html { redirect_back(fallback_location: request.fullpath, alert: exception.message) }
-      format.js { render 'shared/ajax_flash', locals: { flash_alert: exception.message }, status: :forbidden }
+      format.html do
+        redirect_back fallback_location: request.fullpath,
+                      alert: exception.message,
+                      status: :forbidden
+      end
+
+      format.js do
+        render 'shared/ajax_flash',
+               locals: { flash_alert: exception.message },
+               status: :forbidden
+      end
+
       format.json { render json: {}, status: :forbidden }
     end
   end
@@ -24,9 +34,5 @@ class ApplicationController < ActionController::Base
     }
 
     gon.push(payload)
-  end
-
-  def check_permissions(object)
-    head(:forbidden) unless current_user.author?(object)
   end
 end
