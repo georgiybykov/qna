@@ -20,10 +20,11 @@ div id="question_#{@question.id}"
           - unless @question.links.empty?
             = render 'links/links', links: @question.links
 
-      - if author_of?(current_user, @question)
-        p
+      p
+        - if can?(:update, @question)
           = link_to 'Edit', '#', class: 'edit-question-link btn btn-primary', data: { question_id: @question.id }
           |  |
+        - if can?(:destroy, @question)
           = link_to 'Delete question',
                   question_path(@question),
                   method: :delete,
@@ -67,7 +68,7 @@ div id="question_#{@question.id}"
         - else
           = render 'comments/comments', commentable: @question, comments: @question.comments
 
-    - if current_user
+    - if can?(:create, Comment)
       .card.border-primary.mb-3
         .card-body
           .form-group

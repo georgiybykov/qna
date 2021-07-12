@@ -22,16 +22,17 @@
               = render 'links/links', links: answer.links
 
           p
-            - if author_of?(current_user, answer.question) && !answer.best?
+            - if can?(:set_best, answer) && !answer.best?
               = link_to 'Mark as best',
                       set_best_answer_path(answer),
                       method: :patch,
                       remote: true,
                       class: 'best-answer-link btn btn-outline-success'
 
-          - if author_of?(current_user, answer)
+          - if can?(:update, answer)
             = link_to 'Edit', '#', class: 'edit-answer-link btn btn-outline-primary', data: { answer_id: answer.id }
             | |
+          - if can?(:destroy, answer)
             = link_to 'Delete answer',
                     answer_path(answer),
                     method: :delete,
@@ -72,7 +73,7 @@
             - else
               = render 'comments/comments', commentable: answer, comments: answer.comments
 
-          - if current_user
+          - if can?(:create, Comment)
             .card.border-primary.mb-3
               .card-body
                 .form-group

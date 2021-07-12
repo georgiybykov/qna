@@ -5,7 +5,7 @@ module Voted
 
   included do
     before_action :set_votable, only: %i[vote_up vote_down revoke_vote]
-    before_action -> { check_user_not_author(@votable) }, only: %i[vote_up vote_down revoke_vote]
+    before_action -> { authorize_votable(@votable) }, only: %i[vote_up vote_down revoke_vote]
   end
 
   def vote_up
@@ -44,14 +44,7 @@ module Voted
     controller_name.classify.constantize
   end
 
-  def check_user_not_author(resource)
-    return unless current_user.author?(resource)
-
-    render_errors
-  end
-
-  def render_errors
-    render json: { message: 'You do not have permissions to vote!' },
-           status: :forbidden
+  def authorize_votable(resource)
+    authorize! :vote_actions, resource
   end
 end
