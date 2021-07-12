@@ -3,6 +3,10 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
+  devise_scope :user do
+    get 'users/auth/failure', to: 'devise/sessions#new'
+  end
+
   resource :oauth_email_confirmation, only: %i[new create]
 
   root to: 'questions#index'

@@ -35,7 +35,8 @@ feature 'The user can sign in from provider', %q{
 
       click_link 'Sign in with GitHub'
 
-      expect(page).to have_content 'Could not authenticate you from GitHub because "Invalid credentials".'
+      expect(page).to have_content 'Enter your account'
+      expect(page).to have_content 'Sign in with GitHub'
     end
 
     scenario 'when the authentication data is invalid and does not contain :provider' do
@@ -105,7 +106,8 @@ feature 'The user can sign in from provider', %q{
 
       click_link 'Sign in with Facebook'
 
-      expect(page).to have_content 'Could not authenticate you from Facebook because "Invalid credentials".'
+      expect(page).to have_content 'Enter your account'
+      expect(page).to have_content 'Sign in with Facebook'
     end
 
     scenario 'when the authentication data is invalid and does not contain :provider' do

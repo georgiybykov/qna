@@ -88,7 +88,13 @@ RSpec.configure do |config|
   end
 end
 
-OmniAuth.config.test_mode = true
+OmniAuth.configure do |config|
+  config.test_mode = true
+
+  config.on_failure = proc do |env|
+    OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+  end
+end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
