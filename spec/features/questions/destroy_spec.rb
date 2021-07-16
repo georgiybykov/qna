@@ -24,6 +24,7 @@ feature 'The user can delete the question', %q{
       accept_confirm { click_on 'Delete question' }
 
       click_on 'QnA'
+      expect(current_path).to eq questions_path
 
       expect(page).not_to have_content question.title
       expect(page).not_to have_content question.body
@@ -32,7 +33,7 @@ feature 'The user can delete the question', %q{
     scenario 'tries to delete his own question from the main page of the resource' do
       click_on 'Delete question'
 
-      click_on 'QnA'
+      expect(current_path).to eq questions_path
 
       expect(page).not_to have_content question.title
       expect(page).not_to have_content question.body
