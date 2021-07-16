@@ -9,6 +9,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 
 require 'rspec/rails'
 require 'capybara/email/rspec'
+require 'cancan/matchers'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -39,6 +40,9 @@ end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::ControllerHelpers, type: :controller
+  # config.include Devise::Test::ControllerHelpers, type: :view
+  # config.include Devise::Test::IntegrationHelpers, type: :feature
+  # config.include Devise::Test::IntegrationHelpers, type: :request
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
   # config.include ActionCable::TestHelper
@@ -84,7 +88,13 @@ RSpec.configure do |config|
   end
 end
 
-OmniAuth.config.test_mode = true
+OmniAuth.configure do |config|
+  config.test_mode = true
+
+  config.on_failure = proc do |env|
+    OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+  end
+end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

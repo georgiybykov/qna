@@ -6,7 +6,7 @@
         - resource.files.each do |file|
           div id="attachment_#{file.id}"
             = link_to file.filename.to_s, url_for(file)
-            - if author_of?(current_user, resource)
+            - if can?(:destroy, resource)
               p= link_to 'Delete file',
                           attachment_path(file.record_id),
                           method: :delete,

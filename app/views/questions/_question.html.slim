@@ -10,11 +10,11 @@
       td.align-middle
         = question.links.count
       td.align-middle
-        = link_to 'Show', question_path(question), class: 'btn btn-primary'
-      - if author_of?(current_user, question)
+        = link_to 'Show', question_path(question), class: 'btn btn-outline-primary'
+      - if can?(:destroy, question)
         td.align-middle
           = link_to 'Delete question',
                   question_path(question),
                   method: :delete,
                   remote: true,
-                  class: 'delete-question-link btn btn-danger'
+                  class: 'delete-question-link btn btn-outline-danger'

@@ -30,6 +30,13 @@ RSpec/ContextWording:
     - if
     - and
 
+RSpec/NestedGroups:
+  Max: 6
+
+Lint/ReturnInVoidContext:
+  Exclude:
+    - app/models/ability.rb
+
 Layout/LineLength:
   Max: 120
 

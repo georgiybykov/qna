@@ -5,7 +5,6 @@ module Commented
 
   included do
     before_action :set_commentable, only: :comment
-
     after_action :publish_comment, only: :comment
   end
 

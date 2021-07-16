@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OauthEmailConfirmationsController < ApplicationController
+  skip_authorization_check
+
   def new; end
 
   def create

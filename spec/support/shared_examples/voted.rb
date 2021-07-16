@@ -56,7 +56,7 @@ shared_examples_for 'voted' do
 
         response_error_message = JSON.parse(response.body)['message']
 
-        expect(response_error_message).to eq 'You do not have permissions to vote!'
+        expect(response_error_message).to eq 'You are not authorized to perform this action!'
       end
     end
 
@@ -127,7 +127,7 @@ shared_examples_for 'voted' do
 
         response_error_message = JSON.parse(response.body)['message']
 
-        expect(response_error_message).to eq 'You do not have permissions to vote!'
+        expect(response_error_message).to eq 'You are not authorized to perform this action!'
       end
     end
 
@@ -195,7 +195,7 @@ shared_examples_for 'voted' do
 
           response_error_message = JSON.parse(response.body)['message']
 
-          expect(response_error_message).to eq 'You do not have permissions to vote!'
+          expect(response_error_message).to eq 'You are not authorized to perform this action!'
         end
       end
     end

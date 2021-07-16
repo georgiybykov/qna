@@ -14,7 +14,7 @@
         .answers
           = render @question.answers
 
-    - if current_user
+    - if can?(:create, Answer)
       .card.border-primary.mb-3
         .card-body
           .form-group

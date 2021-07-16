@@ -6,7 +6,7 @@
       - links.each do |link|
         li id="link_#{link.id}"
           p= parse_url(link.url, link.name)
-          - if author_of?(current_user, link.linkable)
+          - if can?(:destroy, link.linkable)
             = link_to 'Delete link',
                     link_path(link),
                     method: :delete,
