@@ -21,7 +21,10 @@ class ApplicationController < ActionController::Base
                status: :forbidden
       end
 
-      format.json { render json: { message: exception.message }, status: :forbidden }
+      format.json do
+        render json: { message: exception.message },
+               status: :forbidden
+      end
     end
   end
 
