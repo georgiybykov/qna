@@ -45,6 +45,7 @@ RSpec.configure do |config|
   # config.include Devise::Test::IntegrationHelpers, type: :request
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
+  config.include ApiHelpers, type: :request
   # config.include ActionCable::TestHelper
   config.include OmniAuthMacros
 
