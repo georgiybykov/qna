@@ -113,6 +113,10 @@ Naming/VariableNumber:
   Exclude:
     - db/seeds.rb
 
+Naming/InclusiveLanguage:
+  Exclude:
+    - config/initializers/doorkeeper.rb
+
 Rails/Delegate:
   Exclude:
     - app/controllers/**/*

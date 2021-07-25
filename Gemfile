@@ -40,12 +40,15 @@ gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
 
+# An OAuth 2 provider
+gem 'doorkeeper'
+
 gem 'aws-sdk-s3', require: false
 
 # Form builder to handle nested forms
 gem 'cocoon'
 
-# Share Ruby variables to JS files.
+# Share Ruby variables to JS files
 gem 'gon'
 
 # Manage abilities
