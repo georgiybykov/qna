@@ -7,7 +7,7 @@ module Api
 
       def index
         @questions = Question.all
-        render json: @questions
+        render json: @questions.to_json(include: :answers)
       end
     end
   end

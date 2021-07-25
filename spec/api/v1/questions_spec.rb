@@ -26,7 +26,9 @@ describe 'Questions API', type: :request, aggregate_failures: true do
     context 'when authorized' do
       let(:access_token) { create(:access_token).token }
       let!(:questions) { create_list(:question, 2) }
-      let(:first_question) { questions.first }
+      let(:question) { questions.last }
+      let(:question_response) { response_json.last }
+      let!(:answers) { create_list(:answer, 3, question: question) }
 
       before { get '/api/v1/questions', params: { access_token: access_token }, headers: headers }
 
@@ -39,14 +41,33 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       end
 
       it 'returns all public fields' do
-        expect(response_json.first).to eq({
-                                            id: first_question.id,
-                                            title: first_question.title,
-                                            body: first_question.body,
-                                            user_id: first_question.user_id,
-                                            created_at: first_question.created_at.as_json,
-                                            updated_at: first_question.updated_at.as_json
-                                          })
+        expect(question_response[:id]).to eq question.id
+        expect(question_response[:title]).to eq question.title
+        expect(question_response[:body]).to eq question.body
+        expect(question_response[:user_id]).to eq question.user_id
+        expect(question_response[:created_at]).to eq question.created_at.as_json
+        expect(question_response[:updated_at]).to eq question.updated_at.as_json
+      end
+
+      context 'when there are nested answers' do
+        let(:answer) { answers.first }
+        let(:answer_response) { question_response[:answers].first }
+
+        it 'returns the list of the answers' do
+          expect(response_json.last[:answers].size).to eq 3
+        end
+
+        it 'returns all public fields' do
+          expect(answer_response).to eq({
+                                          id: answer.id,
+                                          body: answer.body,
+                                          best: false,
+                                          question_id: question.id,
+                                          user_id: answer.user_id,
+                                          created_at: answer.created_at.as_json,
+                                          updated_at: answer.updated_at.as_json
+                                        })
+        end
       end
     end
   end
