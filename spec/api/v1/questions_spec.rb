@@ -9,10 +9,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
   end
 
   describe 'GET /api/v1/questions' do
-    it_behaves_like 'API Unauthorized' do
-      let(:method) { :get }
-      let(:api_path) { '/api/v1/questions' }
-    end
+    it_behaves_like 'API Unauthorized', :get, '/api/v1/questions'
 
     context 'when authorized' do
       let(:access_token) { create(:access_token).token }

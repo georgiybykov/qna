@@ -9,10 +9,7 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
   end
 
   describe 'GET /api/v1/profiles/me' do
-    it_behaves_like 'API Unauthorized' do
-      let(:method) { :get }
-      let(:api_path) { '/api/v1/profiles/me' }
-    end
+    it_behaves_like 'API Unauthorized', :get, '/api/v1/profiles/me'
 
     context 'when authorized' do
       let(:me) { create(:user) }

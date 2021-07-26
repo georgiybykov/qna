@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-shared_examples_for 'API Unauthorized' do
-  context 'when unauthorized' do
+shared_examples_for 'API Unauthorized' do |method, api_path|
+  context 'when the resource owner is unauthorized' do
     it 'returns 401 response status if there is not access_token' do
       perform_request(method, api_path, headers: headers)
 
