@@ -3,10 +3,10 @@
 module Api
   module V1
     class QuestionsController < Api::V1::BaseController
-      authorize_resource class: User
+      authorize_resource
 
       def index
-        @questions = Question.all
+        @questions = Question.includes(:user, :answers)
         render json: @questions, each_serializer: Api::V1::QuestionSerializer
       end
     end

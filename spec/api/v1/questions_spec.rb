@@ -9,18 +9,9 @@ describe 'Questions API', type: :request, aggregate_failures: true do
   end
 
   describe 'GET /api/v1/questions' do
-    context 'when unauthorized' do
-      it 'returns 401 response status if there is not access_token' do
-        get '/api/v1/questions', headers: headers
-
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 response status if access_token is invalid' do
-        get '/api/v1/questions', params: { access_token: '1234' }, headers: headers
-
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'API Unauthorized' do
+      let(:method) { :get }
+      let(:api_path) { '/api/v1/questions' }
     end
 
     context 'when authorized' do

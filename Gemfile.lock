@@ -427,7 +427,7 @@ PLATFORMS
 
 DEPENDENCIES
   action-cable-testing
-  active_model_serializers (~> 0.10.0)
+  active_model_serializers (~> 0.10)
   aws-sdk-s3
   bootsnap (>= 1.4.4)
   byebug
