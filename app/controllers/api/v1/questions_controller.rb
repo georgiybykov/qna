@@ -7,7 +7,7 @@ module Api
 
       def index
         @questions = Question.all
-        render json: @questions.to_json(include: :answers)
+        render json: @questions, each_serializer: Api::V1::QuestionSerializer
       end
     end
   end

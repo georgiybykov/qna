@@ -27,7 +27,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       let(:access_token) { create(:access_token).token }
       let!(:questions) { create_list(:question, 2) }
       let(:question) { questions.last }
-      let(:question_response) { response_json.last }
+      let(:question_response) { response_json[:questions].last }
       let!(:answers) { create_list(:answer, 3, question: question) }
 
       before { get '/api/v1/questions', params: { access_token: access_token }, headers: headers }
@@ -37,16 +37,23 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       end
 
       it 'returns the list of the questions' do
-        expect(response_json.size).to eq 2
+        expect(response_json[:questions].size).to eq 2
       end
 
       it 'returns all public fields' do
         expect(question_response[:id]).to eq question.id
         expect(question_response[:title]).to eq question.title
         expect(question_response[:body]).to eq question.body
-        expect(question_response[:user_id]).to eq question.user_id
         expect(question_response[:created_at]).to eq question.created_at.as_json
         expect(question_response[:updated_at]).to eq question.updated_at.as_json
+      end
+
+      it 'contains a user object' do
+        expect(question_response[:user][:id]).to eq question.user_id
+      end
+
+      it 'contains short title' do
+        expect(question_response[:short_title]).to eq question.title.truncate(7)
       end
 
       context 'when there are nested answers' do
@@ -54,7 +61,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         let(:answer_response) { question_response[:answers].first }
 
         it 'returns the list of the answers' do
-          expect(response_json.last[:answers].size).to eq 3
+          expect(question_response[:answers].size).to eq 3
         end
 
         it 'returns all public fields' do
