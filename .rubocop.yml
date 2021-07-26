@@ -21,6 +21,8 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/ExampleLength:
   Max: 10
+  Exclude:
+    - spec/api/**/*
 
 RSpec/ContextWording:
   Prefixes:

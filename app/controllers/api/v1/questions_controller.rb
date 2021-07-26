@@ -6,8 +6,9 @@ module Api
       authorize_resource
 
       def index
-        @questions = Question.includes(:user, :answers)
-        render json: @questions, each_serializer: Api::V1::QuestionSerializer
+        questions = Question.includes(:user, :answers)
+
+        render json: questions, each_serializer: Api::V1::QuestionSerializer
       end
     end
   end
