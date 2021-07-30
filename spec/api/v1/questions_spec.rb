@@ -95,7 +95,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       end
 
       it 'contains nested file URL\'s' do
-        expect(question_response[:files].first).to include('/first_file.txt')
+        expect(question_response[:files].first[:url]).to include('/first_file.txt')
       end
 
       it 'contains nested links' do

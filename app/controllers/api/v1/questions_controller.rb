@@ -15,7 +15,9 @@ module Api
       end
 
       def show
-        render json: question
+        render json: question,
+               serializer: Api::V1::QuestionSerializer,
+               include: %i[comments files links author]
       end
     end
   end
