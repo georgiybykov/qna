@@ -60,21 +60,19 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
       end
 
       it 'returns the list of all users except authenticated one' do
-        expect(response_users_list.size).to eq 2
+        expect(response_users_list.count).to eq 2
 
         expect(response_users_list.pluck(:id).include?(me.id)).to eq false
       end
 
       it 'returns all public fields' do
-        expect(response_users_list.first).to eq(
-          {
-            id: first_user.id,
-            email: first_user.email,
-            admin: false,
-            created_at: first_user.created_at.as_json,
-            updated_at: first_user.updated_at.as_json
-          }
-        )
+        expect(response_users_list.first).to eq({
+                                                  id: first_user.id,
+                                                  email: first_user.email,
+                                                  admin: false,
+                                                  created_at: first_user.created_at.as_json,
+                                                  updated_at: first_user.updated_at.as_json
+                                                })
       end
 
       it 'does not return private fields' do

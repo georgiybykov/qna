@@ -5,10 +5,17 @@ module Api
     class QuestionsController < Api::V1::BaseController
       authorize_resource
 
-      def index
-        questions = Question.includes(:user, :answers)
+      expose :questions, -> { Question.includes(:user) }
+      expose :question, -> { Question.with_attached_files.find(params[:id]) }
 
-        render json: questions, each_serializer: Api::V1::QuestionSerializer
+      def index
+        render json: questions,
+               each_serializer: Api::V1::QuestionSerializer,
+               include: [:author]
+      end
+
+      def show
+        render json: question
       end
     end
   end
