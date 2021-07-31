@@ -8,11 +8,14 @@ describe 'Questions API', type: :request, aggregate_failures: true do
     }
   end
 
+  let(:access_token) { create(:access_token).token }
+
+  let(:user) { create(:user) }
+
   describe 'GET /api/v1/questions' do
     it_behaves_like 'API Unauthorized', :get, '/api/v1/questions'
 
     context 'when authorized' do
-      let(:access_token) { create(:access_token).token }
       let!(:questions) { create_list(:question, 2) }
       let(:question) { questions.last }
       let(:question_user) { question.user }
@@ -54,11 +57,9 @@ describe 'Questions API', type: :request, aggregate_failures: true do
   end
 
   describe 'GET /api/v1/questions/{id}' do
-    it_behaves_like 'API Unauthorized', :get, '/api/v1/questions/0'
+    it_behaves_like 'API Unauthorized', :get, '/api/v1/questions/:id'
 
     context 'when authorized' do
-      let(:access_token) { create(:access_token).token }
-      let(:user) { create(:user) }
       let(:question) { create(:question, :with_file, user: user) }
       let!(:comments) { create_list(:comment, 2, commentable: question, user: user) }
       let(:comment) { comments.first }

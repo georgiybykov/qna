@@ -11,7 +11,7 @@ module Api
       def index
         render json: questions,
                each_serializer: Api::V1::QuestionSerializer,
-               include: [:author]
+               include: :author
       end
 
       def show

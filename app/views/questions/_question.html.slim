@@ -10,6 +10,8 @@
       td.align-middle
         = question.links.count
       td.align-middle
+        = question.comments.count
+      td.align-middle
         = link_to 'Show', question_path(question), class: 'btn btn-outline-primary'
       - if can?(:destroy, question)
         td.align-middle
