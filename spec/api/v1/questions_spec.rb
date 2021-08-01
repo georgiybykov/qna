@@ -124,67 +124,188 @@ describe 'Questions API', type: :request, aggregate_failures: true do
     it_behaves_like 'API Unauthorized', :post, '/api/v1/questions'
 
     context 'when authorized' do
-      let(:params) do
-        {
-          access_token: access_token.token,
-          question: {
-            title: 'First API Question',
-            body: 'It is Wednesday, my dude!'
+      context 'with valid params' do
+        let(:params) do
+          {
+            access_token: access_token.token,
+            question: {
+              title: 'First API Question',
+              body: 'It is Wednesday, my dude!'
+            }
           }
-        }
+        end
+
+        let(:access_token) { create(:access_token) }
+
+        let(:question_response) { response_json[:question] }
+
+        it 'returns 201 response status' do
+          post '/api/v1/questions', params: params, headers: headers
+
+          expect(response.status).to eq 201
+        end
+
+        it 'saves a new question to the database' do
+          expect { post '/api/v1/questions', params: params, headers: headers }
+            .to change(Question, :count)
+                  .by(1)
+        end
+
+        context 'and returns question data in response' do
+          before { post '/api/v1/questions', params: params, headers: headers }
+
+          it 'returns all public fields' do
+            expect(question_response[:title]).to eq 'First API Question'
+            expect(question_response[:body]).to eq 'It is Wednesday, my dude!'
+            expect(question_response[:short_title]).to eq 'First API Question'.truncate(7)
+
+            expect(question_response).to have_key :id
+            expect(question_response).to have_key :created_at
+            expect(question_response).to have_key :updated_at
+          end
+
+          it 'does not contain any comments' do
+            expect(question_response[:comments]).to be_empty
+          end
+
+          it 'does not contain any file URL\'s' do
+            expect(question_response[:files]).to be_empty
+          end
+
+          it 'does not contain any links' do
+            expect(question_response[:links]).to be_empty
+          end
+
+          it 'contains a user object' do
+            user = User.find(access_token.resource_owner_id)
+
+            expect(question_response[:author]).to eq({
+                                                       id: user.id,
+                                                       email: user.email,
+                                                       admin: false,
+                                                       created_at: user.created_at.as_json,
+                                                       updated_at: user.updated_at.as_json
+                                                     })
+          end
+        end
       end
 
-      let(:access_token) { create(:access_token) }
+      context 'with invalid params' do
+        let(:invalid_params) do
+          {
+            access_token: access_token,
+            question: {
+              title: nil,
+              body: nil
+            }
+          }
+        end
+
+        before { post '/api/v1/questions', params: invalid_params, headers: headers }
+
+        it 'returns 422 response status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'returns the response with errors hash' do
+          expect(response_json).to have_key :errors
+        end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/questions' do
+    it_behaves_like 'API Unauthorized', :patch, '/api/v1/questions/:id'
+
+    context 'when authorized' do
+      let(:user) { create(:user) }
+      let(:question) { create(:question, user: user) }
+
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
       let(:question_response) { response_json[:question] }
 
-      it 'returns 201 response status' do
-        post '/api/v1/questions', params: params, headers: headers
+      context 'with valid params' do
+        let(:params) do
+          {
+            access_token: access_token.token,
+            question: {
+              title: new_title,
+              body: 'New Question Body'
+            }
+          }
+        end
 
-        expect(response.status).to eq 201
+        let(:new_title) { 'New Question Title' }
+
+        before { patch "/api/v1/questions/#{question.id}", params: params, headers: headers }
+
+        it 'returns 200 response status' do
+          expect(response.status).to eq 200
+        end
+
+        it 'updates the question and returns all public fields' do
+          expect(question_response[:id]).to eq question.id
+          expect(question_response[:title]).to eq new_title
+          expect(question_response[:body]).to eq 'New Question Body'
+          expect(question_response[:created_at]).to eq question.created_at.as_json
+          expect(question_response[:updated_at]).to eq question.reload.updated_at.as_json
+        end
+
+        it 'returns new short_title for the question' do
+          expect(question_response[:short_title]).to eq new_title.truncate(7)
+        end
       end
 
-      it 'saves a new question to the database' do
-        expect { post '/api/v1/questions', params: params, headers: headers }
-          .to change(Question, :count)
-                .by(1)
+      context 'with invalid params' do
+        let(:invalid_params) do
+          {
+            access_token: access_token.token,
+            question: {
+              title: nil,
+              body: nil
+            }
+          }
+        end
+
+        before { patch "/api/v1/questions/#{question.id}", params: invalid_params, headers: headers }
+
+        it 'returns 422 response status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'returns the response with errors hash' do
+          expect(response_json).to have_key :errors
+        end
+
+        it 'does not update the question' do
+          question.reload
+
+          expect(question.title).to include('QuestionTitle-')
+          expect(question.body).to eq('QuestionBody')
+        end
       end
 
-      context 'and returns question data in response' do
-        before { post '/api/v1/questions', params: params, headers: headers }
+      context 'when the user is not the author of the question' do
+        let(:another_user) { create(:user) }
+        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
 
-        it 'returns all public fields' do
-          expect(question_response[:title]).to eq 'First API Question'
-          expect(question_response[:body]).to eq 'It is Wednesday, my dude!'
-          expect(question_response[:short_title]).to eq 'First API Question'.truncate(7)
-
-          expect(question_response).to have_key :id
-          expect(question_response).to have_key :created_at
-          expect(question_response).to have_key :updated_at
+        let(:params) do
+          {
+            access_token: access_token.token,
+            question: {
+              title: 'New Question Title',
+              body: 'New Question Body'
+            }
+          }
         end
 
-        it 'does not contain any comments' do
-          expect(question_response[:comments]).to be_empty
-        end
+        it 'does not update the question and responses with :forbidden status' do
+          patch "/api/v1/questions/#{question.id}", params: params, headers: headers
 
-        it 'does not contain any file URL\'s' do
-          expect(question_response[:files]).to be_empty
-        end
+          expect(response.status).to be 403
 
-        it 'does not contain any links' do
-          expect(question_response[:links]).to be_empty
-        end
-
-        it 'contains a user object' do
-          user = User.find(access_token.resource_owner_id)
-
-          expect(question_response[:author]).to eq({
-                                                     id: user.id,
-                                                     email: user.email,
-                                                     admin: false,
-                                                     created_at: user.created_at.as_json,
-                                                     updated_at: user.updated_at.as_json
-                                                   })
+          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
         end
       end
     end

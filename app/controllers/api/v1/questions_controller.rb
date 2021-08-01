@@ -6,7 +6,7 @@ module Api
       expose :questions, -> { Question.includes(:user) }
       expose :question, -> { Question.with_attached_files.find(params[:id]) }
 
-      authorize_resource
+      authorize_resource class: Question
 
       def index
         render json: questions,
@@ -19,10 +19,20 @@ module Api
       end
 
       def create
-        question = Question.new(question_params.merge(user: current_resource_owner))
+        question = Question.new(question_params.merge(user_id: current_resource_owner.id))
 
         if question.save
           render_question(question, status: :created)
+        else
+          render json: { errors: question.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def update
+        authorize! :update, question
+
+        if question.update(question_params.merge(user_id: current_resource_owner.id))
+          render_question(question)
         else
           render json: { errors: question.errors }, status: :unprocessable_entity
         end
