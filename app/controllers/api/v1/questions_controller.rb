@@ -38,6 +38,12 @@ module Api
         end
       end
 
+      def destroy
+        authorize! :destroy, question
+
+        render json: {}, status: :ok if question.destroy!
+      end
+
       private
 
       def render_question(question, status: :ok)

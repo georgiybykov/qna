@@ -310,4 +310,52 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       end
     end
   end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    it_behaves_like 'API Unauthorized', :delete, '/api/v1/questions/:id'
+
+    context 'when authorized' do
+      let(:user) { create(:user) }
+      let!(:question) { create(:question, user: user) }
+
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      let(:params) do
+        { access_token: access_token.token }
+      end
+
+      let(:perform_action) { delete "/api/v1/questions/#{question.id}", params: params, headers: headers }
+
+      context 'when the user is the author of the question' do
+        it 'deletes the question' do
+          expect { perform_action }.to change(Question, :count).by(-1)
+        end
+
+        it 'returns 200 response status' do
+          perform_action
+
+          expect(response.status).to eq 200
+        end
+
+        it 'returns response with empty hash' do
+          perform_action
+
+          expect(response_json).to eq({})
+        end
+      end
+
+      context 'when the user is not the author of the question' do
+        let(:another_user) { create(:user) }
+        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
+
+        it 'does not delete the question and responses with :forbidden status' do
+          perform_action
+
+          expect(response.status).to be 403
+
+          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
+        end
+      end
+    end
+  end
 end
