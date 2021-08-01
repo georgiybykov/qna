@@ -3,10 +3,10 @@
 module Api
   module V1
     class AnswersController < Api::V1::BaseController
-      authorize_resource
-
       expose :question, id: -> { params[:question_id] }
       expose :answer, -> { Answer.with_attached_files.find(params[:id]) }
+
+      authorize_resource
 
       def index
         render json: question.answers,

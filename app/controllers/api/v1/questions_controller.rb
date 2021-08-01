@@ -3,10 +3,10 @@
 module Api
   module V1
     class QuestionsController < Api::V1::BaseController
-      authorize_resource
-
       expose :questions, -> { Question.includes(:user) }
       expose :question, -> { Question.with_attached_files.find(params[:id]) }
+
+      authorize_resource
 
       def index
         render json: questions,
@@ -15,9 +15,30 @@ module Api
       end
 
       def show
+        render_question(question)
+      end
+
+      def create
+        question = Question.new(question_params.merge(user: current_resource_owner))
+
+        if question.save
+          render_question(question, status: :created)
+        else
+          render json: { errors: question.errors }, status: :unprocessable_entity
+        end
+      end
+
+      private
+
+      def render_question(question, status: :ok)
         render json: question,
                serializer: Api::V1::QuestionSerializer,
-               include: %i[comments files links author]
+               include: %i[comments files links author],
+               status: status
+      end
+
+      def question_params
+        params.require(:question).permit(:title, :body)
       end
     end
   end

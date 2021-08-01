@@ -15,6 +15,8 @@ describe Question, type: :model, aggregate_failures: true do
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :body }
 
+  it { is_expected.to validate_uniqueness_of :title }
+
   it { is_expected.to accept_nested_attributes_for(:reward) }
 
   it { is_expected.to have_db_column(:title).of_type(:text) }

@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  sequence(:title) { |n| "QuestionTitle-#{n}" }
+
   factory :question do
-    title { 'QuestionTitle' }
+    title { generate(:title) }
     body { 'QuestionBody' }
 
     association :user
