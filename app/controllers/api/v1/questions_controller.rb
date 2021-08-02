@@ -13,13 +13,13 @@ module Api
       end
 
       def show
-        render_json_object question, %i[comments files links author]
+        render_json question, %i[comments files links author]
       end
 
       def create
         question = Question.new(question_params.merge(user_id: current_resource_owner.id))
 
-        result_to_json question.save, question, :author, status: :created
+        respond question.save, question, :author, status: :created
       end
 
       def update
@@ -27,7 +27,7 @@ module Api
 
         result = question.update(question_params.merge(user_id: current_resource_owner.id))
 
-        result_to_json result, question, %i[comments files links author]
+        respond result, question, %i[comments files links author]
       end
 
       def destroy

@@ -6,15 +6,15 @@ module Api
       module Responder
         extend ActiveSupport::Concern
 
-        def result_to_json(result, object, scopes, status: :ok)
+        def respond(result, object, scopes, status: :ok)
           if result
-            render_json_object object, scopes, status: status
+            render_json object, scopes, status: status
           else
             render json: { errors: object.errors }, status: :unprocessable_entity
           end
         end
 
-        def render_json_object(object, scopes, status: :ok)
+        def render_json(object, scopes, status: :ok)
           render json: object,
                  serializer: "Api::V1::#{object.class}Serializer".constantize,
                  include: scopes,
