@@ -49,7 +49,7 @@ Rails.application.routes.draw do
       end
 
       resources :questions do
-        resources :answers, only: %i[index show]
+        resources :answers, only: %i[index show create]
       end
     end
   end

@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Answers API', type: :request, aggregate_failures: true do
-  let(:headers) do
-    {
-      'CONTENT_TYPE' => 'application/json',
-      'ACCEPT' => 'application/json'
-    }
-  end
+  let(:headers) { { 'ACCEPT' => 'application/json' } }
 
   let(:access_token) { create(:access_token).token }
 
@@ -131,6 +126,93 @@ describe 'Answers API', type: :request, aggregate_failures: true do
                                                  created_at: user.created_at.as_json,
                                                  updated_at: user.updated_at.as_json
                                                })
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions/:id/answers' do
+    it_behaves_like 'API Unauthorized', :post, '/api/v1/questions/:id/answers'
+
+    context 'when authorized' do
+      context 'with valid params' do
+        let(:params) do
+          {
+            access_token: access_token.token,
+            answer: {
+              body: 'It is Wednesday again, my dude!'
+            }
+          }
+        end
+
+        let(:another_user) { create(:user) }
+        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
+
+        let(:answer_response) { response_json[:answer] }
+
+        it 'returns 201 response status' do
+          post "/api/v1/questions/#{question.id}/answers", params: params, headers: headers
+
+          expect(response.status).to eq 201
+        end
+
+        it 'saves a new answer to the database' do
+          expect { post "/api/v1/questions/#{question.id}/answers", params: params, headers: headers }
+            .to change(question.answers, :count)
+                  .by(1)
+        end
+
+        context 'and returns answer data in response' do
+          before { post "/api/v1/questions/#{question.id}/answers", params: params, headers: headers }
+
+          it 'returns all public fields' do
+            expect(answer_response[:body]).to eq 'It is Wednesday again, my dude!'
+
+            expect(answer_response).to have_key :id
+            expect(answer_response).to have_key :created_at
+            expect(answer_response).to have_key :updated_at
+          end
+
+          it 'does not contain any comments' do
+            expect(answer_response[:comments]).to be_empty
+          end
+
+          it 'does not contain any file URL\'s' do
+            expect(answer_response[:files]).to be_empty
+          end
+
+          it 'does not contain any links' do
+            expect(answer_response[:links]).to be_empty
+          end
+
+          it 'contains a user object' do
+            expect(answer_response[:author]).to eq({
+                                                     id: another_user.id,
+                                                     email: another_user.email,
+                                                     admin: false,
+                                                     created_at: another_user.created_at.as_json,
+                                                     updated_at: another_user.reload.updated_at.as_json
+                                                   })
+          end
+        end
+      end
+
+      context 'with invalid params' do
+        let(:invalid_params) do
+          {
+            access_token: access_token,
+            answer: attributes_for(:answer, :invalid)
+          }
+        end
+
+        before { post "/api/v1/questions/#{question.id}/answers", params: invalid_params, headers: headers }
+
+        it 'returns 422 response status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'returns the response with errors hash' do
+          expect(response_json).to have_key :errors
+        end
       end
     end
   end

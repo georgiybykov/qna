@@ -49,7 +49,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
     end
   end
 
-  describe 'GET /api/v1/questions/{id}' do
+  describe 'GET /api/v1/questions/:id' do
     it_behaves_like 'API Unauthorized', :get, '/api/v1/questions/:id'
 
     context 'when authorized' do
@@ -135,7 +135,8 @@ describe 'Questions API', type: :request, aggregate_failures: true do
           }
         end
 
-        let(:access_token) { create(:access_token) }
+        let(:user) { create(:user) }
+        let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
         let(:question_response) { response_json[:question] }
 
@@ -177,14 +178,12 @@ describe 'Questions API', type: :request, aggregate_failures: true do
           end
 
           it 'contains a user object' do
-            user = User.find(access_token.resource_owner_id)
-
             expect(question_response[:author]).to eq({
                                                        id: user.id,
                                                        email: user.email,
                                                        admin: false,
                                                        created_at: user.created_at.as_json,
-                                                       updated_at: user.updated_at.as_json
+                                                       updated_at: user.reload.updated_at.as_json
                                                      })
           end
         end
@@ -194,10 +193,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         let(:invalid_params) do
           {
             access_token: access_token,
-            question: {
-              title: nil,
-              body: nil
-            }
+            question: attributes_for(:question, :invalid)
           }
         end
 
@@ -261,10 +257,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         let(:invalid_params) do
           {
             access_token: access_token.token,
-            question: {
-              title: nil,
-              body: nil
-            }
+            question: attributes_for(:question, :invalid)
           }
         end
 
