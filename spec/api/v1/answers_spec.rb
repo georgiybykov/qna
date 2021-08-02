@@ -170,18 +170,6 @@ describe 'Answers API', type: :request, aggregate_failures: true do
             expect(answer_response).to have_key :updated_at
           end
 
-          it 'does not contain any comments' do
-            expect(answer_response[:comments]).to be_empty
-          end
-
-          it 'does not contain any file URL\'s' do
-            expect(answer_response[:files]).to be_empty
-          end
-
-          it 'does not contain any links' do
-            expect(answer_response[:links]).to be_empty
-          end
-
           it 'contains a user object' do
             expect(answer_response[:author]).to eq({
                                                      id: another_user.id,
@@ -219,7 +207,7 @@ describe 'Answers API', type: :request, aggregate_failures: true do
     it_behaves_like 'API Unauthorized', :patch, '/api/v1/questions/:id/answers/:id'
 
     context 'when authorized' do
-      let(:answer) { create(:answer, question: question, user: user) }
+      let(:answer) { create(:answer, :with_file, :with_comment, :with_link, question: question, user: user) }
 
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
@@ -246,6 +234,18 @@ describe 'Answers API', type: :request, aggregate_failures: true do
           expect(answer_response[:body]).to eq 'New Answer Body'
           expect(answer_response[:created_at]).to eq answer.created_at.as_json
           expect(answer_response[:updated_at]).to eq answer.reload.updated_at.as_json
+        end
+
+        it 'returns comments' do
+          expect(answer_response[:comments].count).to eq 1
+        end
+
+        it 'returns files URL\'s' do
+          expect(answer_response[:files].count).to eq 1
+        end
+
+        it 'returns links' do
+          expect(answer_response[:links].count).to eq 1
         end
       end
 

@@ -24,5 +24,21 @@ FactoryBot.define do
                             filename: 'second_file.txt')
       end
     end
+
+    trait :with_comment do
+      transient do
+        comment_user { user }
+      end
+
+      after :create do |answer, evaluator|
+        create(:comment, commentable: answer, user: evaluator.comment_user)
+      end
+    end
+
+    trait :with_link do
+      after :create do |answer|
+        create(:link, linkable: answer)
+      end
+    end
   end
 end
