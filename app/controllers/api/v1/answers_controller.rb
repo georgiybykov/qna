@@ -30,6 +30,16 @@ module Api
         end
       end
 
+      def update
+        authorize! :update, answer
+
+        if answer.update(answer_params.merge(user_id: current_resource_owner.id))
+          render_answer(answer)
+        else
+          render json: { errors: answer.errors }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def render_answer(answer, status: :ok)

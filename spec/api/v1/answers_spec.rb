@@ -24,9 +24,7 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         }
       end
 
-      before do
-        get "/api/v1/questions/#{question.id}/answers", params: params, headers: headers
-      end
+      before { get "/api/v1/questions/#{question.id}/answers", params: params, headers: headers }
 
       it 'returns 200 response status' do
         expect(response).to be_successful
@@ -212,6 +210,89 @@ describe 'Answers API', type: :request, aggregate_failures: true do
 
         it 'returns the response with errors hash' do
           expect(response_json).to have_key :errors
+        end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/questions' do
+    it_behaves_like 'API Unauthorized', :patch, '/api/v1/questions/:id/answers/:id'
+
+    context 'when authorized' do
+      let(:answer) { create(:answer, question: question, user: user) }
+
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      let(:answer_response) { response_json[:answer] }
+
+      context 'with valid params' do
+        let(:params) do
+          {
+            access_token: access_token.token,
+            answer: {
+              body: 'New Answer Body'
+            }
+          }
+        end
+
+        before { patch "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: params, headers: headers }
+
+        it 'returns 200 response status' do
+          expect(response.status).to eq 200
+        end
+
+        it 'updates the answer for the question and returns all public fields' do
+          expect(answer_response[:id]).to eq answer.id
+          expect(answer_response[:body]).to eq 'New Answer Body'
+          expect(answer_response[:created_at]).to eq answer.created_at.as_json
+          expect(answer_response[:updated_at]).to eq answer.reload.updated_at.as_json
+        end
+      end
+
+      context 'with invalid params' do
+        let(:invalid_params) do
+          {
+            access_token: access_token.token,
+            answer: attributes_for(:answer, :invalid)
+          }
+        end
+
+        before do
+          patch "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: invalid_params, headers: headers
+        end
+
+        it 'returns 422 response status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'returns the response with errors hash' do
+          expect(response_json).to have_key :errors
+        end
+
+        it 'does not update the answer' do
+          expect(answer.reload.body).to include('AnswerBody-')
+        end
+      end
+
+      context 'when the user is not the author of the answer' do
+        let(:another_user) { create(:user) }
+        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
+
+        let(:params) do
+          {
+            access_token: access_token.token,
+            answer: {
+              body: 'New Answer Body'
+            }
+          }
+        end
+
+        it 'does not update the question and responses with :forbidden status' do
+          patch "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: params, headers: headers
+
+          expect(response.status).to be 403
+
+          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
         end
       end
     end
