@@ -40,6 +40,12 @@ module Api
         end
       end
 
+      def destroy
+        authorize! :destroy, answer
+
+        render json: {}, status: :ok if answer.destroy!
+      end
+
       private
 
       def render_answer(answer, status: :ok)

@@ -44,12 +44,12 @@ Rails.application.routes.draw do
   # rubocop:disable Naming/VariableNumber
   namespace :api do
     namespace :v1 do
-      resources :profiles, only: [:index] do
+      resources :profiles, only: :index do
         get :me, on: :collection
       end
 
-      resources :questions do
-        resources :answers, only: %i[index show create update]
+      resources :questions, except: %i[new edit] do
+        resources :answers, except: %i[new edit]
       end
     end
   end
