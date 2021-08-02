@@ -165,18 +165,6 @@ describe 'Questions API', type: :request, aggregate_failures: true do
             expect(question_response).to have_key :updated_at
           end
 
-          it 'does not contain any comments' do
-            expect(question_response[:comments]).to be_empty
-          end
-
-          it 'does not contain any file URL\'s' do
-            expect(question_response[:files]).to be_empty
-          end
-
-          it 'does not contain any links' do
-            expect(question_response[:links]).to be_empty
-          end
-
           it 'contains a user object' do
             expect(question_response[:author]).to eq({
                                                        id: user.id,
@@ -215,7 +203,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
     context 'when authorized' do
       let(:user) { create(:user) }
-      let(:question) { create(:question, user: user) }
+      let(:question) { create(:question, :with_file, :with_comment, :with_link, user: user) }
 
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
@@ -250,6 +238,18 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
         it 'returns new short_title for the question' do
           expect(question_response[:short_title]).to eq new_title.truncate(7)
+        end
+
+        it 'returns comments' do
+          expect(question_response[:comments].count).to eq 1
+        end
+
+        it 'returns files URL\'s' do
+          expect(question_response[:files].count).to eq 1
+        end
+
+        it 'returns links' do
+          expect(question_response[:links].count).to eq 1
         end
       end
 

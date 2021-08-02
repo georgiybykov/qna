@@ -12,7 +12,9 @@ module Api
       def index
         users = User.where.not(id: current_resource_owner.id)
 
-        render json: users, each_serializer: Api::V1::UserSerializer
+        render json: users,
+               each_serializer: Api::V1::UserSerializer,
+               include: []
       end
     end
   end

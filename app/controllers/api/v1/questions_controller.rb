@@ -9,33 +9,25 @@ module Api
       authorize_resource class: Question
 
       def index
-        render json: questions,
-               each_serializer: Api::V1::QuestionSerializer,
-               include: :author
+        render_json_list questions, Question, :author
       end
 
       def show
-        render_question(question)
+        render_json_object question, %i[comments files links author]
       end
 
       def create
         question = Question.new(question_params.merge(user_id: current_resource_owner.id))
 
-        if question.save
-          render_question(question, status: :created)
-        else
-          render json: { errors: question.errors }, status: :unprocessable_entity
-        end
+        result_to_json question.save, question, :author, status: :created
       end
 
       def update
         authorize! :update, question
 
-        if question.update(question_params.merge(user_id: current_resource_owner.id))
-          render_question(question)
-        else
-          render json: { errors: question.errors }, status: :unprocessable_entity
-        end
+        result = question.update(question_params.merge(user_id: current_resource_owner.id))
+
+        result_to_json result, question, %i[comments files links author]
       end
 
       def destroy
@@ -45,13 +37,6 @@ module Api
       end
 
       private
-
-      def render_question(question, status: :ok)
-        render json: question,
-               serializer: Api::V1::QuestionSerializer,
-               include: %i[comments files links author],
-               status: status
-      end
 
       def question_params
         params.require(:question).permit(:title, :body)

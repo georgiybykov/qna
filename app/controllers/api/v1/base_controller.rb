@@ -3,6 +3,8 @@
 module Api
   module V1
     class BaseController < ApplicationController
+      include Concerns::Responder
+
       protect_from_forgery with: :null_session
 
       before_action :doorkeeper_authorize!
