@@ -146,6 +146,11 @@ describe 'Questions API', type: :request, aggregate_failures: true do
           let(:object) { Question }
         end
 
+        it 'broadcasts to the `questions_list` channel' do
+          expect { post '/api/v1/questions', params: params }
+            .to broadcast_to('questions_list')
+        end
+
         context 'and returns question data in response' do
           before { post '/api/v1/questions', params: params, headers: headers }
 
