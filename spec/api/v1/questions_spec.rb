@@ -75,6 +75,8 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
       it 'returns 200 response status' do
         expect(response).to be_successful
+
+        expect(response).to match_json_schema('v1/question')
       end
 
       it 'returns all public fields' do
@@ -142,7 +144,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
         let(:question_response) { response_json[:question] }
 
-        it_behaves_like 'Successfully created object' do
+        it_behaves_like 'Successfully created object', :question do
           let(:method) { :post }
           let(:path) { '/api/v1/questions' }
           let(:object) { Question }
@@ -215,6 +217,8 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
         it 'returns 200 response status' do
           expect(response.status).to eq 200
+
+          expect(response).to match_json_schema('v1/question')
         end
 
         it 'updates the question and returns all public fields' do
@@ -278,10 +282,6 @@ describe 'Questions API', type: :request, aggregate_failures: true do
           perform_action
 
           expect(response.status).to eq 200
-        end
-
-        it 'returns response with empty hash' do
-          perform_action
 
           expect(response_json).to eq({})
         end

@@ -152,7 +152,7 @@ describe 'Answers API', type: :request, aggregate_failures: true do
             .to broadcast_to("answers_for_page_with_question_#{question.id}")
         end
 
-        it_behaves_like 'Successfully created object' do
+        it_behaves_like 'Successfully created object', :answer do
           let(:method) { :post }
           let(:path) { "/api/v1/questions/#{question.id}/answers" }
           let(:object) { question.answers }
@@ -186,7 +186,6 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         let(:method) { :post }
         let(:path) { "/api/v1/questions/#{question.id}/answers" }
         let(:channel) { "answers_for_page_with_question_#{question.id}" }
-        # .to broadcast_to("answers_for_page_with_question_#{question.id}")
       end
     end
   end
@@ -274,10 +273,6 @@ describe 'Answers API', type: :request, aggregate_failures: true do
           perform_action
 
           expect(response.status).to eq 200
-        end
-
-        it 'returns response with empty hash' do
-          perform_action
 
           expect(response_json).to eq({})
         end

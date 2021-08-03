@@ -1,0 +1,19 @@
+{
+  "id": "file:/link.json#",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "url",
+    "created_at",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "url": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

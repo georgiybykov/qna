@@ -4,7 +4,7 @@
   "required": ["question"],
   "additionalProperties": false,
   "properties": {
-    "user": {
+    "question": {
       "type": "object",
       "required": [
         "id",
@@ -23,9 +23,26 @@
         "updated_at": { "type": "string", "format": "date-time" },
         "short_title": { "type": "string" },
         "author": {
-          "type": "array",
           "items": {
             "$ref": "file:/user.json#"
+          }
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "file:/comment.json#"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "file:/file.json#"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "file:/link.json#"
           }
         }
       }
