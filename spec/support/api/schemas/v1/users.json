@@ -1,28 +1,13 @@
 {
   "type": "object",
-  "required": ["users"],
-  "properties": {
+  "definitions": {
     "users": {
+      "description": "A collection of users except authenticated one",
       "type": "array",
-      "additionalProperties": false,
       "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "id",
-          "email",
-          "admin",
-          "created_at",
-          "updated_at"
-        ],
-        "properties": {
-          "id": { "type": "integer" },
-          "email": { "type": "string" },
-          "admin": { "type": "boolean" },
-          "created_at": { "type": "string", "format": "date-time" },
-          "updated_at": { "type": "string", "format": "date-time" }
-        }
+        "$ref": "file:/user.json#"
       }
     }
-  }
+  },
+  "required": ["users"]
 }
