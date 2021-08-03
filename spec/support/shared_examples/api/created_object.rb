@@ -7,7 +7,7 @@ shared_examples 'Successfully created object' do |type|
 
       expect(response.status).to eq 201
 
-      expect(response).to match_json_schema("v1/#{type}")
+      expect(response).to match_json_schema("v1/#{type.to_s.pluralize}/#{type}")
     end
 
     it 'saves a new answer to the database' do
