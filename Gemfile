@@ -111,6 +111,9 @@ group :test do
 
   # Launching external applications from within ruby programs (currently only a browser is supported)
   gem 'launchy'
+
+  # Validate the JSON returned by API
+  gem 'json_matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

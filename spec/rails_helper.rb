@@ -10,6 +10,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'capybara/email/rspec'
 require 'cancan/matchers'
+require 'json_matchers/rspec'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -103,3 +104,5 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+JsonMatchers.schema_root = 'spec/support/api/schemas'
