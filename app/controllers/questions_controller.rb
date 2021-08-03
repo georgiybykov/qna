@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: %i[show update destroy comment]
   after_action :publish_question, only: :create
 
-  expose :questions, -> { Question.all }
+  expose :questions, -> { Question.with_attached_files.includes(:user, :comments, :links) }
 
   include Voted
   include Commented
