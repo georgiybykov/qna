@@ -28,6 +28,8 @@ describe 'Answers API', type: :request, aggregate_failures: true do
 
       it 'returns 200 response status' do
         expect(response).to be_successful
+
+        expect(response).to match_json_schema('v1/answers')
       end
 
       it 'returns the list of the answers for the question' do
@@ -81,6 +83,8 @@ describe 'Answers API', type: :request, aggregate_failures: true do
 
       it 'returns 200 response status' do
         expect(response).to be_successful
+
+        expect(response).to match_json_schema('v1/answer')
       end
 
       it 'returns all public fields' do
@@ -214,6 +218,8 @@ describe 'Answers API', type: :request, aggregate_failures: true do
 
         it 'returns 200 response status' do
           expect(response.status).to eq 200
+
+          expect(response).to match_json_schema('v1/answer')
         end
 
         it 'updates the answer for the question and returns all public fields' do

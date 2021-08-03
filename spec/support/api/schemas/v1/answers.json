@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "definitions": {
+    "users": {
+      "description": "A collection of answers for the question",
+      "type": "array",
+      "items": {
+        "$ref": "file:/answer.json#"
+      }
+    }
+  },
+  "required": ["answers"]
+}
