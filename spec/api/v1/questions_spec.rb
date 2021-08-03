@@ -140,16 +140,10 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
         let(:question_response) { response_json[:question] }
 
-        it 'returns 201 response status' do
-          post '/api/v1/questions', params: params, headers: headers
-
-          expect(response.status).to eq 201
-        end
-
-        it 'saves a new question to the database' do
-          expect { post '/api/v1/questions', params: params, headers: headers }
-            .to change(Question, :count)
-                  .by(1)
+        it_behaves_like 'Successfully created object' do
+          let(:method) { :post }
+          let(:path) { '/api/v1/questions' }
+          let(:object) { Question }
         end
 
         context 'and returns question data in response' do
@@ -177,23 +171,10 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         end
       end
 
-      context 'with invalid params' do
-        let(:invalid_params) do
-          {
-            access_token: access_token,
-            question: attributes_for(:question, :invalid)
-          }
-        end
-
-        before { post '/api/v1/questions', params: invalid_params, headers: headers }
-
-        it 'returns 422 response status' do
-          expect(response.status).to eq 422
-        end
-
-        it 'returns the response with errors hash' do
-          expect(response_json).to have_key :errors
-        end
+      it_behaves_like 'Not created object with invalid params' do
+        let(:object) { :question }
+        let(:method) { :post }
+        let(:path) { '/api/v1/questions' }
       end
     end
   end
@@ -253,53 +234,14 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         end
       end
 
-      context 'with invalid params' do
-        let(:invalid_params) do
-          {
-            access_token: access_token.token,
-            question: attributes_for(:question, :invalid)
-          }
-        end
-
-        before { patch "/api/v1/questions/#{question.id}", params: invalid_params, headers: headers }
-
-        it 'returns 422 response status' do
-          expect(response.status).to eq 422
-        end
-
-        it 'returns the response with errors hash' do
-          expect(response_json).to have_key :errors
-        end
-
-        it 'does not update the question' do
-          question.reload
-
-          expect(question.title).to include('QuestionTitle-')
-          expect(question.body).to eq('QuestionBody')
-        end
+      it_behaves_like 'Not updated object', :question do
+        let(:method) { :patch }
+        let(:path) { "/api/v1/questions/#{question.id}" }
       end
 
-      context 'when the user is not the author of the question' do
-        let(:another_user) { create(:user) }
-        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
-
-        let(:params) do
-          {
-            access_token: access_token.token,
-            question: {
-              title: 'New Question Title',
-              body: 'New Question Body'
-            }
-          }
-        end
-
-        it 'does not update the question and responses with :forbidden status' do
-          patch "/api/v1/questions/#{question.id}", params: params, headers: headers
-
-          expect(response.status).to be 403
-
-          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
-        end
+      it_behaves_like 'Not the author of the object' do
+        let(:method) { :patch }
+        let(:path) { "/api/v1/questions/#{question.id}" }
       end
     end
   end
@@ -337,17 +279,9 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         end
       end
 
-      context 'when the user is not the author of the question' do
-        let(:another_user) { create(:user) }
-        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
-
-        it 'does not delete the question and responses with :forbidden status' do
-          perform_action
-
-          expect(response.status).to be 403
-
-          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
-        end
+      it_behaves_like 'Not the author of the object' do
+        let(:method) { :delete }
+        let(:path) { "/api/v1/questions/#{question.id}" }
       end
     end
   end

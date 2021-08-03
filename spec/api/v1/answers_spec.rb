@@ -147,16 +147,10 @@ describe 'Answers API', type: :request, aggregate_failures: true do
 
         let(:answer_response) { response_json[:answer] }
 
-        it 'returns 201 response status' do
-          post "/api/v1/questions/#{question.id}/answers", params: params, headers: headers
-
-          expect(response.status).to eq 201
-        end
-
-        it 'saves a new answer to the database' do
-          expect { post "/api/v1/questions/#{question.id}/answers", params: params, headers: headers }
-            .to change(question.answers, :count)
-                  .by(1)
+        it_behaves_like 'Successfully created object' do
+          let(:method) { :post }
+          let(:path) { "/api/v1/questions/#{question.id}/answers" }
+          let(:object) { question.answers }
         end
 
         context 'and returns answer data in response' do
@@ -182,23 +176,10 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         end
       end
 
-      context 'with invalid params' do
-        let(:invalid_params) do
-          {
-            access_token: access_token,
-            answer: attributes_for(:answer, :invalid)
-          }
-        end
-
-        before { post "/api/v1/questions/#{question.id}/answers", params: invalid_params, headers: headers }
-
-        it 'returns 422 response status' do
-          expect(response.status).to eq 422
-        end
-
-        it 'returns the response with errors hash' do
-          expect(response_json).to have_key :errors
-        end
+      it_behaves_like 'Not created object with invalid params' do
+        let(:object) { :answer }
+        let(:method) { :post }
+        let(:path) { "/api/v1/questions/#{question.id}/answers" }
       end
     end
   end
@@ -249,51 +230,14 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         end
       end
 
-      context 'with invalid params' do
-        let(:invalid_params) do
-          {
-            access_token: access_token.token,
-            answer: attributes_for(:answer, :invalid)
-          }
-        end
-
-        before do
-          patch "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: invalid_params, headers: headers
-        end
-
-        it 'returns 422 response status' do
-          expect(response.status).to eq 422
-        end
-
-        it 'returns the response with errors hash' do
-          expect(response_json).to have_key :errors
-        end
-
-        it 'does not update the answer' do
-          expect(answer.reload.body).to include('AnswerBody-')
-        end
+      it_behaves_like 'Not updated object', :answer do
+        let(:method) { :patch }
+        let(:path) { "/api/v1/questions/#{question.id}/answers/#{answer.id}" }
       end
 
-      context 'when the user is not the author of the answer' do
-        let(:another_user) { create(:user) }
-        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
-
-        let(:params) do
-          {
-            access_token: access_token.token,
-            answer: {
-              body: 'New Answer Body'
-            }
-          }
-        end
-
-        it 'does not update the question and responses with :forbidden status' do
-          patch "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: params, headers: headers
-
-          expect(response.status).to be 403
-
-          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
-        end
+      it_behaves_like 'Not the author of the object' do
+        let(:method) { :patch }
+        let(:path) { "/api/v1/questions/#{question.id}/answers/#{answer.id}" }
       end
     end
   end
@@ -332,17 +276,9 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         end
       end
 
-      context 'when the user is not the author of the answer for the question' do
-        let(:another_user) { create(:user) }
-        let(:access_token) { create(:access_token, resource_owner_id: another_user.id) }
-
-        it 'does not delete the answer for the question and responses with :forbidden status' do
-          perform_action
-
-          expect(response.status).to be 403
-
-          expect(response_json).to eq({ message: 'You are not authorized to perform this action!' })
-        end
+      it_behaves_like 'Not the author of the object' do
+        let(:method) { :delete }
+        let(:path) { "/api/v1/questions/#{question.id}/answers/#{answer.id}" }
       end
     end
   end
