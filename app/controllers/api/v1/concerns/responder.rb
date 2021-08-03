@@ -21,9 +21,9 @@ module Api
                  status: status
         end
 
-        def render_json_list(objects, serializer_name, scopes, status: :ok)
+        def render_json_list(objects, klass, scopes, status: :ok)
           render json: objects,
-                 each_serializer: "Api::V1::#{serializer_name}Serializer".constantize,
+                 each_serializer: "Api::V1::#{klass}Serializer".constantize,
                  include: scopes,
                  status: status
         end
