@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "required": ["users"],
+  "properties": {
+    "users": {
+      "type": "array",
+      "additionalProperties": false,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "email",
+          "admin",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": { "type": "integer" },
+          "email": { "type": "string" },
+          "admin": { "type": "boolean" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

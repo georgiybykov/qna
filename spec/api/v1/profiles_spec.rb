@@ -19,6 +19,8 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
 
       it 'returns 200 response status' do
         expect(response).to be_successful
+
+        expect(response).to match_json_schema('v1/user')
       end
 
       it 'returns all public fields' do
@@ -57,6 +59,8 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
 
       it 'returns 200 response status' do
         expect(response).to be_successful
+
+        expect(response).to match_json_schema('v1/users')
       end
 
       it 'returns the list of all users except authenticated one' do
