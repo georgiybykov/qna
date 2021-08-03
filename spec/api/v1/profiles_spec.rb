@@ -70,12 +70,12 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
       end
 
       it 'returns all public fields' do
-        expect(response_users_list.first).to eq({
-                                                  id: first_user.id,
-                                                  email: first_user.email,
+        expect(response_users_list.last).to eq({
+                                                  id: second_user.id,
+                                                  email: second_user.email,
                                                   admin: false,
-                                                  created_at: first_user.created_at.as_json,
-                                                  updated_at: first_user.updated_at.as_json
+                                                  created_at: second_user.created_at.as_json,
+                                                  updated_at: second_user.updated_at.as_json
                                                 })
       end
 

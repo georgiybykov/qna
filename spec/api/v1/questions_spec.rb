@@ -19,6 +19,8 @@ describe 'Questions API', type: :request, aggregate_failures: true do
 
       it 'returns 200 response status' do
         expect(response).to be_successful
+
+        expect(response).to match_json_schema('v1/questions')
       end
 
       it 'returns the list of the questions' do
