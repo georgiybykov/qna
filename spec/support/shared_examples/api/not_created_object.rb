@@ -21,9 +21,9 @@ shared_examples 'Not created object with invalid params' do
       expect(response_json).to have_key :errors
     end
 
-    it 'does not broadcast to the `questions_list` channel' do
+    it 'does not broadcast to the channel' do
       expect { perform_request(method, path, params: invalid_params, headers: headers) }
-        .not_to broadcast_to('questions_list')
+        .not_to broadcast_to channel
     end
   end
 end

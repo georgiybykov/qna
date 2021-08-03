@@ -180,6 +180,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         let(:object) { :question }
         let(:method) { :post }
         let(:path) { '/api/v1/questions' }
+        let(:channel) { 'questions_list' }
       end
     end
   end

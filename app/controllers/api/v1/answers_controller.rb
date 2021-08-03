@@ -6,6 +6,8 @@ module Api
       expose :question, id: -> { params[:question_id] }
       expose :answer, -> { Answer.with_attached_files.find(params[:id]) }
 
+      after_action :publish_answer, only: :create
+
       authorize_resource class: Answer
 
       def index
@@ -17,9 +19,9 @@ module Api
       end
 
       def create
-        answer = question.answers.new(answer_params.merge(user_id: current_resource_owner.id))
+        @answer = question.answers.new(answer_params.merge(user_id: current_resource_owner.id))
 
-        respond answer.save, answer, :author, status: :created
+        respond @answer.save, @answer, :author, status: :created
       end
 
       def update
@@ -40,6 +42,17 @@ module Api
 
       def answer_params
         params.require(:answer).permit(:body)
+      end
+
+      def publish_answer
+        return if @answer.errors.any?
+
+        ActionCable.server.broadcast(
+          "answers_for_page_with_question_#{question.id}",
+          answer: @answer,
+          rating: @answer.rating,
+          links: @answer.links
+        )
       end
     end
   end

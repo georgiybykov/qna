@@ -147,6 +147,11 @@ describe 'Answers API', type: :request, aggregate_failures: true do
 
         let(:answer_response) { response_json[:answer] }
 
+        it 'broadcasts to the `answers_for_page_with_question_ID` channel' do
+          expect { post "/api/v1/questions/#{question.id}/answers", params: params }
+            .to broadcast_to("answers_for_page_with_question_#{question.id}")
+        end
+
         it_behaves_like 'Successfully created object' do
           let(:method) { :post }
           let(:path) { "/api/v1/questions/#{question.id}/answers" }
@@ -180,6 +185,8 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         let(:object) { :answer }
         let(:method) { :post }
         let(:path) { "/api/v1/questions/#{question.id}/answers" }
+        let(:channel) { "answers_for_page_with_question_#{question.id}" }
+        # .to broadcast_to("answers_for_page_with_question_#{question.id}")
       end
     end
   end
