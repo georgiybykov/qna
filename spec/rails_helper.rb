@@ -10,6 +10,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'capybara/email/rspec'
 require 'cancan/matchers'
+require 'json_matchers/rspec'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -45,6 +46,7 @@ RSpec.configure do |config|
   # config.include Devise::Test::IntegrationHelpers, type: :request
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
+  config.include ApiHelpers, type: :request
   # config.include ActionCable::TestHelper
   config.include OmniAuthMacros
 
@@ -102,3 +104,5 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+JsonMatchers.schema_root = 'spec/support/api/schemas'

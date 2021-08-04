@@ -10,6 +10,17 @@ feature 'The user can see the list of the questions', %q{
   given(:question) { create(:question) }
   given!(:question_answers) { create_list(:answer, 3, question: question) }
 
+  scenario 'The main page with questions to choose consists of the table with columns' do
+    visit questions_path
+
+    expect(page).to have_content 'Title'
+    expect(page).to have_content 'Body'
+    expect(page).to have_content 'Files'
+    expect(page).to have_content 'Links'
+    expect(page).to have_content 'Comments'
+    expect(page).to have_content 'Actions'
+  end
+
   scenario 'The user looks at the list of the questions, selects first one and gets the list of answers ' do
     visit questions_path(question)
 

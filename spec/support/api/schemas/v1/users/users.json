@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "definitions": {
+    "users": {
+      "description": "A collection of users except authenticated one",
+      "type": "array",
+      "items": {
+        "$ref": "file:/user.json#"
+      }
+    }
+  },
+  "required": ["users"]
+}

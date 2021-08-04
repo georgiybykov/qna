@@ -1,0 +1,19 @@
+{
+  "id": "file:/comment.json#",
+  "type": "object",
+  "required": [
+    "id",
+    "body",
+    "user_id",
+    "created_at",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "integer" },
+    "body": { "type": "string" },
+    "user_id": { "type": "integer" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

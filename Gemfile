@@ -40,16 +40,25 @@ gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
 
+# An OAuth 2 provider
+gem 'doorkeeper'
+
 gem 'aws-sdk-s3', require: false
 
 # Form builder to handle nested forms
 gem 'cocoon'
 
-# Share Ruby variables to JS files.
+# Share Ruby variables to JS files
 gem 'gon'
 
 # Manage abilities
 gem 'cancancan'
+
+# JSON generation
+gem 'active_model_serializers', '~> 0.10'
+
+# JSON parser and Object marshaller
+gem 'oj'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -102,6 +111,9 @@ group :test do
 
   # Launching external applications from within ruby programs (currently only a browser is supported)
   gem 'launchy'
+
+  # Validate the JSON returned by API
+  gem 'json_matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -17,10 +17,14 @@ RSpec/MultipleExpectations:
   Enabled: false
 
 RSpec/MultipleMemoizedHelpers:
-  Max: 8
+  Max: 10
+  Exclude:
+    - spec/api/**/*
 
 RSpec/ExampleLength:
   Max: 10
+  Exclude:
+    - spec/api/**/*
 
 RSpec/ContextWording:
   Prefixes:
@@ -112,6 +116,10 @@ Naming/VariableNumber:
   EnforcedStyle: non_integer
   Exclude:
     - db/seeds.rb
+
+Naming/InclusiveLanguage:
+  Exclude:
+    - config/initializers/doorkeeper.rb
 
 Rails/Delegate:
   Exclude:

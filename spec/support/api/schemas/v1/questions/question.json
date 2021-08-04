@@ -1,0 +1,51 @@
+{
+  "id": "file:/question.json#",
+  "type": "object",
+  "required": ["question"],
+  "additionalProperties": false,
+  "properties": {
+    "question": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "body",
+        "created_at",
+        "updated_at",
+        "short_title",
+        "author"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "short_title": { "type": "string" },
+        "author": {
+          "items": {
+            "$ref": "file:/user.json#"
+          }
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "file:/comment.json#"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "file:/file.json#"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "file:/link.json#"
+          }
+        }
+      }
+    }
+  }
+}

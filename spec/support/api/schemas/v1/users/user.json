@@ -1,0 +1,25 @@
+{
+  "id": "file:/user.json#",
+  "type": "object",
+  "required": ["user"],
+  "additionalProperties": false,
+  "properties": {
+    "user": {
+      "type": "object",
+      "required": [
+        "id",
+        "email",
+        "admin",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "email": { "type": "string" },
+        "admin": { "type": "boolean" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

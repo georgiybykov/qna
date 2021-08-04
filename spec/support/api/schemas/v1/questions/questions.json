@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "definitions": {
+    "users": {
+      "description": "A collection of questions",
+      "type": "array",
+      "items": {
+        "$ref": "file:/question.json#"
+      }
+    }
+  },
+  "required": ["questions"]
+}

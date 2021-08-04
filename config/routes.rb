@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
   devise_scope :user do
@@ -39,4 +40,18 @@ Rails.application.routes.draw do
   resources :rewards, only: :index
 
   mount ActionCable.server => '/cable'
+
+  # rubocop:disable Naming/VariableNumber
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+
+      resources :questions, except: %i[new edit] do
+        resources :answers, except: %i[new edit]
+      end
+    end
+  end
+  # rubocop:enable Naming/VariableNumber
 end

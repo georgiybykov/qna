@@ -150,7 +150,7 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
 
           question.reload
 
-          expect(question.title).to eq('QuestionTitle')
+          expect(question.title).to include('QuestionTitle-')
           expect(question.body).to eq('QuestionBody')
         end
 
