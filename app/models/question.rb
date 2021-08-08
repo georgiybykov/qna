@@ -22,6 +22,6 @@ class Question < ApplicationRecord
   private
 
   def calculate_reputation
-    Reputation.calculate(self)
+    ReputationJob.perform_later(self)
   end
 end

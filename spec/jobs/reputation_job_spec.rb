@@ -1,5 +1,8 @@
-require 'rails_helper'
+describe ReputationJob, type: :job do
+  let(:question) { create(:question) }
 
-RSpec.describe ReputationJob, type: :job do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'calls Reputation#calculate' do
+    expect(Reputation).to receive(:calculate).with(question)
+    ReputationJob.perform_now(question)
+  end
 end

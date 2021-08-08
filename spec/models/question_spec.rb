@@ -29,8 +29,8 @@ describe Question, type: :model, aggregate_failures: true do
   describe 'reputation' do
     let(:question) { build(:question) }
 
-    it 'calls Services::Reputation#calculate' do
-      expect(Reputation).to receive(:calculate).with(question)
+    it 'calls ReputationJob#perform_later' do
+      expect(ReputationJob).to receive(:perform_later).with(question)
       question.save!
     end
   end
