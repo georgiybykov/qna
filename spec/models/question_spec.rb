@@ -25,4 +25,13 @@ describe Question, type: :model, aggregate_failures: true do
   it 'has many attached files' do
     expect(question.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
+
+  describe 'reputation' do
+    let(:question) { build(:question) }
+
+    it 'calls Services::Reputation#calculate' do
+      expect(Reputation).to receive(:calculate).with(question)
+      question.save!
+    end
+  end
 end
