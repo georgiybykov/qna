@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReputationJob < ApplicationJob
   # rescue_from ActiveJob::DeserializationError do |exception|
   #   # handle a deleted record

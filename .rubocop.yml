@@ -37,6 +37,9 @@ RSpec/ContextWording:
 RSpec/NestedGroups:
   Max: 6
 
+RSpec/MessageSpies:
+  Enabled: false
+
 Lint/ReturnInVoidContext:
   Exclude:
     - app/models/ability.rb
