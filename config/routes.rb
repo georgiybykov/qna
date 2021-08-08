@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
@@ -40,6 +42,10 @@ Rails.application.routes.draw do
   resources :rewards, only: :index
 
   mount ActionCable.server => '/cable'
+
+  authenticate :user, lambda { |user| user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # rubocop:disable Naming/VariableNumber
   namespace :api do
