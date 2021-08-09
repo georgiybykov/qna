@@ -19,6 +19,8 @@ class Question < ApplicationRecord
 
   after_create :calculate_reputation
 
+  scope :created_after, ->(date) { where('created_at > ?', date) }
+
   private
 
   def calculate_reputation

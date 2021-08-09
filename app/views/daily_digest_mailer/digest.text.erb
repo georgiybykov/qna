@@ -1,0 +1,7 @@
+Hi, <%= @user_email %>!
+
+Take a look at new questions:
+
+<% @questions.pluck(:title).each do |question_title| %>
+  <%= question_title %>
+<% end %>
