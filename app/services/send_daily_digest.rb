@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SendDailyDigest
-  def call
+  def call!
     return unless new_questions_exist?
 
     send_daily_digest_to_users
