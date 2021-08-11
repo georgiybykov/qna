@@ -33,6 +33,11 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
         expect(gon['user_id']).to eq(user.id)
       end
+
+      it 'enqueues NewAnswerNotificationJob' do
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
+          .to have_enqueued_job(NewAnswerNotificationJob).on_queue('default')
+      end
     end
 
     context 'with invalid attributes' do
@@ -60,6 +65,13 @@ describe AnswersController, type: :controller, aggregate_failures: true do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
 
         expect(gon['user_id']).to eq(user.id)
+      end
+
+      it 'does not enqueue NewAnswerNotificationJob' do
+        expect do
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
+        end
+          .not_to have_enqueued_job(NewAnswerNotificationJob)
       end
     end
 

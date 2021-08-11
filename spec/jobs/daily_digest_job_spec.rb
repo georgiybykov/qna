@@ -12,6 +12,6 @@ describe DailyDigestJob, type: :job do
   end
 
   it 'enqueues DailyDigestJob' do
-    expect { described_class.perform_later }.to have_enqueued_job(described_class)
+    expect { described_class.perform_later }.to have_enqueued_job(described_class).on_queue('default')
   end
 end

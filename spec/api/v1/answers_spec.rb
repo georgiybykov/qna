@@ -156,6 +156,11 @@ describe 'Answers API', type: :request, aggregate_failures: true do
             .to broadcast_to("answers_for_page_with_question_#{question.id}")
         end
 
+        it 'enqueues NewAnswerNotificationJob' do
+          expect { post "/api/v1/questions/#{question.id}/answers", params: params }
+            .to have_enqueued_job(NewAnswerNotificationJob).on_queue('default')
+        end
+
         it_behaves_like 'Successfully created object', :answer do
           let(:method) { :post }
           let(:path) { "/api/v1/questions/#{question.id}/answers" }
@@ -190,6 +195,7 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         let(:method) { :post }
         let(:path) { "/api/v1/questions/#{question.id}/answers" }
         let(:channel) { "answers_for_page_with_question_#{question.id}" }
+        let(:background_job) { NewAnswerNotificationJob }
       end
     end
   end

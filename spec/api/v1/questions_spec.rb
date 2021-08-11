@@ -185,6 +185,7 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         let(:method) { :post }
         let(:path) { '/api/v1/questions' }
         let(:channel) { 'questions_list' }
+        let(:background_job) { 'no background job - mock' }
       end
     end
   end

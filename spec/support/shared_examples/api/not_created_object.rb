@@ -25,5 +25,10 @@ shared_examples 'Not created object with invalid params' do
       expect { perform_request(method, path, params: invalid_params, headers: headers) }
         .not_to broadcast_to channel
     end
+
+    it 'does not enqueue background job' do
+      expect { perform_request(method, path, params: invalid_params, headers: headers) }
+        .not_to have_enqueued_job(background_job)
+    end
   end
 end
