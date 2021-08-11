@@ -41,23 +41,26 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     end
 
     context 'with invalid attributes' do
+      let(:invalid_params) do
+        {
+          answer: attributes_for(:answer, :invalid),
+          question_id: question
+        }
+      end
+
       it 'does not save the answer' do
-        expect do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
-        end
+        expect { post :create, params: invalid_params, format: :js }
           .not_to change(question.answers, :count)
       end
 
       it 'renders the create template' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
+        post :create, params: invalid_params, format: :js
 
         expect(response).to render_template :create
       end
 
       it 'does not broadcast to the `answers_for_page_with_question_ID` channel' do
-        expect do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
-        end
+        expect { post :create, params: invalid_params, format: :js }
           .not_to broadcast_to("answers_for_page_with_question_#{question.id}")
       end
 
@@ -68,9 +71,7 @@ describe AnswersController, type: :controller, aggregate_failures: true do
       end
 
       it 'does not enqueue NewAnswerNotificationJob' do
-        expect do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
-        end
+        expect { post :create, params: invalid_params, format: :js }
           .not_to have_enqueued_job(NewAnswerNotificationJob)
       end
     end
@@ -106,15 +107,20 @@ describe AnswersController, type: :controller, aggregate_failures: true do
     end
 
     context 'with invalid attributes' do
+      let(:invalid_params) do
+        {
+          id: answer,
+          answer: attributes_for(:answer, :invalid)
+        }
+      end
+
       it 'does not change the answer' do
-        expect do
-          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
-        end
+        expect { patch :update, params: invalid_params, format: :js }
           .not_to change(answer, :body)
       end
 
       it 'renders the update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        patch :update, params: invalid_params, format: :js
 
         expect(response).to render_template :update
       end
