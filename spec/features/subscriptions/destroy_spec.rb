@@ -12,7 +12,7 @@ feature 'The user can unsubscribe from the question updates', %q{
   describe 'Authenticated user' do
     background { sign_in(user) }
 
-    context 'with the current subscription' do
+    context 'with current subscription' do
       background { create(:subscription, question: question, user: user) }
 
       scenario 'tries to unsubscribe from the question updates' do
@@ -30,11 +30,36 @@ feature 'The user can unsubscribe from the question updates', %q{
       end
     end
 
-    scenario 'tries to unsubscribe from the question updates' do
+    scenario 'tries to unsubscribe from the question updates without current subscription' do
       visit question_path(question)
 
       within('.subscription') do
         expect(page).not_to have_link 'Unsubscribe'
+        expect(page).to have_link 'Subscribe'
+      end
+    end
+  end
+
+  describe 'Authenticated author of the question' do
+    given(:question) { create(:question, user: user) }
+
+    background do
+      create(:subscription, question: question, user: user)
+
+      sign_in(user)
+    end
+
+    scenario 'tries to unsubscribe from the question updates' do
+      visit question_path(question)
+
+      within('.subscription') do
+        expect(page).to have_link 'Unsubscribe'
+        expect(page).not_to have_link 'Subscribe'
+
+        click_on 'Unsubscribe'
+
+        expect(page).not_to have_link 'Unsubscribe'
+        expect(page).to have_link 'Subscribe'
       end
     end
   end

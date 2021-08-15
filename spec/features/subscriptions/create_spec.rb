@@ -34,6 +34,7 @@ feature 'The user can subscribe to the question updates', %q{
 
         within('.subscription') do
           expect(page).not_to have_link 'Subscribe'
+          expect(page).to have_link 'Unsubscribe'
         end
       end
     end
