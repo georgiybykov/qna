@@ -1,4 +1,11 @@
-- if can?(:create, Subscription) && !subscription
+- if subscription && can?(:destroy, subscription)
+  = link_to 'Unsubscribe',
+          subscription_path(subscription),
+          method: :delete,
+          remote: true,
+          class: 'btn btn-outline-danger'
+
+- elsif can?(:create, Subscription)
   = link_to 'Subscribe',
           question_subscriptions_path(question),
           method: :post,

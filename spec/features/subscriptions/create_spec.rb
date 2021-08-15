@@ -17,10 +17,12 @@ feature 'The user can subscribe to the question updates', %q{
 
       within('.subscription') do
         expect(page).to have_link 'Subscribe'
+        expect(page).not_to have_link 'Unsubscribe'
 
         click_on 'Subscribe'
 
         expect(page).not_to have_link 'Subscribe'
+        expect(page).to have_link 'Unsubscribe'
       end
     end
 
@@ -30,7 +32,9 @@ feature 'The user can subscribe to the question updates', %q{
       scenario 'tries to subscribe to the question updates' do
         visit question_path(question)
 
-        expect(page).not_to have_link 'Subscribe'
+        within('.subscription') do
+          expect(page).not_to have_link 'Subscribe'
+        end
       end
     end
   end

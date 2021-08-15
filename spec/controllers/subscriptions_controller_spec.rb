@@ -33,4 +33,52 @@ describe SubscriptionsController, type: :controller, aggregate_failures: true do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:subscription) { create(:subscription, question: question, user: user) }
+
+    context 'when the user is the owner of the subscription' do
+      before { login(subscription.user) }
+
+      it 'deletes the subscription' do
+        expect { delete :destroy, params: { id: subscription }, format: :js }
+          .to change(Subscription, :count)
+                .by(-1)
+      end
+
+      it 'renders the destroy view' do
+        delete :destroy, params: { id: subscription }, format: :js
+
+        expect(response).to render_template :destroy
+      end
+    end
+
+    context 'when the user is not the owner of the subscription' do
+      let(:another_user) { create(:user) }
+
+      before { login(another_user) }
+
+      it 'does not delete the subscription and responses :forbidden' do
+        expect { delete :destroy, params: { id: subscription }, format: :js }
+          .not_to change(Subscription, :count)
+
+        expect(response.status).to be 403
+      end
+    end
+
+    context 'when the user is the guest of the resource' do
+      it 'does not delete the subscription' do
+        expect { delete :destroy, params: { id: subscription }, format: :js }
+          .not_to change(Subscription, :count)
+      end
+
+      it 'responses :unauthorized' do
+        delete :destroy, params: { id: subscription }, format: :js
+
+        expect(response.body).to have_content 'You need to sign in or sign up before continuing.'
+
+        expect(response.status).to be 401
+      end
+    end
+  end
 end
