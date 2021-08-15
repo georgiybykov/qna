@@ -21,6 +21,16 @@ shared_examples 'Not created object with invalid params' do
       expect(response_json).to have_key :errors
     end
 
+    it 'does not save a new record to the database' do
+      expect { perform_request method, path, params: invalid_params, headers: headers }
+        .not_to change(object.to_s.classify.constantize, :count)
+    end
+
+    it 'does not subscribe the author of the question for updates' do
+      expect { perform_request method, path, params: invalid_params, headers: headers }
+        .not_to change(Subscription, :count)
+    end
+
     it 'does not broadcast to the channel' do
       expect { perform_request(method, path, params: invalid_params, headers: headers) }
         .not_to broadcast_to channel
