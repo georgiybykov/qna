@@ -7,8 +7,8 @@ class AnswersController < ApplicationController
   expose :question, id: -> { params[:question_id] }
   expose :answer_question, -> { @answer.question }
 
-  after_action :publish_answer,
-               :send_notification,
+  after_action :send_notification,
+               :publish_answer,
                only: :create,
                unless: -> { @answer.errors.any? }
 
@@ -47,6 +47,10 @@ class AnswersController < ApplicationController
                                    links_attributes: %i[id name url _destroy])
   end
 
+  def send_notification
+    NewAnswerNotificationJob.perform_later(@answer)
+  end
+
   def publish_answer
     ActionCable.server.broadcast(
       "answers_for_page_with_question_#{question.id}",
@@ -54,9 +58,5 @@ class AnswersController < ApplicationController
       rating: @answer.rating,
       links: @answer.links
     )
-  end
-
-  def send_notification
-    NewAnswerNotificationJob.perform_later(@answer)
   end
 end

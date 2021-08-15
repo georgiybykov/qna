@@ -28,6 +28,10 @@ feature 'The user can create a question', %q{
         expect(page).to have_content 'Your question has been successfully created!'
         expect(page).to have_content 'Question title'
         expect(page).to have_content 'Text in the question body'
+
+        within('.subscription') do
+          expect(page).to have_link 'Unsubscribe'
+        end
       end
 
       scenario 'with attached files' do
@@ -73,10 +77,17 @@ feature 'The user can create a question', %q{
         expect(page).to have_content 'Your question has been successfully created!'
         expect(page).to have_content 'Question title'
         expect(page).to have_content 'Text in the question body'
+
+        within('.subscription') do
+          expect(page).to have_link 'Unsubscribe'
+        end
       end
 
       Capybara.using_session('guest') do
         expect(page).to have_content 'Question title'
+
+        expect(page).not_to have_link 'Subscribe'
+        expect(page).not_to have_link 'Unsubscribe'
       end
     end
   end

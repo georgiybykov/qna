@@ -5,7 +5,10 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: %i[show update destroy comment]
   before_action :find_subscription, only: :show
 
-  after_action :publish_question, only: :create
+  after_action :create_subscription,
+               :publish_question,
+               only: :create,
+               unless: -> { @question.errors.any? }
 
   expose :questions, -> { Question.with_attached_files.includes(:user, :comments, :links) }
 
@@ -71,9 +74,11 @@ class QuestionsController < ApplicationController
                                      reward_attributes: %i[title image])
   end
 
-  def publish_question
-    return if @question.errors.any?
+  def create_subscription
+    @question.subscriptions.create!(user_id: current_user.id)
+  end
 
+  def publish_question
     ActionCable.server.broadcast(
       'questions_list',
       controller_renderer.render(

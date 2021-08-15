@@ -66,6 +66,12 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
                 .by(1)
       end
 
+      it 'subscribes the author of the question for updates' do
+        expect { post :create, params: { question: attributes_for(:question) } }
+          .to change(Subscription, :count)
+                .by(1)
+      end
+
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
 
@@ -88,6 +94,11 @@ describe QuestionsController, type: :controller, aggregate_failures: true do
       it 'does not save the question' do
         expect { post :create, params: { question: attributes_for(:question, :invalid) } }
           .not_to change(Question, :count)
+      end
+
+      it 'does not subscribe the author of the question for updates' do
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }
+          .not_to change(Subscription, :count)
       end
 
       it 'renders the new view' do
