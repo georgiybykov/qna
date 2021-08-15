@@ -43,11 +43,7 @@ feature 'The user can unsubscribe from the question updates', %q{
   describe 'Authenticated author of the question' do
     given(:question) { create(:question, user: user) }
 
-    background do
-      create(:subscription, question: question, user: user)
-
-      sign_in(user)
-    end
+    background { sign_in(user) }
 
     scenario 'tries to unsubscribe from the question updates' do
       visit question_path(question)

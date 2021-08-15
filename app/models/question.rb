@@ -19,5 +19,13 @@ class Question < ApplicationRecord
   validates :title, :body, presence: true
   validates :title, uniqueness: true
 
+  after_create :subscribe_author!
+
   scope :created_after, ->(date) { where('created_at > ?', date) }
+
+  private
+
+  def subscribe_author!
+    subscriptions.create!(user_id: user.id)
+  end
 end

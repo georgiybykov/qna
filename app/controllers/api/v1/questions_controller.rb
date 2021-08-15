@@ -6,10 +6,7 @@ module Api
       expose :questions, -> { Question.includes(:user) }
       expose :question, -> { Question.with_attached_files.find(params[:id]) }
 
-      after_action :create_subscription,
-                   :publish_question,
-                   only: :create,
-                   unless: -> { @question.errors.any? }
+      after_action :publish_question, only: :create
 
       authorize_resource class: Question
 
@@ -47,11 +44,9 @@ module Api
         params.require(:question).permit(:title, :body)
       end
 
-      def create_subscription
-        @question.subscriptions.create!(user_id: current_resource_owner.id)
-      end
-
       def publish_question
+        return if @question.errors.any?
+
         ActionCable.server.broadcast(
           'questions_list',
           controller_renderer.render(

@@ -4,7 +4,7 @@ describe SubscriptionsController, type: :controller, aggregate_failures: true do
   include_context 'with gon stores shared params'
 
   let(:user) { create(:user) }
-  let(:question) { create(:question, user: user) }
+  let!(:question) { create(:question) }
 
   describe 'POST #create' do
     before { login(user) }
@@ -35,7 +35,7 @@ describe SubscriptionsController, type: :controller, aggregate_failures: true do
   end
 
   describe 'DELETE #destroy' do
-    let!(:subscription) { create(:subscription, question: question, user: user) }
+    let(:subscription) { question.subscriptions.first }
 
     context 'when the user is the owner of the subscription' do
       before { login(subscription.user) }

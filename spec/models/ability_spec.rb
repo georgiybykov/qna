@@ -31,11 +31,6 @@ describe Ability, type: :model, aggregate_failures: true do
       create(:answer, question: not_current_user_question, user: not_current_user)
     end
 
-    let(:user_subscription) { create(:subscription, question: user_question, user: user) }
-    let(:not_current_user_subscription) do
-      create(:subscription, question: not_current_user_question, user: not_current_user)
-    end
-
     it { is_expected.not_to be_able_to :manage, :all }
     it { is_expected.to be_able_to :read, :all }
 
@@ -103,6 +98,9 @@ describe Ability, type: :model, aggregate_failures: true do
     end
 
     context 'with subscriptions' do
+      let(:user_subscription) { user_question.subscriptions.first }
+      let(:not_current_user_subscription) { not_current_user_question.subscriptions.first }
+
       it { is_expected.to be_able_to :create, Subscription }
 
       it { is_expected.to be_able_to :destroy, user_subscription }

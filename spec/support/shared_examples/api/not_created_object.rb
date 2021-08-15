@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-shared_examples 'Not created object with invalid params' do
+shared_examples 'Not created object with invalid params' do |type|
   context 'when authorized user tries to create object with invalid params' do
     let(:invalid_params) do
       {
         access_token: access_token,
-        object => attributes_for(object, :invalid)
+        type => attributes_for(type, :invalid)
       }
     end
 
@@ -23,7 +23,7 @@ shared_examples 'Not created object with invalid params' do
 
     it 'does not save a new record to the database' do
       expect { perform_request method, path, params: invalid_params, headers: headers }
-        .not_to change(object.to_s.classify.constantize, :count)
+        .not_to change(type.to_s.classify.constantize, :count)
     end
 
     it 'does not subscribe the author of the question for updates' do

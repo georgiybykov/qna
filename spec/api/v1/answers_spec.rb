@@ -190,8 +190,9 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         end
       end
 
-      it_behaves_like 'Not created object with invalid params' do
-        let(:object) { :answer }
+      it_behaves_like 'Not created object with invalid params', :answer do
+        let!(:question) { create(:question) }
+
         let(:method) { :post }
         let(:path) { "/api/v1/questions/#{question.id}/answers" }
         let(:channel) { "answers_for_page_with_question_#{question.id}" }

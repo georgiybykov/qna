@@ -16,7 +16,11 @@ describe Question, type: :model, aggregate_failures: true do
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to validate_presence_of :body }
 
-  it { is_expected.to validate_uniqueness_of :title }
+  it 'validates uniqueness of the title' do
+    question = build(:question, user: create(:user))
+
+    expect(question).to validate_uniqueness_of :title
+  end
 
   it { is_expected.to accept_nested_attributes_for(:reward) }
 
@@ -25,5 +29,15 @@ describe Question, type: :model, aggregate_failures: true do
 
   it 'has many attached files' do
     expect(question.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
+  describe '#subscribe_author!' do
+    let(:build_question) { build(:question) }
+
+    it 'creates new subscription for the question updates' do
+      expect { build_question.save! }
+        .to change(Subscription, :count)
+              .by(1)
+    end
   end
 end
