@@ -36,7 +36,8 @@ describe AnswersController, type: :controller, aggregate_failures: true do
 
       it 'enqueues NewAnswerNotificationJob' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
-          .to have_enqueued_job(NewAnswerNotificationJob).on_queue('default')
+          .to have_enqueued_job(NewAnswerNotificationJob)
+                .on_queue('default')
       end
     end
 

@@ -60,4 +60,14 @@ describe Answer, type: :model, aggregate_failures: true do
       expect(user.reload.rewards.count).to eq(1)
     end
   end
+
+  describe '#send_notification' do
+    let(:build_answer) { build(:answer) }
+
+    it 'enqueues NewAnswerNotificationJob' do
+      expect { build_answer.save! }
+        .to have_enqueued_job(NewAnswerNotificationJob)
+              .on_queue('default')
+    end
+  end
 end

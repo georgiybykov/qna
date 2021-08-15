@@ -21,10 +21,4 @@ describe NewAnswerNotificationJob, type: :job do
 
     described_class.perform_now(answer)
   end
-
-  it 'enqueues NewAnswerNotificationJob' do
-    expect { described_class.perform_later(answer) }
-      .to have_enqueued_job(described_class)
-            .on_queue('default')
-  end
 end

@@ -6,10 +6,7 @@ module Api
       expose :question, id: -> { params[:question_id] }
       expose :answer, -> { Answer.with_attached_files.find(params[:id]) }
 
-      after_action :publish_answer,
-                   :send_notification,
-                   only: :create,
-                   unless: -> { @answer.errors.any? }
+      after_action :publish_answer, only: :create
 
       authorize_resource class: Answer
 
@@ -48,16 +45,14 @@ module Api
       end
 
       def publish_answer
+        return if @answer.errors.any?
+
         ActionCable.server.broadcast(
           "answers_for_page_with_question_#{question.id}",
           answer: @answer,
           rating: @answer.rating,
           links: @answer.links
         )
-      end
-
-      def send_notification
-        NewAnswerNotificationJob.perform_later(@answer)
       end
     end
   end
