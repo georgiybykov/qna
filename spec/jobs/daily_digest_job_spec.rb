@@ -5,7 +5,7 @@ describe DailyDigestJob, type: :job do
 
   before { allow(SendDailyDigest).to receive(:new).and_return(send_daily_digest_service) }
 
-  it 'calls SendDailyDigest#call' do
+  it 'calls SendDailyDigest#call!' do
     expect(send_daily_digest_service).to receive(:call!).once
 
     described_class.perform_now

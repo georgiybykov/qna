@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-class NewAnswerNotifyPreview < ActionMailer::Preview
+class NewAnswerNotifyMailerPreview < ActionMailer::Preview
   def notify
-    NewAnswerNotifyMailer.notify(FactoryBot.build_stubbed(:answer))
+    subscriber = FactoryBot.build_stubbed(:user)
+
+    NewAnswerNotifyMailer.notify(FactoryBot.build_stubbed(:answer), subscriber)
   end
 end

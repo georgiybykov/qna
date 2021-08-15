@@ -4,6 +4,6 @@ class NewAnswerNotificationJob < ApplicationJob
   queue_as :default
 
   def perform(answer)
-    NewAnswerNotifyMailer.notify(answer).deliver_later
+    SendNewAnswerNotification.new.call(answer: answer)
   end
 end

@@ -1,0 +1,6 @@
+- if can?(:create, Subscription) && !subscription
+  = link_to 'Subscribe',
+          question_subscriptions_path(question),
+          method: :post,
+          remote: true,
+          class: 'btn btn-outline-success'

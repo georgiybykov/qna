@@ -4,6 +4,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   use_doorkeeper
+
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
   devise_scope :user do
@@ -35,6 +36,8 @@ Rails.application.routes.draw do
       patch :set_best,
             on: :member
     end
+
+    resources :subscriptions, only: :create
   end
 
   resources :attachments, only: :destroy

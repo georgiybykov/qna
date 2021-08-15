@@ -2,7 +2,7 @@
 
 class SendDailyDigest
   def call!
-    return unless new_questions_exist?
+    return :new_questions_not_found unless new_questions_exist?
 
     send_daily_digest_to_users
   end

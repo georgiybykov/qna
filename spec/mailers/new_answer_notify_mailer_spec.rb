@@ -2,12 +2,14 @@
 
 describe NewAnswerNotifyMailer, type: :mailer, aggregate_failures: true do
   describe 'notify' do
+    let(:mail) { described_class.notify(answer, subscriber) }
+
     let(:answer) { create(:answer) }
-    let(:mail) { described_class.notify(answer) }
+    let(:subscriber) { create(:user) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Notify')
-      expect(mail.to).to eq([answer.question.user.email])
+      expect(mail.to).to eq([subscriber.email])
       expect(mail.from).to eq(['admin@qna.com'])
     end
 

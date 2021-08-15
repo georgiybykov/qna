@@ -5,7 +5,7 @@ describe SendDailyDigest, type: :service do
 
   context 'when there are not any questions created during last day' do
     it 'does not send daily digests' do
-      expect(call!).to be_nil
+      expect(call!).to eq(:new_questions_not_found)
     end
   end
 

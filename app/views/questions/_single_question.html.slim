@@ -8,7 +8,11 @@ div id="question_#{@question.id}"
       h5
         = @question.body
 
-      = render 'votes/vote', resource: @question
+      .votes
+        = render 'votes/vote', resource: @question
+
+      .subscription
+        = render 'subscriptions/subscription', question: @question, subscription: @subscription
 
       p
       .container
