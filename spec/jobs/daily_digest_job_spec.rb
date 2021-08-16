@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe DailyDigestJob, type: :job do
+  include ActiveJob::TestHelper
+
   let(:send_daily_digest_service) { instance_double(SendDailyDigest) }
 
   before { allow(SendDailyDigest).to receive(:new).and_return(send_daily_digest_service) }

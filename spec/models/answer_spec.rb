@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe Answer, type: :model, aggregate_failures: true do
+  include ActiveJob::TestHelper
+
   let(:answer) { described_class.new }
 
   it_behaves_like 'linkable'

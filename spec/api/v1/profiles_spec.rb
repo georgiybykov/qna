@@ -50,8 +50,7 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
       let(:access_token) { create(:access_token, resource_owner_id: me.id).token }
 
       let!(:users) { create_list(:user, 2) }
-      let(:first_user) { users.first }
-      let(:second_user) { users.last }
+      let(:user) { users.last }
 
       let(:response_users_list) { response_json[:users] }
 
@@ -71,11 +70,11 @@ describe 'Profiles API', type: :request, aggregate_failures: true do
 
       it 'returns all public fields' do
         expect(response_users_list.last).to eq({
-                                                 id: second_user.id,
-                                                 email: second_user.email,
+                                                 id: user.id,
+                                                 email: user.email,
                                                  admin: false,
-                                                 created_at: second_user.created_at.as_json,
-                                                 updated_at: second_user.updated_at.as_json
+                                                 created_at: user.created_at.as_json,
+                                                 updated_at: user.updated_at.as_json
                                                })
       end
 

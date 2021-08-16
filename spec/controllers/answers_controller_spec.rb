@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe AnswersController, type: :controller, aggregate_failures: true do
+  include ActiveJob::TestHelper
+
   include_context 'with gon stores shared params'
 
   let(:user) { create(:user) }
