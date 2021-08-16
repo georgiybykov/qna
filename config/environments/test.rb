@@ -47,7 +47,10 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  config.active_job.queue_adapter = :test
+  # NOTE: make sure to `require 'sidekiq/testing'` in rails_helper.rb
+  # Otherwise use `:test` instead of `:sidekiq` for queue_adapter
+  # @see https://github.com/mperham/sidekiq/wiki/Testing#setup
+  config.active_job.queue_adapter = :sidekiq
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
