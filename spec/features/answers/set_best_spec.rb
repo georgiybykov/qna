@@ -30,11 +30,11 @@ feature 'The user can select the best answer for his question', %q{
     end
 
     scenario 'sets a new answer as best' do
-      within "div#answer_#{answers[-1].id}" do
+      within "div#answer_#{answers.last.id}" do
         click_on 'Mark as best'
       end
 
-      within "div#answer_#{answers[0].id}" do
+      within "div#answer_#{answers.first.id}" do
         click_on 'Mark as best'
 
         expect(page).not_to have_content 'Mark as best'
@@ -43,7 +43,7 @@ feature 'The user can select the best answer for his question', %q{
     end
 
     scenario 'tries to see the list of the earned rewards' do
-      within "div#answer_#{answers[0].id}" do
+      within "div#answer_#{answers.first.id}" do
         click_on 'Mark as best'
       end
 

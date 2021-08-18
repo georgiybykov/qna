@@ -1,0 +1,5 @@
+$('.subscription').html(
+    '<%= j render 'subscriptions/subscription',
+    question: subscription.question,
+    subscription: subscription.persisted? ? subscription : nil %>'
+)

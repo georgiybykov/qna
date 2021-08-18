@@ -3,6 +3,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show update destroy comment]
+  before_action :find_subscription, only: :show
+
   after_action :publish_question, only: :create
 
   expose :questions, -> { Question.with_attached_files.includes(:user, :comments, :links) }
@@ -53,6 +55,12 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.with_attached_files.find(params[:id])
+  end
+
+  def find_subscription
+    return unless current_user
+
+    @subscription = @question.subscriptions.find_by(user_id: current_user.id)
   end
 
   def question_params

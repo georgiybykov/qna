@@ -6,9 +6,7 @@ describe Ability, type: :model, aggregate_failures: true do
   describe 'when actions are performed by a guest' do
     let(:user) { nil }
 
-    it { is_expected.to be_able_to :read, Question }
-    it { is_expected.to be_able_to :read, Answer }
-    it { is_expected.to be_able_to :read, Comment }
+    it { is_expected.to be_able_to :read, :all }
 
     it { is_expected.to be_able_to :create, Authorization }
 
@@ -97,6 +95,16 @@ describe Ability, type: :model, aggregate_failures: true do
         it { is_expected.to be_able_to :destroy, create(:link, linkable: user_answer) }
         it { is_expected.not_to be_able_to :destroy, create(:link, linkable: not_current_user_answer) }
       end
+    end
+
+    context 'with subscriptions' do
+      let(:user_subscription) { user_question.subscriptions.first }
+      let(:not_current_user_subscription) { not_current_user_question.subscriptions.first }
+
+      it { is_expected.to be_able_to :create, Subscription }
+
+      it { is_expected.to be_able_to :destroy, user_subscription }
+      it { is_expected.not_to be_able_to :destroy, not_current_user_subscription }
     end
   end
 end

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper
+
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
   devise_scope :user do
@@ -33,6 +36,8 @@ Rails.application.routes.draw do
       patch :set_best,
             on: :member
     end
+
+    resources :subscriptions, shallow: true, only: %i[create destroy]
   end
 
   resources :attachments, only: :destroy
@@ -40,6 +45,10 @@ Rails.application.routes.draw do
   resources :rewards, only: :index
 
   mount ActionCable.server => '/cable'
+
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # rubocop:disable Naming/VariableNumber
   namespace :api do

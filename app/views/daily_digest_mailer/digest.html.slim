@@ -1,0 +1,7 @@
+h1
+  | Hi, #{@user_email}!
+p
+  | Take a look at new questions:
+  b
+    - @questions.each do |question|
+      li= link_to question.title, url_for(question)

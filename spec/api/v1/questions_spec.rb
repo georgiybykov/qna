@@ -150,8 +150,14 @@ describe 'Questions API', type: :request, aggregate_failures: true do
           let(:object) { Question }
         end
 
+        it 'subscribes the author of the question for updates' do
+          expect { post '/api/v1/questions', params: params, headers: headers }
+            .to change(Subscription, :count)
+                  .by(1)
+        end
+
         it 'broadcasts to the `questions_list` channel' do
-          expect { post '/api/v1/questions', params: params }
+          expect { post '/api/v1/questions', params: params, headers: headers }
             .to broadcast_to('questions_list')
         end
 
@@ -180,11 +186,11 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         end
       end
 
-      it_behaves_like 'Not created object with invalid params' do
-        let(:object) { :question }
+      it_behaves_like 'Not created object with invalid params', :question do
         let(:method) { :post }
         let(:path) { '/api/v1/questions' }
         let(:channel) { 'questions_list' }
+        let(:background_job) { 'no background job - mock' }
       end
     end
   end

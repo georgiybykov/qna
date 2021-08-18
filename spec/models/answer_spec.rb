@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe Answer, type: :model, aggregate_failures: true do
+  include ActiveJob::TestHelper
+
   let(:answer) { described_class.new }
 
   it_behaves_like 'linkable'
@@ -58,6 +60,16 @@ describe Answer, type: :model, aggregate_failures: true do
       first_answer.mark_as_best!
 
       expect(user.reload.rewards.count).to eq(1)
+    end
+  end
+
+  describe '#send_notification' do
+    let(:build_answer) { build(:answer) }
+
+    it 'enqueues NewAnswerNotificationJob' do
+      expect { build_answer.save! }
+        .to have_enqueued_job(NewAnswerNotificationJob)
+              .on_queue('default')
     end
   end
 end

@@ -1,0 +1,6 @@
+h1
+  | Hello!
+p
+  | The user #{@author_email} created a new answer for the question #{@question.title}:
+p
+  = link_to @answer.body.truncate(10), url_for(@question)

@@ -24,8 +24,9 @@ class Ability
   def user_abilities(user)
     can :read, :all
 
-    can :create, [Question, Answer, Comment]
-    can %i[update destroy], [Question, Answer], { user_id: user.id }
+    can :create, [Question, Answer, Comment, Subscription]
+    can :update, [Question, Answer], { user_id: user.id }
+    can :destroy, [Question, Answer, Subscription], { user_id: user.id }
 
     alias_action :vote_up, :vote_down, :revoke_vote, to: :vote_actions
 

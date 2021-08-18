@@ -11,6 +11,7 @@ require 'rspec/rails'
 require 'capybara/email/rspec'
 require 'cancan/matchers'
 require 'json_matchers/rspec'
+require 'sidekiq/testing'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -87,6 +88,10 @@ RSpec.configure do |config|
 
   config.after(:all) do
     FileUtils.rm_rf(Rails.root / 'tmp' / 'storage')
+  end
+
+  config.around(:example, :sidekiq_inline) do |example|
+    Sidekiq::Testing.inline! { example.run }
   end
 end
 
