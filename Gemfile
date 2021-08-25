@@ -69,6 +69,10 @@ gem 'sinatra', require: false
 # Provides a clear syntax for writing and deploying cron jobs
 gem 'whenever', require: false
 
+gem 'mysql2', '~> 0.5.0', platform: :ruby
+# A library for connecting ActiveRecord to the Sphinx full-text search tool
+gem 'thinking-sphinx', '~> 5.0'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -85,7 +89,7 @@ group :development, :test do
   # A documentation generation tool
   gem 'yard'
 
-  # Shim to load environment variables.
+  # Shim to load environment variables
   gem 'dotenv-rails'
 end
 

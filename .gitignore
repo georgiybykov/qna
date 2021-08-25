@@ -38,3 +38,7 @@ config/database.yml
 
 # Dotenv file with confidential information
 .env
+
+# Full text search indices
+/db/sphinx
+/config/*.sphinx.conf
