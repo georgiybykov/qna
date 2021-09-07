@@ -71,7 +71,7 @@ gem 'whenever', require: false
 
 gem 'mysql2', '~> 0.5.0', platform: :ruby
 # A library for connecting ActiveRecord to the Sphinx full-text search tool
-gem 'thinking-sphinx', '~> 5.0'
+gem 'thinking-sphinx', '~> 5.3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
