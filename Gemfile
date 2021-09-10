@@ -125,8 +125,11 @@ group :test do
   # Launching external applications from within ruby programs (currently only a browser is supported)
   gem 'launchy'
 
-  # Validate the JSON returned by API
+  # Validates the JSON returned by API
   gem 'json_matchers'
+
+  # Ensures clean database state during tests
+  gem 'database_cleaner-active_record'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

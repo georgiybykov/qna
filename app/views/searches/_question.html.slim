@@ -1,0 +1,12 @@
+li.list-group-item.question
+  .small
+    b
+      = 'Author of the question: '
+    = result.user.email
+
+  = link_to result.title, result
+
+  .small
+    b
+      = 'Question body: '
+    = result.body

@@ -125,6 +125,10 @@ GEM
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     crass (1.0.6)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     decent_exposure (3.0.4)
       activesupport (>= 4.0)
     diff-lcs (1.4.4)
@@ -468,6 +472,7 @@ DEPENDENCIES
   capybara (>= 3.26)
   capybara-email
   cocoon
+  database_cleaner-active_record
   decent_exposure
   devise!
   doorkeeper
