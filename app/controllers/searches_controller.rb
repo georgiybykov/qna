@@ -4,7 +4,7 @@ class SearchesController < ApplicationController
   skip_authorization_check
 
   def index
-    case QuerySearch.new.call(search: Search.new(search_params))
+    case QuerySearchService.new.call(search: Search.new(search_params))
     in Array => result
       @search_results = result
     in String => error_message

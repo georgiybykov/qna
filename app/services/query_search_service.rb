@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class QuerySearch
+class QuerySearchService
   AVAILABLE_SCOPES = %w[Question Answer Comment User].freeze
 
   # @param search [Search]
   #
-  # @return [String, Array]
+  # @return [Array, String]
   def call(search:)
     return string_error(search) unless search.valid?
 

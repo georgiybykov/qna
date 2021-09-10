@@ -2,7 +2,7 @@
   = form_with scope: :search, url: search_path, method: :get, local: true, class: 'form-inline' do |f|
     .input-group
       = f.select :scope,
-              options_for_select(['All scopes'] + QuerySearch::AVAILABLE_SCOPES),
+              options_for_select(['All scopes'] + QuerySearchService::AVAILABLE_SCOPES),
               {},
               { class: 'btn btn-outline-info' }
 

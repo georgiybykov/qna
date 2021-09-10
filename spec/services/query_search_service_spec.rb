@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe QuerySearch, type: :service, aggregate_failures: true do
+describe QuerySearchService, type: :service, aggregate_failures: true do
   subject(:result) { described_class.new.call(search: search) }
 
   let(:search) { build(:search) }
