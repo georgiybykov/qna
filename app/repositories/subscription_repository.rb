@@ -5,7 +5,7 @@ class SubscriptionRepository
   # question by the answer without related
   # subscription of the answer's author, if any.
   #
-  # @param answer [Class<Answer>]
+  # @param answer [Answer]
   #
   # @return [Subscription::ActiveRecord_Relation]
   def subscriptions_for_question_by(answer)
