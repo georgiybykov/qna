@@ -3,11 +3,11 @@
 describe DailyDigestJob, type: :job do
   include ActiveJob::TestHelper
 
-  let(:send_daily_digest_service) { instance_double(SendDailyDigest) }
+  let(:send_daily_digest_service) { instance_double(SendDailyDigestService) }
 
-  before { allow(SendDailyDigest).to receive(:new).and_return(send_daily_digest_service) }
+  before { allow(SendDailyDigestService).to receive(:new).and_return(send_daily_digest_service) }
 
-  it 'calls SendDailyDigest#call!' do
+  it 'calls SendDailyDigestService#call!' do
     expect(send_daily_digest_service).to receive(:call!).once
 
     described_class.perform_now

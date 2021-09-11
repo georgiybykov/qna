@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe SendNewAnswerNotification, type: :service, aggregate_failures: true do
+describe SendNewAnswerNotificationService, type: :service, aggregate_failures: true do
   subject(:result) { service.call(answer: answer) }
 
   let(:service) { described_class.new(subscription_repo) }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Users::FindForOauth, type: :service, aggregate_failures: true do
+describe Users::FindForOauthService, type: :service, aggregate_failures: true do
   subject(:result) { described_class.new.call(auth_hash: auth_hash) }
 
   let(:auth_hash) { mock_auth_hash(provider: :github, email: 'github-test@email.com') }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendNewAnswerNotification
+class SendNewAnswerNotificationService
   def initialize(subscription_repo = SubscriptionRepository.new)
     @subscription_repo = subscription_repo
   end

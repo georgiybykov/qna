@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendDailyDigest
+class SendDailyDigestService
   def call!
     return :new_questions_not_found unless new_questions_exist?
 

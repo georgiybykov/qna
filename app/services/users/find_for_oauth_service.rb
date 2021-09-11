@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  class FindForOauth
+  class FindForOauthService
     # @param auth_hash [Hash]
     #
     # @return [<User, Symbol>]
