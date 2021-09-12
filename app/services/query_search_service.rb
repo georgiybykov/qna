@@ -9,10 +9,10 @@ class QuerySearchService
   def call(search:)
     return string_error(search) unless search.valid?
 
-    # ThinkingSphinx.search(
-    #   ThinkingSphinx::Query.escape(search.query),
-    #   classes: [search_klass(search.scope)]
-    # ).to_a
+    Elasticsearch::Model.search(
+      search.query,
+      search_klass(search.scope)
+    ).records.to_a
   end
 
   private
@@ -24,8 +24,8 @@ class QuerySearchService
   end
 
   def search_klass(scope)
-    return unless AVAILABLE_SCOPES.include?(scope)
+    return [] unless AVAILABLE_SCOPES.include?(scope)
 
-    scope.classify.constantize
+    [scope.classify.constantize]
   end
 end

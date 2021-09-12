@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Searchable
+
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :rewards, dependent: :nullify
@@ -24,4 +26,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :trackable, :validatable, :confirmable,
          :omniauthable, omniauth_providers: %i[github facebook]
+
+  settings index: { number_of_shards: 1 } do
+    mappings dynamic: false do
+      indexes :email, type: :text
+    end
+  end
 end

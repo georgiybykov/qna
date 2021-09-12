@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Answer < ApplicationRecord
+  include Searchable
+
   include Linkable
   include Votable
   include Commentable
@@ -15,6 +17,17 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   after_create :send_notification
+
+  settings index: { number_of_shards: 1 } do
+    mappings dynamic: false do
+      indexes :id, type: :long
+      indexes :body, type: :text
+      indexes :user, type: :nested, properties: {
+        id: { type: :long },
+        email: { type: :text }
+      }
+    end
+  end
 
   def mark_as_best!
     transaction do

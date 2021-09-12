@@ -1,6 +1,10 @@
 .search-results
-  small.search-results-count.text-muted
-    | Found #{@search_results.count} search results:
-  ul.list-group
-  - @search_results.each do |result|
-    = render result.class.to_s.downcase, result: result
+  - if @search_results.any?
+    small.search-results-count.text-muted
+      | Found #{@search_results.count} search results:
+    ul.list-group
+    - @search_results.each do |result|
+      = render result.class.to_s.downcase, result: result
+  - else
+    small.search-results-count.text-muted
+      | Results not found
