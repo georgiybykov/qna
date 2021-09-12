@@ -13,3 +13,9 @@
 every 1.day do
   runner 'DailyDigestJob.perform_now'
 end
+
+every 60.minutes do
+  %w[Question Answer Comment User].each do |klass|
+    rake "environment elasticsearch:import:model CLASS=#{klass} FORCE=y"
+  end
+end
