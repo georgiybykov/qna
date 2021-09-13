@@ -5,9 +5,6 @@ describe QuerySearchService, type: :service, aggregate_failures: true do
 
   let(:search) { build(:search) }
 
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
-
   context 'when scope is invalid' do
     let(:search) { build(:search, scope: nil) }
 
@@ -28,32 +25,33 @@ describe QuerySearchService, type: :service, aggregate_failures: true do
     end
   end
 
-  xcontext 'when searches for all scopes' do
-    it 'returns an array with all types of found models inside' do
-      expect(ThinkingSphinx)
-        .to receive(:search)
-              .with(search.query, classes: [nil])
-              .and_return([question, answer])
-              .once
+  context 'when everything is OK', :elasticsearch do
+    let(:question) { create(:question, body: 'search-query', user: user) }
+    let(:answer) { create(:answer, body: 'search-query', question: question, user: user) }
+    let!(:comment) { create(:comment, body: 'search-query', commentable: answer, user: user) }
+    let(:user) { create(:user, email: 'search-query@test.com') }
 
-      expect(result).to be_an(Array)
+    before do
+      Question.__elasticsearch__.refresh_index!
+      Answer.__elasticsearch__.refresh_index!
+      Comment.__elasticsearch__.refresh_index!
+      User.__elasticsearch__.refresh_index!
     end
-  end
 
-  xcontext 'when searches the one from the available scopes' do
-    let(:search) { build(:search, scope: 'Question') }
+    context 'and searches for all scopes' do
+      let(:search) { build(:search, query: 'search-query', scope: 'All scopes') }
 
-    it 'returns an array with one type of models inside' do
-      expect(ThinkingSphinx)
-        .to receive(:search)
-              .with(
-                search.query,
-                classes: [search.scope.classify.constantize]
-              )
-              .and_return([question])
-              .once
+      it 'returns an array with all types of found models inside' do
+        expect(result).to contain_exactly(question, answer, comment, user)
+      end
+    end
 
-      expect(result).to be_an(Array)
+    context 'and searches the one from the available scopes' do
+      let(:search) { build(:search, query: 'search-query', scope: 'Question') }
+
+      it 'returns an array with one type of models inside' do
+        expect(result).to eq([question])
+      end
     end
   end
 end

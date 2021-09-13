@@ -15,7 +15,5 @@ every 1.day do
 end
 
 every 60.minutes do
-  %w[Question Answer Comment User].each do |klass|
-    rake "environment elasticsearch:import:model CLASS=#{klass} FORCE=y"
-  end
+  rake 'environment elasticsearch:import:all DIR=app/models FORCE=y'
 end

@@ -127,6 +127,8 @@ group :test do
 
   # Validate the JSON returned by API
   gem 'json_matchers'
+
+  gem 'elasticsearch-extensions'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
