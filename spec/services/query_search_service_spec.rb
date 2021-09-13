@@ -25,7 +25,7 @@ describe QuerySearchService, type: :service, aggregate_failures: true do
     end
   end
 
-  context 'when everything is OK', :elasticsearch do
+  context 'when params are valid', :elasticsearch do
     let(:question) { create(:question, body: 'search-query', user: user) }
     let(:answer) { create(:answer, body: 'search-query', question: question, user: user) }
     let!(:comment) { create(:comment, body: 'search-query', commentable: answer, user: user) }
