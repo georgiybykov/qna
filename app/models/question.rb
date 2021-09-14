@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Question < ApplicationRecord
-  include Searchable
+  include Indices::QuestionsIndex
 
   include Linkable
   include Votable
@@ -24,18 +24,6 @@ class Question < ApplicationRecord
   after_create :subscribe_author!
 
   scope :created_after, ->(date) { where('created_at > ?', date) }
-
-  settings index: { number_of_shards: 1 } do
-    mappings dynamic: false do
-      indexes :id, type: :long
-      indexes :title, type: :text
-      indexes :body, type: :text
-      indexes :user, type: :nested, properties: {
-        id: { type: :long },
-        email: { type: :text }
-      }
-    end
-  end
 
   private
 
