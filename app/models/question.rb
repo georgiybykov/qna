@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Question < ApplicationRecord
+  include Indices::QuestionsIndex
+
   include Linkable
   include Votable
   include Commentable
@@ -26,6 +28,6 @@ class Question < ApplicationRecord
   private
 
   def subscribe_author!
-    subscriptions.create!(user_id: user.id)
+    subscriptions.create!(user: user)
   end
 end

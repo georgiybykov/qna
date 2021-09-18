@@ -36,5 +36,8 @@ yarn-debug.log*
 # Igore the local database configuration
 config/database.yml
 
+# Igore the local elasticsearch configuration
+config/elasticsearch.yml
+
 # Dotenv file with confidential information
 .env

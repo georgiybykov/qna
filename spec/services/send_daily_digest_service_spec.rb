@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe SendDailyDigest, type: :service do
+describe SendDailyDigestService, type: :service do
   subject(:call!) { described_class.new.call! }
 
   context 'when there are not any questions created during last day' do

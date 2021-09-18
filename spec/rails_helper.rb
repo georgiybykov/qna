@@ -12,6 +12,7 @@ require 'capybara/email/rspec'
 require 'cancan/matchers'
 require 'json_matchers/rspec'
 require 'sidekiq/testing'
+require 'elasticsearch_helper'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

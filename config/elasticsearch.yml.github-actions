@@ -1,0 +1,5 @@
+test:
+  host: 'http://localhost:9250/'
+  transport_options:
+    request:
+      timeout: 30

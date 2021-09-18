@@ -1,0 +1,14 @@
+li.list-group-item.answer
+  .small
+    b
+      = 'Author of the answer: '
+    = result.user.email
+
+  b
+    = 'Answer body: '
+  = result.body
+
+  .small
+    b
+      = 'For question: '
+      = link_to result.question.title, result.question

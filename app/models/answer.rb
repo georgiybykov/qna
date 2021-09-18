@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Answer < ApplicationRecord
+  include Indices::AnswersIndex
+
   include Linkable
   include Votable
   include Commentable

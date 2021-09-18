@@ -14,7 +14,7 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def sign_in_with_oauth
-    case Users::FindForOauth.new.call(auth_hash: auth_hash)
+    case Users::FindForOauthService.new.call(auth_hash: auth_hash)
     in User => user
       sign_in_and_redirect(user, event: :authentication)
 

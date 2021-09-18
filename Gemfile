@@ -69,6 +69,10 @@ gem 'sinatra', require: false
 # Provides a clear syntax for writing and deploying cron jobs
 gem 'whenever', require: false
 
+# Integrations for Elasticsearch
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -123,6 +127,8 @@ group :test do
 
   # Validate the JSON returned by API
   gem 'json_matchers'
+
+  gem 'elasticsearch-extensions'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

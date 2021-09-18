@@ -16,6 +16,23 @@ jobs:
           POSTGRES_PASSWORD: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+#      elasticsearch:
+#        image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+#        ports:
+#          - 9250:9200
+#        env:
+#          cluster.name: qna-elastic-test-cluster
+#          xpack.security.enabled: false
+#          transport.host: localhost
+#          network.host: 127.0.0.1
+#          http.port: 9250
+#          discovery.type: single-node
+
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+        ports:
+          - 9250:9200
+
     steps:
       - uses: actions/checkout@v2
 
@@ -24,6 +41,20 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Configure sysctl limits
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+
+      - name: Runs Elasticsearch
+        run: |
+          cp config/elasticsearch.yml.github-actions config/elasticsearch.yml
+        uses: elastic/elastic-github-actions/elasticsearch@master
+        with:
+          stack-version: 7.14.1
 
       - name: Install postgres client
         run: sudo apt-get install libpq-dev
@@ -55,3 +86,9 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_KEY }}
+          TEST_CLUSTER_NODES: 1
+          TEST_CLUSTER_COMMAND: bin/elasticsearch
+          TEST_CLUSTER_PORT: 9250
+          TEST_CLUSTER_NAME: qna-elastic-test-cluster
+          TEST_CLUSTER_TIMEOUT: 120
+          TEST_CLUSTER_NETWORK_HOST: _local_

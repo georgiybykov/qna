@@ -1,0 +1,15 @@
+.search
+  = form_with scope: :search, url: search_path, method: :get, local: true, class: 'form-inline' do |f|
+    .input-group
+      = f.select :scope,
+              options_for_select(['All scopes'] + QuerySearchService::AVAILABLE_SCOPES),
+              {},
+              { class: 'btn btn-outline-info' }
+
+      = f.text_field :query,
+              required: true,
+              class: 'form-control',
+              placeholder: 'Search query'
+
+      .input-group-append
+        = f.submit 'Search', class: 'btn btn-outline-success'
