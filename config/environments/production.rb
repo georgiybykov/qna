@@ -65,15 +65,20 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "qna_production"
 
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: ENV['HOST'], port: ENV['PORT'] }
+
+  config.action_mailer.default_url_options = {
+    host: Rails.application.credentials.dig(:mailer, :host),
+    port: Rails.application.credentials.dig(:mailer, :port).to_i
+  }
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
-    address: ENV['SMTP_ADDRESS'],
-    port: ENV['SMTP_PORT'],
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
+    address: Rails.application.credentials.dig(:mailer, :smtp_address),
+    port: Rails.application.credentials.dig(:mailer, :smtp_port).to_i,
+    user_name: Rails.application.credentials.dig(:mailer, :smtp_username),
+    password: Rails.application.credentials.dig(:mailer, :smtp_password),
     authentication: 'plain',
     enable_starttls_auto: true
   }
