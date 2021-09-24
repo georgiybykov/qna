@@ -10,7 +10,7 @@ describe NewAnswerNotifyMailer, type: :mailer, aggregate_failures: true do
     it 'renders the headers' do
       expect(mail.subject).to eq('Notify')
       expect(mail.to).to eq([subscriber.email])
-      expect(mail.from).to eq(['admin@qna.com'])
+      expect(mail.from).to eq([ENV.fetch('ADMIN_EMAIL', 'qna-admin@test.com')])
     end
 
     it 'renders the body' do
