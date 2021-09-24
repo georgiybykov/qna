@@ -20,7 +20,7 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
 
       set_flash_message(:notice, :success, kind: action_name.camelize) if is_navigational_format?
     in :no_email_provided
-      session["devise.#{action_name}_data"] = request.env['omniauth.auth'].except('extra')
+      session["devise.#{action_name}_data"] = auth_hash.except('extra')
 
       redirect_to new_oauth_email_confirmation_path
     in :not_found_or_created
