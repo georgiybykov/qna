@@ -1,7 +1,7 @@
 .row.justify-content-center.mt-3
   .col.col-md-6
     h3.text-center
-      | Create account
+      | Create an account
     .card.border-primary
       .card-body
         = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
@@ -38,7 +38,7 @@
                                  placeholder: 'Enter your password to confirm'
 
           .actions
-            = f.submit 'Sign up', class: 'btn btn-primary'
+            = f.submit 'Confirm', class: 'btn btn-primary'
 
     .mt-1.ml-2
       = render 'devise/shared/links'
