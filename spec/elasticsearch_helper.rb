@@ -4,12 +4,15 @@ require 'elasticsearch/extensions/test/cluster'
 
 RSpec.configure do |config|
   # @see https://github.com/elastic/elasticsearch-ruby/blob/b3cfdcbde678c2704c0a557a163782b9e027d144/elasticsearch-extensions/lib/elasticsearch/extensions/test/cluster.rb#L78
-  cluster = Elasticsearch::Extensions::Test::Cluster::Cluster.new(cluster_name: ENV['TEST_CLUSTER_NAME'].chomp,
-                                                                  network_host: ENV['TEST_CLUSTER_NETWORK_HOST'],
-                                                                  number_of_nodes: ENV['TEST_CLUSTER_NODES'].to_i,
-                                                                  port: ENV['TEST_CLUSTER_PORT'].to_i,
-                                                                  timeout: ENV['TEST_CLUSTER_TIMEOUT'].to_i,
-                                                                  command: ENV['TEST_CLUSTER_COMMAND'])
+  cluster = Elasticsearch::Extensions::Test::Cluster::Cluster
+              .new(
+                cluster_name: ENV.fetch('TEST_CLUSTER_NAME', 'elastic-test-cluster').chomp,
+                network_host: ENV.fetch('TEST_CLUSTER_NETWORK_HOST', 'localhost'),
+                number_of_nodes: ENV.fetch('TEST_CLUSTER_NODES', 1).to_i,
+                port: ENV.fetch('TEST_CLUSTER_PORT', 9250).to_i,
+                timeout: ENV.fetch('TEST_CLUSTER_TIMEOUT', 120).to_i,
+                command: ENV.fetch('TEST_CLUSTER_COMMAND', '/usr/share/elasticsearch/bin/elasticsearch')
+              )
 
   # Start an in-memory cluster for Elasticsearch as needed
   config.before :all do # rubocop:disable RSpec/BeforeAfterAll
