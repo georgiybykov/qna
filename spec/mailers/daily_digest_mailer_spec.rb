@@ -8,7 +8,7 @@ describe DailyDigestMailer, type: :mailer, aggregate_failures: true do
     it 'renders the headers' do
       expect(mail.subject).to eq('Digest')
       expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq([ENV.fetch('ADMIN_EMAIL', 'qna-admin@test.com')])
+      expect(mail.from).to eq([Rails.application.credentials.admin_email || 'no-reply@qna.com'])
     end
 
     it 'renders the body' do
