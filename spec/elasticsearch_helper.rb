@@ -3,15 +3,17 @@
 require 'elasticsearch/extensions/test/cluster'
 
 RSpec.configure do |config|
+  creds = Rails.application.credentials
+
   # @see https://github.com/elastic/elasticsearch-ruby/blob/b3cfdcbde678c2704c0a557a163782b9e027d144/elasticsearch-extensions/lib/elasticsearch/extensions/test/cluster.rb#L78
   cluster = Elasticsearch::Extensions::Test::Cluster::Cluster
               .new(
-                cluster_name: ENV.fetch('TEST_CLUSTER_NAME', 'elastic-test-cluster').chomp,
-                network_host: ENV.fetch('TEST_CLUSTER_NETWORK_HOST', 'localhost'),
-                number_of_nodes: ENV.fetch('TEST_CLUSTER_NODES', 1).to_i,
-                port: ENV.fetch('TEST_CLUSTER_PORT', 9250).to_i,
-                timeout: ENV.fetch('TEST_CLUSTER_TIMEOUT', 120).to_i,
-                command: ENV.fetch('TEST_CLUSTER_COMMAND', '/usr/share/elasticsearch/bin/elasticsearch')
+                cluster_name: creds.dig(:elastic_test_cluster, :name)&.chomp || 'elastic-test-cluster',
+                network_host: creds.dig(:elastic_test_cluster, :network_host) || 'localhost',
+                number_of_nodes: creds.dig(:elastic_test_cluster, :nodes)&.to_i || 1,
+                port: creds.dig(:elastic_test_cluster, :port)&.to_i || 9250,
+                timeout: creds.dig(:elastic_test_cluster, :timeout)&.to_i || 120,
+                command: creds.dig(:elastic_test_cluster, :command) || '/usr/share/elasticsearch/bin/elasticsearch'
               )
 
   # Start an in-memory cluster for Elasticsearch as needed
