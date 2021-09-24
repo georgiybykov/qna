@@ -13,6 +13,6 @@ module FeatureHelpers
     fill_in 'E-mail', with: email
     fill_in 'Password', with: password
     fill_in 'Password confirmation', with: password_confirmation
-    click_on 'Sign up'
+    click_on 'Confirm'
   end
 end
