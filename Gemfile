@@ -105,6 +105,16 @@ group :development do
 
   # Opens e-mails in the browser
   gem 'letter_opener'
+
+  # Framework for building automated deployment scripts
+  gem 'capistrano', require: false
+
+  # Adds specific tasks for Capistrano
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-sidekiq', require: false
 end
 
 group :test do
