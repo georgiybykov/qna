@@ -7,7 +7,7 @@ p
 - if can?(:vote_actions, resource)
   .vote
     p
-      = link_to '+', polymorphic_path(resource, action: :vote_up),
+      = link_to '-', polymorphic_path(resource, action: :vote_down),
               method: :patch,
               data: { type: :json },
               remote: true,
@@ -19,7 +19,7 @@ p
               remote: true,
               class: 'btn btn-outline-danger'
       | |
-      = link_to '-', polymorphic_path(resource, action: :vote_down),
+      = link_to '+', polymorphic_path(resource, action: :vote_up),
               method: :patch,
               data: { type: :json },
               remote: true,
