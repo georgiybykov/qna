@@ -66,16 +66,16 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: Rails.application.credentials.host }
+  config.action_mailer.default_url_options = { host: Rails.application.credentials[Rails.env.to_sym][:host] }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
-    address: Rails.application.credentials.dig(:smtp, :address),
-    port: Rails.application.credentials.dig(:smtp, :port).to_i,
-    user_name: Rails.application.credentials.dig(:smtp, :username),
-    password: Rails.application.credentials.dig(:smtp, :password),
+    address: Rails.application.credentials[Rails.env.to_sym].dig(:smtp, :address),
+    port: Rails.application.credentials[Rails.env.to_sym].dig(:smtp, :port).to_i,
+    user_name: Rails.application.credentials[Rails.env.to_sym].dig(:smtp, :username),
+    password: Rails.application.credentials[Rails.env.to_sym].dig(:smtp, :password),
     authentication: 'plain',
     enable_starttls_auto: true
   }
