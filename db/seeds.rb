@@ -46,7 +46,7 @@ Question.create!([
                        Comment.new(body: 'Good question', user: user)
                      ],
                      links: [
-                       Link.new(name: 'Google Main Page', url: 'https://gooogle.com')
+                       Link.new(name: 'Google Main Page', url: 'https://google.com')
                      ],
                      votes: [
                        Vote.new(value: 1, user: user)
