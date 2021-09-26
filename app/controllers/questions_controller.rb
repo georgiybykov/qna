@@ -7,7 +7,7 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: :create
 
-  expose :questions, -> { Question.with_attached_files.includes(:user, :comments, :links) }
+  expose :questions, -> { Question.with_attached_files.includes(:user, :answers, :comments, :links) }
 
   include Voted
   include Commented

@@ -15,6 +15,7 @@ feature 'The user can see the list of the questions', %q{
 
     expect(page).to have_content 'Title'
     expect(page).to have_content 'Body'
+    expect(page).to have_content 'Answers'
     expect(page).to have_content 'Files'
     expect(page).to have_content 'Links'
     expect(page).to have_content 'Comments'
