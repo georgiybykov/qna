@@ -31,7 +31,7 @@ feature 'The user can delete the question', %q{
     end
 
     scenario 'tries to delete his own question from the main page of the resource' do
-      click_on 'Delete question'
+      click_on 'Delete'
 
       expect(current_path).to eq questions_path
 

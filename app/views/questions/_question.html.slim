@@ -4,7 +4,9 @@
       td.align-middle.font-weight-bold
         = question.title
       td.align-middle
-        = question.body
+        = question.body.truncate(35)
+      td.align-middle
+        = question.answers.size
       td.align-middle
         = question.files.size
       td.align-middle
@@ -15,7 +17,7 @@
         = link_to 'Show', question_path(question), class: 'btn btn-outline-primary'
       - if can?(:destroy, question)
         td.align-middle
-          = link_to 'Delete question',
+          = link_to 'Delete',
                   question_path(question),
                   method: :delete,
                   remote: true,
