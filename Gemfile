@@ -73,6 +73,9 @@ gem 'whenever', require: false
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
+# App server for production
+gem 'unicorn'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -111,7 +114,8 @@ group :development do
 
   # Adds specific tasks for Capistrano
   gem 'capistrano-bundler', require: false
-  gem 'capistrano-passenger', require: false
+  # gem 'capistrano-passenger', require: false
+  gem 'capistrano3-unicorn', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-sidekiq', require: false
