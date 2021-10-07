@@ -1,13 +1,15 @@
 div id="question_#{@question.id}"
   .card-body
-    .card-header-pills
-      h2.text-center
-        b
-          = @question.title
-    .container
-      h5
-        = @question.body
+    - cache @question do
+      .card-header-pills
+        h2.text-center
+          b
+            = @question.title
+      .container
+        h5
+          = @question.body
 
+    .container
       .votes
         = render 'votes/vote', resource: @question
 
