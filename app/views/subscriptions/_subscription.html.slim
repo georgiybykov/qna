@@ -1,14 +1,13 @@
-- cache subscription do
-  - if subscription && can?(:destroy, subscription)
-    = link_to 'Unsubscribe',
-            subscription_path(subscription),
-            method: :delete,
-            remote: true,
-            class: 'btn btn-outline-danger'
+- if subscription && can?(:destroy, subscription)
+  = link_to 'Unsubscribe',
+          subscription_path(subscription),
+          method: :delete,
+          remote: true,
+          class: 'btn btn-outline-danger'
 
-  - elsif can?(:create, Subscription)
-    = link_to 'Subscribe',
-            question_subscriptions_path(question),
-            method: :post,
-            remote: true,
-            class: 'btn btn-outline-success'
+- elsif can?(:create, Subscription)
+  = link_to 'Subscribe',
+          question_subscriptions_path(question),
+          method: :post,
+          remote: true,
+          class: 'btn btn-outline-success'

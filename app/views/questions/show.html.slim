@@ -1,23 +1,22 @@
 .row.justify-content-center.mt-3
-  - cache @question do
-    .col.col-md-9
-      .single-question
-        .card.border-primary.mb-3
-          .card-body
-            = render 'single_question', resource: @question
+  .col.col-md-9
+    .single-question
+      .card.border-primary.mb-3
+        .card-body
+          = render 'single_question', resource: @question
 
-    .col.col-md-9
-      .card-body
-        h4.text-center
-          b
-            = 'Answers'
-        .container
-          .answers
-            = render @question.answers
+  .col.col-md-9
+    .card-body
+      h4.text-center
+        b
+          = 'Answers'
+      .container
+        .answers
+          = render @question.answers
 
-      - if can?(:create, Answer)
-        .card.border-primary.mb-3
-          .card-body
-            .form-group
-              ol
-                = render 'answers/form'
+    - if can?(:create, Answer)
+      .card.border-primary.mb-3
+        .card-body
+          .form-group
+            ol
+              = render 'answers/form'

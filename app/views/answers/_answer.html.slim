@@ -1,82 +1,82 @@
-- cache answer do
-  - if answer.persisted?
-    div id="answer_#{answer.id}"
-      .card.border-primary.mb-3
-        .card-body
-          .container
-            p
-              - if answer.best?
-                i
-                  sup.best THE BEST ANSWER
-                p
+- if answer.persisted?
+  div id="answer_#{answer.id}"
+    .card.border-primary.mb-3
+      .card-body
+        .container
+          p
+            - if answer.best?
+              i
+                sup.best THE BEST ANSWER
+            - cache answer do
+              p
               = answer.body
 
             = render 'votes/vote', resource: answer, current_user: current_user
 
-          .container
-            .attachments
-              - if answer.files.attached?
-                = render 'attachments/attachments', resource: answer
+        .container
+          .attachments
+            - if answer.files.attached?
+              = render 'attachments/attachments', resource: answer
 
-            .links
-              - unless answer.links.empty?
-                = render 'links/links', links: answer.links
+          .links
+            - unless answer.links.empty?
+              = render 'links/links', links: answer.links
 
-            p
-              - if can?(:set_best, answer) && !answer.best?
-                = link_to 'Mark as best',
-                        set_best_answer_path(answer),
-                        method: :patch,
-                        remote: true,
-                        class: 'best-answer-link btn btn-outline-success'
-
-            - if can?(:update, answer)
-              = link_to 'Edit', '#', class: 'edit-answer-link btn btn-outline-primary', data: { answer_id: answer.id }
-              | |
-            - if can?(:destroy, answer)
-              = link_to 'Delete answer',
-                      answer_path(answer),
-                      method: :delete,
+          p
+            - if can?(:set_best, answer) && !answer.best?
+              = link_to 'Mark as best',
+                      set_best_answer_path(answer),
+                      method: :patch,
                       remote: true,
-                      class: 'btn btn-outline-danger'
+                      class: 'best-answer-link btn btn-outline-success'
+
+          - if can?(:update, answer)
+            = link_to 'Edit', '#', class: 'edit-answer-link btn btn-outline-primary', data: { answer_id: answer.id }
+            | |
+          - if can?(:destroy, answer)
+            = link_to 'Delete answer',
+                    answer_path(answer),
+                    method: :delete,
+                    remote: true,
+                    class: 'btn btn-outline-danger'
+            p
+
+          = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+            .edit-answer-errors
+            h5.text-center
+              b
+                | Edit answer
+            b= f.label :body, 'Your answer'
+            = f.text_area :body, id: "answer_body-#{answer.id}", class: 'form-control'
+            br
+            b= f.label :files, 'Files:'
+            = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control'
+            br
+
+            .links-form
               p
+                b Links:
+                = render 'links/form', f: f
 
-            = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-              .edit-answer-errors
-              h5.text-center
-                b
-                  | Edit answer
-              b= f.label :body, 'Your answer'
-              = f.text_area :body, id: "answer_body-#{answer.id}", class: 'form-control'
-              br
-              b= f.label :files, 'Files:'
-              = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control'
-              br
+            br
+            = f.submit 'Save', class: 'btn btn-outline-success'
 
-              .links-form
-                p
-                  b Links:
-                  = render 'links/form', f: f
+        hr
 
-              br
-              = f.submit 'Save', class: 'btn btn-outline-success'
+        h5.text-center
+          b
+            = 'Comments'
+        .container
+          .answer-comments
+            - if answer.comments.empty?
+              .empty-comments-label.mb-2
+                = 'No comments yet'
+            - else
+              = render 'comments/comments', commentable: answer, comments: answer.comments
 
-          hr
-
-          h5.text-center
-            b
-              = 'Comments'
-          .container
-            .answer-comments
-              - if answer.comments.empty?
-                .empty-comments-label.mb-2
-                  = 'No comments yet'
-              - else
-                = render 'comments/comments', commentable: answer, comments: answer.comments
-
-            - if can?(:create, Comment)
-              .card.border-primary.mb-3
-                .card-body
-                  .form-group
-                    ol
-                      = render 'comments/form', commentable: answer, comment: answer.comments.build
+          - if can?(:create, Comment)
+            .card.border-primary.mb-3
+              .card-body
+                .form-group
+                  ol
+                    = render 'comments/form', commentable: answer, comment: answer.comments.build

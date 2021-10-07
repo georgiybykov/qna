@@ -7,9 +7,10 @@
           - cache file do
             div id="attachment_#{file.id}"
               = link_to file.filename.to_s, url_for(file)
-              - if can?(:destroy, resource)
-                p= link_to 'Delete file',
-                            attachment_path(file.record_id),
-                            method: :delete,
-                            remote: true,
-                            class: 'btn btn-outline-danger'
+
+          - if can?(:destroy, resource)
+            p= link_to 'Delete file',
+                        attachment_path(file.record_id),
+                        method: :delete,
+                        remote: true,
+                        class: 'btn btn-outline-danger'

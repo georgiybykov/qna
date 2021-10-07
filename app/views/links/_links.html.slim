@@ -7,9 +7,10 @@
         - cache link do
           li id="link_#{link.id}"
             p= parse_url(link.url, link.name)
-            - if can?(:destroy, link.linkable)
-              = link_to 'Delete link',
-                      link_path(link),
-                      method: :delete,
-                      remote: true,
-                      class: 'btn btn-outline-danger'
+
+        - if can?(:destroy, link.linkable)
+          = link_to 'Delete link',
+                  link_path(link),
+                  method: :delete,
+                  remote: true,
+                  class: 'btn btn-outline-danger'
