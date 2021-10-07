@@ -33,9 +33,5 @@ module Qna
                        routing_specs: false,
                        request_specs: false
     end
-
-    config.cache_store = :redis_store,
-                         Rails.application.credentials.redis_cache_store_url,
-                         { expires_in: 90.minutes }
   end
 end
