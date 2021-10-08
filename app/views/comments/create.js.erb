@@ -4,12 +4,10 @@ $('.comment-errors').html('<%= j render 'shared/errors', resource: @comment %>')
   $('.empty-comments-label').remove()
 
   var commentTemplate = '<%= j render 'comments/comment', comment: @comment %>'
+  var commentable = '<%= @comment.commentable_type.downcase %>'
 
-  <% if @comment.commentable.is_a?(Question) %>
-    $('.question-comments').append(commentTemplate)
-  <% else %>
-    $('.answer-comments').append(commentTemplate)
-  <% end %>
+  $('#' + commentable + '_<%= @comment.commentable_id %> .' + commentable + '-comments')
+      .append(commentTemplate)
 
   $('.new-comment #comment_body').val('')
 <% end %>

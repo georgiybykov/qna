@@ -8,12 +8,10 @@ consumer.subscriptions.create("CommentChannel", {
   received(data) {
     if (!(gon.user_id === data.comment.user_id)) {
       let commentTemplate = require('templates/comment.hbs')({ comment: data.comment })
+      let commentable = data.comment.commentable_type.toLowerCase()
 
-      if (data.comment.commentable_type === 'Question') {
-        $('.question-comments').append(commentTemplate)
-      } else {
-        $('.answer-comments').append(commentTemplate)
-      }
+      $('#' + commentable + '_' + data.comment.commentable_id + ' .' + commentable + '-comments')
+          .append(commentTemplate)
     }
   }
 });
