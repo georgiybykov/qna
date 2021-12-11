@@ -37,12 +37,14 @@ describe 'Answers API', type: :request, aggregate_failures: true do
       end
 
       it 'returns all public fields' do
-        expect(answer_response[:id]).to eq answer.id
-        expect(answer_response[:body]).to eq answer.body
-        expect(answer_response[:best]).to eq false
-        expect(answer_response[:question_id]).to eq question.id
-        expect(answer_response[:created_at]).to eq answer.created_at.as_json
-        expect(answer_response[:updated_at]).to eq answer.updated_at.as_json
+        expect(answer_response).to match a_hash_including(
+          id: answer.id,
+          body: answer.body,
+          best: false,
+          question_id: question.id,
+          created_at: answer.created_at.as_json,
+          updated_at: answer.updated_at.as_json
+        )
       end
 
       it 'contains a user object' do
@@ -88,12 +90,14 @@ describe 'Answers API', type: :request, aggregate_failures: true do
       end
 
       it 'returns all public fields' do
-        expect(answer_response[:id]).to eq answer.id
-        expect(answer_response[:body]).to eq answer.body
-        expect(answer_response[:best]).to eq false
-        expect(answer_response[:question_id]).to eq question.id
-        expect(answer_response[:created_at]).to eq answer.created_at.as_json
-        expect(answer_response[:updated_at]).to eq answer.updated_at.as_json
+        expect(answer_response).to match a_hash_including(
+          id: answer.id,
+          body: answer.body,
+          best: false,
+          question_id: question.id,
+          created_at: answer.created_at.as_json,
+          updated_at: answer.updated_at.as_json
+        )
       end
 
       it 'contains nested comments' do
@@ -231,10 +235,14 @@ describe 'Answers API', type: :request, aggregate_failures: true do
         end
 
         it 'updates the answer for the question and returns all public fields' do
-          expect(answer_response[:id]).to eq answer.id
-          expect(answer_response[:body]).to eq 'New Answer Body'
-          expect(answer_response[:created_at]).to eq answer.created_at.as_json
-          expect(answer_response[:updated_at]).to eq answer.reload.updated_at.as_json
+          expect(answer_response).to match a_hash_including(
+            id: answer.id,
+            body: 'New Answer Body',
+            best: false,
+            question_id: question.id,
+            created_at: answer.created_at.as_json,
+            updated_at: answer.reload.updated_at.as_json
+          )
         end
 
         it 'returns comments' do
