@@ -28,11 +28,13 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       end
 
       it 'returns all public fields' do
-        expect(question_response[:id]).to eq question.id
-        expect(question_response[:title]).to eq question.title
-        expect(question_response[:body]).to eq question.body
-        expect(question_response[:created_at]).to eq question.created_at.as_json
-        expect(question_response[:updated_at]).to eq question.updated_at.as_json
+        expect(question_response).to match a_hash_including(
+          id: question.id,
+          title: question.title,
+          body: question.body,
+          created_at: question.created_at.as_json,
+          updated_at: question.updated_at.as_json
+        )
       end
 
       it 'contains short title' do
@@ -80,12 +82,14 @@ describe 'Questions API', type: :request, aggregate_failures: true do
       end
 
       it 'returns all public fields' do
-        expect(question_response[:id]).to eq question.id
-        expect(question_response[:title]).to eq question.title
-        expect(question_response[:body]).to eq question.body
-        expect(question_response[:created_at]).to eq question.created_at.as_json
-        expect(question_response[:updated_at]).to eq question.updated_at.as_json
-        expect(question_response[:short_title]).to eq question.title.truncate(7)
+        expect(question_response).to match a_hash_including(
+          id: question.id,
+          title: question.title,
+          body: question.body,
+          created_at: question.created_at.as_json,
+          updated_at: question.updated_at.as_json,
+          short_title: question.title.truncate(7)
+        )
       end
 
       it 'contains nested comments' do
@@ -165,9 +169,11 @@ describe 'Questions API', type: :request, aggregate_failures: true do
           before { post '/api/v1/questions', params: params, headers: headers }
 
           it 'returns all public fields' do
-            expect(question_response[:title]).to eq 'First API Question'
-            expect(question_response[:body]).to eq 'It is Wednesday, my dude!'
-            expect(question_response[:short_title]).to eq 'First API Question'.truncate(7)
+            expect(question_response).to match a_hash_including(
+              title: 'First API Question',
+              body: 'It is Wednesday, my dude!',
+              short_title: 'First API Question'.truncate(7)
+            )
 
             expect(question_response).to have_key :id
             expect(question_response).to have_key :created_at
@@ -228,11 +234,13 @@ describe 'Questions API', type: :request, aggregate_failures: true do
         end
 
         it 'updates the question and returns all public fields' do
-          expect(question_response[:id]).to eq question.id
-          expect(question_response[:title]).to eq new_title
-          expect(question_response[:body]).to eq 'New Question Body'
-          expect(question_response[:created_at]).to eq question.created_at.as_json
-          expect(question_response[:updated_at]).to eq question.reload.updated_at.as_json
+          expect(question_response).to match a_hash_including(
+            id: question.id,
+            title: new_title,
+            body: 'New Question Body',
+            created_at: question.created_at.as_json,
+            updated_at: question.reload.updated_at.as_json
+          )
         end
 
         it 'returns new short_title for the question' do

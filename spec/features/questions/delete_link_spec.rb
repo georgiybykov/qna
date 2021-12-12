@@ -16,11 +16,9 @@ feature 'The user can delete links to the question', %q{
       sign_in(author)
       visit question_path(question)
 
-      within "#link_#{link.id}" do
-        expect(page).to have_link link.name, href: link.url
+      expect(page).to have_link link.name, href: link.url
 
-        click_on "Delete link"
-      end
+      click_on "Delete link"
 
       expect(page).not_to have_link link.name, href: link.url
     end
@@ -31,17 +29,13 @@ feature 'The user can delete links to the question', %q{
 
       expect(page).to have_link link.name, href: link.url
 
-      within "#link_#{link.id}" do
-        expect(page).not_to have_content 'Delete link'
-      end
+      expect(page).not_to have_content 'Delete link'
     end
   end
 
   scenario 'Unauthenticated user tries to delete the link for the question' do
     visit question_path(question)
 
-    within "#link_#{link.id}" do
-      expect(page).not_to have_content "Delete link"
-    end
+    expect(page).not_to have_content "Delete link"
   end
 end

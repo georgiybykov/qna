@@ -2,6 +2,8 @@ default: &default
   transport_options:
     request:
       timeout: 30
+  bootstrap:
+    mlockall: true
 
 development:
   <<: *default

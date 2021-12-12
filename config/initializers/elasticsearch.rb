@@ -6,7 +6,7 @@ config = if File.exist?(path)
            YAML.load_file(path)[Rails.env]&.deep_symbolize_keys || {}
          else
            {
-             host: 'http://localhost:9200/',
+             host: ENV['ELASTIC_SEARCH_URL'] || 'http://localhost:9200/',
              transport_options: {
                request: {
                  timeout: 30

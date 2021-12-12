@@ -1,4 +1,4 @@
-name: Rspec
+name: RSpec
 
 on: [push, pull_request]
 
@@ -14,33 +14,28 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-#      elasticsearch:
-#        image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
-#        ports:
-#          - 9250:9200
-#        env:
-#          cluster.name: qna-elastic-test-cluster
-#          xpack.security.enabled: false
-#          transport.host: localhost
-#          network.host: 127.0.0.1
-#          http.port: 9250
-#          discovery.type: single-node
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+        image: elasticsearch:7.14.1
         ports:
-          - 9250:9200
+          - 9200/tcp
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: false
+        options: >-
+          --health-cmd="curl http://localhost:9200/_cluster/health"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Configure sysctl limits
         run: |
@@ -49,12 +44,11 @@ jobs:
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
 
-      - name: Runs Elasticsearch
-        run: |
-          cp config/elasticsearch.yml.github-actions config/elasticsearch.yml
-        uses: elastic/elastic-github-actions/elasticsearch@master
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          stack-version: 7.14.1
+          ruby-version: .ruby-version
+          bundler-cache: true
 
       - name: Install postgres client
         run: sudo apt-get install libpq-dev
@@ -65,30 +59,32 @@ jobs:
           node-version: 12.21.0
 
       - name: Install packages
-        run: |
-          yarn install --pure-lockfile
+        run: yarn install --pure-lockfile
 
       - name: Setup Database
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_KEY }}
         run: |
           cp config/database.yml.github-actions config/database.yml
           bundle exec rails db:create
           bundle exec rails db:migrate
+
+      - name: Verify Elasticsearch connection from host
         env:
-          RAILS_ENV: test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_KEY }}
+          ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
+        run: |
+          echo $ELASTIC_SEARCH_URL
+          curl -fsSL "$ELASTIC_SEARCH_URL/_cat/health?h=status"
 
       - name: Run RSpec
-        run: COVERAGE=true bundle exec rspec --require rails_helper
         env:
           RAILS_ENV: test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           RAILS_MASTER_KEY: ${{ secrets.RAILS_TEST_KEY }}
-          TEST_CLUSTER_NODES: 1
-          TEST_CLUSTER_COMMAND: bin/elasticsearch
-          TEST_CLUSTER_PORT: 9250
-          TEST_CLUSTER_NAME: qna-elastic-test-cluster
-          TEST_CLUSTER_TIMEOUT: 120
-          TEST_CLUSTER_NETWORK_HOST: _local_
+          ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
+        run: |
+          COVERAGE=true bundle exec rspec --require rails_helper
