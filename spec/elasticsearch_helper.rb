@@ -3,6 +3,7 @@
 require 'elasticsearch/extensions/test/cluster'
 
 RSpec.configure do |config|
+  # CI env is always `true` for GitHub Actions.
   if ENV['CI'].blank?
     creds = Rails.application.credentials
 

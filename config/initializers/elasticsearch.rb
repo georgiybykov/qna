@@ -11,11 +11,6 @@ config = if File.exist?(path)
                request: {
                  timeout: 30
                }
-             },
-             xpack: {
-               security: {
-                 enabled: false
-               }
              }
            }
          end

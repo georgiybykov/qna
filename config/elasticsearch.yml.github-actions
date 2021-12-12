@@ -1,8 +1,0 @@
-test:
-  host: <%= ENV['ELASTIC_SEARCH_URL'] %>
-  transport_options:
-    request:
-      timeout: 30
-  xpack:
-    security:
-        enabled: false
