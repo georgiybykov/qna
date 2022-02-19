@@ -4,7 +4,7 @@ qna
 [![RuboCop](https://github.com/georgiybykov/qna/actions/workflows/rubocop.yml/badge.svg)](https://github.com/georgiybykov/qna/actions)
 [![RSpec](https://github.com/georgiybykov/qna/actions/workflows/rspec.yml/badge.svg)](https://github.com/georgiybykov/qna/actions)
 
-Ruby on Rails questions and answers resource.
+Ruby on Rails project with questions and answers.
 
 ---
 
@@ -17,7 +17,7 @@ Ruby on Rails questions and answers resource.
 - Elasticsearch for full-text search
 - ActionCable for real-time connection using WebSockets
 - OAuth 2.0 with Authorization Code Flow
-- cancancan for authorization (abilities)
+- Role Based Access Control with `cancancan` for authorization (abilities)
 - RESTful API with Doorkeeper as OAuth 2.0 provider
 - Production web-server is Unicorn (configuration files are in the project tree)
 - Capistrano for deployment
@@ -34,8 +34,8 @@ $ cd qna
 $ bundle install
 
 $ cp .env.sample .env
-$ cp database.yml.sample database.yml
-$ cp elasticsearch.yml.sample elasticsearch.yml
+$ cp config/database.yml.sample config/database.yml
+$ cp config/elasticsearch.yml.sample config/elasticsearch.yml
 
 $ bundle exec bin/rails db:create
 $ bundle exec bin/rails db:migrate
@@ -43,6 +43,13 @@ $ bundle exec bin/rails db:migrate
 # If you need test or development data:
 $ bundle exec bin/rails db:seed
 ```
+
+#### Run server:
+```bash
+$ bundle exec bin/rails server
+```
+
+Then visit: http://localhost:3000
 
 #### Run tests:
 ```bash
