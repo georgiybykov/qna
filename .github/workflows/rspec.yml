@@ -3,7 +3,7 @@ name: RSpec
 on: [push, pull_request]
 
 jobs:
-  rspec-test:
+  rspec:
     runs-on: ubuntu-latest
 
     services:

@@ -12,3 +12,8 @@ development:
 test:
   <<: *default
   host: 'http://localhost:9250/'
+
+production:
+  host: 'http://localhost:9200/'
+  user: <%= ENV['ELASTIC_USER'] %>
+  password: <%= ENV['ELASTIC_PASSWORD'] %>
